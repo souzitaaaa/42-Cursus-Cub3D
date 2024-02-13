@@ -32,6 +32,10 @@ typedef enum keycodes
     Y = 121,
     Z = 122,
 	ESC = 65307,
+    LEFTARROW = 65361,
+    UPARROW = 65362,
+    RIGHTARROW = 65363,
+    DOWNARROW = 65364
 }				t_keys;
 
 #endif
