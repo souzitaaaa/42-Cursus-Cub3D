@@ -16,8 +16,8 @@ RM 				= rm -rf
 #-----------------------------------  FLAGS  -----------------------------------
 CFLAGS			= -Wall -Wextra -Werror
 NPD				= --no-print-directory
-MINILIBX 		= ./minilibx-linux
-MLXFLAGS 		= -L ./minilibx-linux -lmlx -Ilmlx -lXext -lX11
+MINILIBX 		= ./minilibx
+MLXFLAGS 		= -L ./minilibx -lmlx -Ilmlx -lXext -lX11
 
 #----------------------------------  FOLDERS ------------------------------------
 
@@ -39,18 +39,29 @@ HDR				= $(addprefix $(INCLUDE)/, $(_HEADERS))
 
 #---------------------------------  RULES  --------------------------------------
 
+ifeq ($(shell uname), Linux)
+	MLX_PATH	= ./minilibx
+	MLXFLAGS 		= -lmlx -Ilmlx -lXext -lX11
+	OS          = 1
+else ifeq ($(shell uname), Darwin)
+	MLX_PATH	= ./minilibx
+	MLXFLAGS	= -L ./minilibx -lmlx -framework OpenGL -framework Appkit -lm 
+	CP_CMD 		= cp ./minilibx/libmlx.dylib ./
+	OS          = 2
+endif
+
 all: $(NAME)
 
 $(NAME): $(OBJDIR) $(TARGET) main.c
 	echo "[$(CYAN)Compiling minilibx$(RESET)] $(CFLAGS) $<$(RESET)"
 	$(MAKE) --no-print-directory -C $(MINILIBX)
 	echo "[$(GREEN)Success$(RESET)] Compiling minilibx$(BOLD)$(RESET)"
-	$(CC) $(CFLAGS) -lm main.c $(TARGET) $(MLXFLAGS) -I $(INCLUDE) -o $(NAME)
+	$(CC) $(CFLAGS) main.c $(TARGET) $(MLXFLAGS) -I $(INCLUDE) -o $(NAME)
 	echo "[$(GREEN)Success$(RESET)] cub3d created$(BOLD)$(RESET)"
 
 $(OBJDIR)/%.o : %.c $(HDR)
 	echo "[$(CYAN)Compiling$(RESET)] $(CFLAGS) $<$(RESET)"
-	$(CC) $(CFLAGS) -c $< -o $@ -I $(INCLUDE)
+	$(CC) $(CFLAGS) -D OS=$(OS) -c $< -o $@ -I $(INCLUDE)
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
