@@ -1,5 +1,5 @@
 #ifndef KEYCODES_H
-# define KEYCODES_h
+# define KEYCODES_H
 
 #include "cub3d.h"
 
