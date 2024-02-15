@@ -6,6 +6,8 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include <stdbool.h>
+# include <stdlib.h>
+# include <string.h>
 
 # if OS == 1
 #  define ESC 65307
@@ -49,6 +51,17 @@
 #  define H
 # endif
 
+typedef struct s_map
+{
+	char *map_folder;
+
+}				t_map;
+
+typedef struct s_game
+{
+	t_map map;
+}				t_game;
+
 typedef struct s_data
 {
 	void	*img;
@@ -63,5 +76,7 @@ typedef struct s_vars
 	void	*mlx;
 	void	*win;
 }				t_vars;
+
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 
 #endif

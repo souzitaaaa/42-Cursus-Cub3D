@@ -1,5 +1,26 @@
 #include "./includes/cub3d.h"
 
+void init_struct(t_game *game)
+{
+	(void)*game;
+	return;
+}
+
+void map_validations(t_game *game)
+{
+	//* Checking the map extension
+	int pos;
+
+	pos = strlen(game->map.map_folder) - 4;
+	if (strncmp(".cub", &game->map.map_folder[pos], 4) != 0)
+	{
+		printf("Error\n The map you provided isn't .cub\n");
+		exit (EXIT_FAILURE);
+	}
+	//* End
+
+}
+
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dst;
@@ -16,24 +37,22 @@ int	get_code(int keycode, t_vars *vars)
 	return (0);
 }
 
-int	main(void)
+int	main(int ac, char **av)
 {
-	void	*mlx;
-	void	*mlx_win;
-	t_data	img;
+	t_game	game;
 
-	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, 720, 576, "Hello World!");
-	img.img = mlx_new_image(mlx, 720, 576);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_lenght, &img.endian);
-	my_mlx_pixel_put(&img, 100, 100, 0x00FF0000);
-	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
-	//mlx_loop(mlx);
+	if (ac != 2)
+	{
+		printf("Error\n Wrong number of arguments\n");
+		exit (EXIT_FAILURE);
 
-    t_vars	vars;
-
-	vars.mlx = mlx_init();
-	vars.win = mlx_new_window(vars.mlx, 500, 500, "Get the Keycode");
-	mlx_hook(vars.win, 2, 1L<<0, get_code, &vars);
-	mlx_loop(vars.mlx);
+	}
+	if (av[1] == NULL)
+	{
+		printf("Error\n No map inserted");
+		exit (EXIT_FAILURE);
+	}
+	game.map.map_folder = av[1];
+	init_struct(&game);
+	map_validations(&game);
 }
