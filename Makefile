@@ -40,7 +40,7 @@ HDR				= $(addprefix $(INCLUDE)/, $(_HEADERS))
 #---------------------------------  RULES  --------------------------------------
 
 ifeq ($(shell uname), Linux)
-	MLX_PATH	= ./minilibx
+	MLX_PATH	= ./minilibx-linux
 	MLXFLAGS 		= -lmlx -Ilmlx -lXext -lX11
 	OS          = 1
 else ifeq ($(shell uname), Darwin)
