@@ -2,23 +2,9 @@
 
 void init_struct(t_game *game)
 {
-	(void)*game;
+	game->map.map_y = 0;
+	game->map.map_x = 0;
 	return;
-}
-
-void map_validations(t_game *game)
-{
-	//* Checking the map extension
-	int pos;
-
-	pos = strlen(game->map.map_folder) - 4;
-	if (strncmp(".cub", &game->map.map_folder[pos], 4) != 0)
-	{
-		printf("Error\n The map you provided isn't .cub\n");
-		exit (EXIT_FAILURE);
-	}
-	//* End
-
 }
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
@@ -53,6 +39,7 @@ int	main(int ac, char **av)
 		exit (EXIT_FAILURE);
 	}
 	game.map.map_folder = av[1];
+	printf("Map folder: %s\n", game.map.map_folder);
 	init_struct(&game);
 	map_validations(&game);
 }

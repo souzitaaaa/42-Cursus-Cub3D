@@ -1,15 +1,18 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include "../minilibx/mlx.h"
-# include "keycodes.h"
+# include "../libft/include/libft.h"
 # include <stdio.h>
 # include <fcntl.h>
 # include <stdbool.h>
 # include <stdlib.h>
 # include <string.h>
 
+# define SCREEN_X 1024
+# define SCREEN_Y 512
+
 # if OS == 1
+#  include "../minilibx-linux/mlx.h"
 #  define ESC 65307
 #  define LEFT 65361
 #  define RIGHT 65363
@@ -53,8 +56,11 @@
 
 typedef struct s_map
 {
-	char *map_folder;
-
+	char	*map_folder;
+	int		fd;
+	char	**area;
+	int		map_y;
+	int		map_x;
 }				t_map;
 
 typedef struct s_game
@@ -77,6 +83,14 @@ typedef struct s_vars
 	void	*win;
 }				t_vars;
 
+//* [src/map_check.c]
+void map_validations(t_game *game);
+
+
+
+
+
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
+
 
 #endif
