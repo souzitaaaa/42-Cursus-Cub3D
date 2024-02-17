@@ -21,6 +21,8 @@ MLXFLAGS 		= -L ./minilibx -lmlx -Ilmlx -lXext -lX11
 
 #----------------------------------  FOLDERS ------------------------------------
 
+LIBFTDIR 		= libft
+LIBFT 			= $(LIBFTDIR)/libft.a
 INCLUDE			= includes
 SRCS			= src
 _SUBFOLDERS		= 
@@ -30,7 +32,7 @@ OBJDIR			= obj
 #--------------------------------- FILES  ---------------------------------------
 NAME 			= cub3d
 
-_FILES 			= init
+_FILES 			= init map_check position
 
 OBJ				= $(_FILES:%=%.o)
 TARGET			= $(addprefix $(OBJDIR)/, $(OBJ))
@@ -40,11 +42,11 @@ HDR				= $(addprefix $(INCLUDE)/, $(_HEADERS))
 #---------------------------------  RULES  --------------------------------------
 
 ifeq ($(shell uname), Linux)
-	MLX_PATH	= ./minilibx-linux
-	MLXFLAGS 		= -lmlx -Ilmlx -lXext -lX11
+	MINILIBX 	= ./minilibx-linux
+	MLXFLAGS 	= -L ./minilibx-linux -lmlx -Ilmlx -lXext -lX11
 	OS          = 1
 else ifeq ($(shell uname), Darwin)
-	MLX_PATH	= ./minilibx
+	MINILIBX 	= ./minilibx
 	MLXFLAGS	= -L ./minilibx -lmlx -framework OpenGL -framework Appkit -lm 
 	CP_CMD 		= cp ./minilibx/libmlx.dylib ./
 	OS          = 2
@@ -52,11 +54,11 @@ endif
 
 all: $(NAME)
 
-$(NAME): $(OBJDIR) $(TARGET) main.c
+$(NAME): $(OBJDIR) $(TARGET) $(LIBFT) main.c
 	echo "[$(CYAN)Compiling minilibx$(RESET)] $(CFLAGS) $<$(RESET)"
 	$(MAKE) --no-print-directory -C $(MINILIBX)
 	echo "[$(GREEN)Success$(RESET)] Compiling minilibx$(BOLD)$(RESET)"
-	$(CC) $(CFLAGS) main.c $(TARGET) $(MLXFLAGS) -I $(INCLUDE) -o $(NAME)
+	$(CC) $(CFLAGS) main.c $(TARGET) $(MLXFLAGS) -I $(INCLUDE) $(LIBFT) -o $(NAME)
 	echo "[$(GREEN)Success$(RESET)] cub3d created$(BOLD)$(RESET)"
 
 $(OBJDIR)/%.o : %.c $(HDR)
@@ -66,12 +68,19 @@ $(OBJDIR)/%.o : %.c $(HDR)
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
 
+$(LIBFT):
+	echo "[$(CYAN)Compiling$(RESET)] libft$(RESET)"
+	$(MAKE) $(NPD) -C $(LIBFTDIR)
+	echo "[$(GREEN)Success$(RESET)] Libft compilation compleated!$(BOLD)$(RESET)"
+
 clean:
 	$(RM) $(OBJDIR)
+	$(MAKE) clean $(NPD) -C  $(LIBFTDIR)
 	echo "[$(RED)Deleting$(RESET)]  object files deleted$(BOLD)$(RESET)"
 
 fclean: clean
 	$(RM) $(NAME)
+	$(MAKE) fclean $(NPD) -C  $(LIBFTDIR)
 	echo "[$(RED)Deleting$(RESET)]  .a deleted$(BOLD)"
 
 re: fclean all

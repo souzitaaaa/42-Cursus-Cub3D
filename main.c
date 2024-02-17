@@ -2,23 +2,9 @@
 
 void init_struct(t_game *game)
 {
-	(void)*game;
+	game->map.map_y = 0;
+	game->map.map_x = 0;
 	return;
-}
-
-void map_validations(t_game *game)
-{
-	//* Checking the map extension
-	int pos;
-
-	pos = strlen(game->map.map_folder) - 4;
-	if (strncmp(".cub", &game->map.map_folder[pos], 4) != 0)
-	{
-		printf("Error\n The map you provided isn't .cub\n");
-		exit (EXIT_FAILURE);
-	}
-	//* End
-
 }
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
@@ -40,12 +26,12 @@ int	get_code(int keycode, t_vars *vars)
 int	main(int ac, char **av)
 {
 	t_game	game;
+	t_playerPos	player;
 
 	if (ac != 2)
 	{
 		printf("Error\n Wrong number of arguments\n");
 		exit (EXIT_FAILURE);
-
 	}
 	if (av[1] == NULL)
 	{
@@ -53,6 +39,11 @@ int	main(int ac, char **av)
 		exit (EXIT_FAILURE);
 	}
 	game.map.map_folder = av[1];
+	printf("Map folder: %s\n", game.map.map_folder);
 	init_struct(&game);
 	map_validations(&game);
+	player = get_position(&(game.map));
+	printf("Posição do jogador: linha %d, coluna %d, orientation %c\n", player.row, player.col, player.orientation);
+	set_direction(&game, player);
+	printf("dir_x: %d, dir_y: %d, plane_x: %d, plane_y: %d\n", game.map.dir_x, game.map.dir_y, game.map.plane_x, game.map.plane_y);
 }
