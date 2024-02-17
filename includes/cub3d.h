@@ -33,6 +33,7 @@
 #  define L 108
 #  define H 104
 # elif OS == 2
+# include "../minilibx/mlx.h"
 #  define ESC 53
 #  define LEFT 123
 #  define RIGHT 124
