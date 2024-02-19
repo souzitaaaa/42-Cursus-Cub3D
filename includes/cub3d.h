@@ -51,7 +51,7 @@
 #  define INCREASE 24
 #  define DECREASE 27
 #  define R 15
-#  define L 
+#  define L
 #  define H
 # endif
 
