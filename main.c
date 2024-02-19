@@ -4,6 +4,10 @@ void init_struct(t_game *game)
 {
 	game->map.map_y = 0;
 	game->map.map_x = 0;
+	game->map.ray_dir_x = malloc(game->map.map_x * sizeof(double));
+	game->map.ray_dir_y = malloc(game->map.map_y * sizeof(double));
+	game->map.ray_pos_x = malloc(game->map.map_x * sizeof(double));
+	game->map.ray_pos_y = malloc(game->map.map_y * sizeof(double));
 	return;
 }
 
@@ -46,4 +50,5 @@ int	main(int ac, char **av)
 	printf("Posição do jogador: linha %d, coluna %d, orientation %c\n", player.row, player.col, player.orientation);
 	set_direction(&game, player);
 	printf("dir_x: %d, dir_y: %d, plane_x: %d, plane_y: %d\n", game.map.dir_x, game.map.dir_y, game.map.plane_x, game.map.plane_y);
+	calculate_rays(&game);
 }

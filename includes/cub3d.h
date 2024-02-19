@@ -10,6 +10,7 @@
 
 # define SCREEN_X 1024
 # define SCREEN_Y 512
+# define FOV 60 // field of view
 
 # if OS == 1
 #  include "../minilibx-linux/mlx.h"
@@ -66,6 +67,10 @@ typedef struct s_map
 	int		dir_y;
 	int		plane_x;
 	int		plane_y;
+	double	*ray_dir_x; // array raios x
+	double	*ray_dir_y; // array raios y
+	double	*ray_pos_x; // array coordenada do raio x
+	double	*ray_pos_y; // array coordenada do raio x
 }				t_map;
 
 typedef struct s_game
@@ -99,12 +104,9 @@ typedef	struct s_playerPos {
 void map_validations(t_game *game);
 t_playerPos	get_position(t_map *map);
 void	set_direction(t_game *game, t_playerPos position);
-
-
-
-
+void	calculate_rays(t_game *game);
+void	render_rays(t_game *game);
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
-
 
 #endif
