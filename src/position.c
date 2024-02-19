@@ -8,19 +8,24 @@ t_playerPos	get_position(t_map *map)
 	char	**area = map->area;
 	int		rows = map->map_y;
 	int		cols = map->map_x;
+	int x = 0;
+	int y;
 
-	for (int row = 0; row < rows; row++)
+	while (x < rows)
 	{
-		for (int col = 0; col < cols; col++)
+		y = 0;
+		while (y < cols)
 		{
-			if (area[row][col] == 'N' || area[row][col] == 'S' || area[row][col] == 'E' || area[row][col] == 'W')
+			if (area[x][y] == 'N' || area[x][y] == 'S' || area[x][y] == 'E' || area[x][y] == 'W')
 			{
-				pos.row = row;
-				pos.col = col;
-				pos.orientation = area[row][col];
+				pos.row = x;
+				pos.col = y;
+				pos.orientation = area[x][y];
 				return (pos);
 			}
+			y++;
 		}
+		x++;
 	}
 	return (pos);
 }
