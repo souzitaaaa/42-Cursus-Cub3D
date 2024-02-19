@@ -58,19 +58,19 @@
 
 typedef struct s_map
 {
-	char	*map_folder;
-	int		fd;
-	char	**area;
-	int		map_y;
-	int		map_x;
-	int		dir_x;
-	int		dir_y;
-	int		plane_x;
-	int		plane_y;
-	double	*ray_dir_x; // array raios x
-	double	*ray_dir_y; // array raios y
-	double	*ray_pos_x; // array coordenada do raio x
-	double	*ray_pos_y; // array coordenada do raio x
+	char	*map_folder; //? Ficheiro do mapa
+	int		fd;			 //? Fd para usar quando se abre o mapa
+	char	**area;      //? Array com o mapa
+	int		map_y;       //? Colunas do mapa
+	int		map_x;       //? Linhas do mapa
+	int		dir_x;       //? Valor de x em que a câmara está a olhar
+	int		dir_y;       //? Valor de y em que a câmara está a olhar
+	int		plane_x;     //? Valor de x do plano???
+	int		plane_y;     //? Valor de y do plano???
+	double	*ray_dir_x;  //? array raios x
+	double	*ray_dir_y;  //? array raios y
+	double	*ray_pos_x;  //? array coordenada do raio x
+	double	*ray_pos_y;  //? array coordenada do raio x
 }				t_map;
 
 typedef struct s_game
