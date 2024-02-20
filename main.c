@@ -8,7 +8,6 @@ void init_struct(t_game *game)
 	game->ray.screen_x = 0;
 	game->ray.map_x = 0;
 	game->ray.map_y = 0;
-	//! estás a iniciar valores com o map_x e map_y que ainda não foram atribuidos
 	return;
 }
 
@@ -71,6 +70,7 @@ int	main(int ac, char **av)
 	init_struct(&game);
 	map_validations(&game);
 	player = get_position(&(game.map));
+	//! estavas a iniciar valores com o map_x e map_y que estavam a 0 ainda, porque nao tinham sido atribuidos
 	game.ray.ray_dir_x = malloc(game.map.map_x * sizeof(double));
 	game.ray.ray_dir_y = malloc(game.map.map_y * sizeof(double));
 	game.ray.ray_pos_x = malloc(game.map.map_x * sizeof(double));
