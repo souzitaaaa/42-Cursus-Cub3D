@@ -24,84 +24,85 @@ void alloc_map(t_game *game)
 	//! VAI TER QUE SE DAR FREE DA GAME->MAP.AREA
 }
 
-void wall_space_right(t_game *game, int i) {
-	int len;
-
-	len = ft_strlen(game->map.area[i]) - 1;
-	while (len >= 0)
-	{
-		if (game->map.area[i][len] == ' '){
-			len--;
-		}
-		else {
-			if (game->map.area[i][len] == '1')
-				return;
-			else {
-				printf("Error\n The map isn't surrounded by walls\n");
-				//! FREE
-				exit(EXIT_FAILURE);
-			}
-		}
-	}
+bool flood_walls(t_game *game, char **map, int col, int row)
+{
+	if (col < 0 || row < 0 || col >= game->map.map_y || row >= game->map.map_x)
+		return false;
+	else if (map[col][row] != '1')
+		return false;
+	else if (map[col][row] == 'X')
+		return false;
+	map[col][row] = 'X';
+	flood_walls(game, map, col + 1, row);
+	flood_walls(game, map, col, row + 1);
+	flood_walls(game, map, col + 1, row + 1);
+	flood_walls(game, map, col - 1, row + 1);
+	flood_walls(game, map, col - 1, row);
+	flood_walls(game, map, col, row - 1);
+	flood_walls(game, map, col - 1, row - 1);
+	flood_walls(game, map, col + 1, row - 1);
+	return true;
 }
 
-void wall_space_left(t_game *game, int i) {
-	int len;
-	int j;
-
-	j = 0;
-	len = ft_strlen(game->map.area[i]) - 1;
-	while (j < len)
+bool verify_flood(char **map)
+{
+	int row = 0;
+	int col = 0;
+	int row_back = 0;
+	while (map[col])
 	{
-		if (game->map.area[i][j] == ' '){
-			j++;
+		row = 0;
+		row_back = 0;
+		while (map[col][row])
+		{
+			while(map[col][row] == ' ')
+				row++;
+			if (map[col][row] != 'X')
+				return true;
+			else
+				break;
 		}
-		else {
-			if (game->map.area[i][j] == '1')
-				return;
-			else {
-				printf("Error\n The map isn't surrounded by walls\n");
-				//! FREE
-				exit(EXIT_FAILURE);
-			}
+		row_back = ft_strlen(map[col]) - 1;
+		while (map[col][row_back])
+		{
+			while(map[col][row_back] == ' ')
+				row_back--;
+			if (map[col][row_back] != 'X')
+				return true;
+			else
+				break;
 		}
+		col++;
 	}
+	return false;
+}
+
+bool flood(t_game *game, int start)
+{
+	char **map;
+	bool valid;
+
+	map = ft_arrdup(game->map.area);
+	valid = flood_walls(game, map, start, 0);
+	printf("Map flood walls: \n");
+	valid = verify_flood(map);
+	print_arr(map);
+	ft_free_array(&map);
+	return (valid);
 }
 
 void check_walls(t_game *game)
 {
-	int i;
-	int len;
-	int total_len;
+	int start;
 
-	i = 0;
-	len = 0;
-	total_len = 0;
-	while (i < game->map.map_y) {
-		if (game->map.area[i][0] == '1' && game->map.area[i][ft_strlen(game->map.area[i]) - 1] == '1')
-			game->map.map_x++;
-		else if (game->map.area[i][0] == '1' && game->map.area[i][ft_strlen(game->map.area[i]) - 1] == ' ')
-			wall_space_right(game, i);
-		else if (game->map.area[i][0] == ' ' && game->map.area[i][ft_strlen(game->map.area[i]) - 1] == '1')
-			wall_space_left(game, i);
-		else if (game->map.area[i][0] == ' ' && game->map.area[i][ft_strlen(game->map.area[i]) - 1] == ' ')
-		{
-			game->map.map_x++;
-
-		}
-		else {
-			total_len = ft_strlen(game->map.area[i]) - 1;
-			len = ft_strclen(game->map.area[i], '1');
-			if (len != total_len){
-				game->map.map_x++;
-			}
-			else {
-				printf("Error\n The map isn't surrounded by walls\n");
-				//! FREE
-				exit(EXIT_FAILURE);
-			}
-		}
-		i++;
+	start = 0;
+	while (game->map.area[start][0] != '1')
+		start++;
+	printf("Start: %i\n", start);
+	if (flood(game, start)) {
+		printf("Error\n The map isn't surrounded by walls\n");
+		//! FREE
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -161,6 +162,4 @@ void map_validations(t_game *game)
 	alloc_map(game);
 	get_map_x(game);
 	check_walls(game);
-	//* Check if surrounded by walls
-	//* End
 }

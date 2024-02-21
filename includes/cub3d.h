@@ -53,66 +53,67 @@
 #  define INCREASE 24
 #  define DECREASE 27
 #  define R 15
-#  define L 
+#  define L
 #  define H
 # endif
 
 typedef struct s_map
 {
-	char	*map_folder;
-	int		fd;
-	char	**area;
-	int		map_y;
-	int		map_x;
-	int		dir_x;
-	int		dir_y;
-	int		plane_x;
-	int		plane_y;
-	int		*ray_x; // array coordenada x do raio
-	int		*ray_y; // array coordenada y do raio
-	int		*side; //lado atingido pelo raio
-	double	*ray_dir_x; // array raios x
-	double	*ray_dir_y; // array raios y
-	double	*ray_pos_x; // array coordenada do raio x
-	double	*ray_pos_y; // array coordenada do raio x
-	double	delta_x; // distância delta do x
-	double	delta_y; // distância delta do y
+	char	*map_folder; 	//? Ficheiro do mapa
+	int		fd;			 	//? Fd para usar quando se abre o mapa
+	char	**area;      	//? Array com o mapa
+	int		map_y;       	//? Colunas do mapa
+	int		map_x;       	//? Linhas do mapa
+	//! Tudo que tinha haver com a parte do raytracer meti noutra estrutura
+	int		dir_x;       	//? Valor de x do jogador (câmara está a olhar)
+	int		dir_y;       	//? Valor de y do jogador (câmara está a olhar)
+	int		plane_x;     	//? Posição de x da perpendicular á visão do jogador (plano da câmara)
+	int		plane_y;     	//? Posição de y da perpendicular á visão do jogador (plano da câmara)
 }				t_map;
-
-typedef struct s_game
-{
-	t_map map;
-}				t_game;
 
 typedef struct s_data
 {
-	void	*img;
-	char	*addr;
-	int	bits_per_pixel;
-	int	line_lenght;
-	int	endian;
+	void	*mlx;			//? Instância da mlx
+	void	*win;			//? Janela da mlx
 }				t_data;
 
-typedef struct s_vars
-{
-	void	*mlx;
-	void	*win;
-}				t_vars;
-
 typedef	struct s_playerPos {
-	int		row;
-	int		col;
-	char	orientation;
+	int		row;			//? Linha (x) onde o jogador está posicionado
+	int		col;			//? Coluna (y) onde o jogador está posicionado
+	char	orientation;	//? Orientação do jogador (N, S, E, W)
 } t_playerPos;
 
+typedef struct s_ray {
+	double	*ray_dir_x;  	//? array raios x
+	double	ray_dir_x_2; 	//? Direção do raio no plano em x para o pixel no plano da câmara
+	double	*ray_dir_y;  	//? array raios y
+	double	ray_dir_y_2; 	//? Direção do raio no plano em y para o pixel no plano da câmara
+	double	*ray_pos_x;  	//? array coordenada do raio x
+	double	*ray_pos_y;  	//? array coordenada do raio x
+	double	screen_x;	 	//? Index do x relativamente á tela
+	int		map_x;			//? Coordenada x no grid do mapa onde o raio está a interceptar
+	int		map_y;			//? Coordenada y no grid do mapa onde o raio está a interceptar
+	double	side_dist_x;	//? Distância inicial que o raio percorre até chegar ao primeiro x no grid
+	double	side_dist_y;	//? Distância inicial que o raio percorre até chegar ao primeiro y no grid
+	double	delta_dist_x;	//? Distância que o raio fez desde um lado do grid x até ao outro
+	double	delta_dist_y;	//? Distância que o raio fez desde um lado do grid y até ao outro
+} t_ray;
+
+typedef struct s_game
+{
+	t_map		map;		//? Estrutura com as informações do mapa
+	t_data		data;		//? Estrutura com as informações para a mlx
+	t_ray		ray;		//? Estrutura com as informações para o raycasting
+	t_playerPos pos;		//? Estrutura com as informações do jogador
+}				t_game;
 
 //* [src/map_check.c]
 void map_validations(t_game *game);
 t_playerPos	get_position(t_map *map);
 void	set_direction(t_game *game, t_playerPos position);
 void	calculate_rays(t_game *game);
-void	perform_dda(t_game *game, int i);
 
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
+
+void	init_game(t_game *game);
 
 #endif

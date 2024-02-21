@@ -8,11 +8,9 @@ void	calculate_rays(t_game *game)
 	while (i < SCREEN_X)
 	{
 		camera_x = 2 * i / (double)SCREEN_X - 1;
-		game->map.ray_dir_x[i] = game->map.dir_x + game->map.plane_x * camera_x;
-		game->map.ray_dir_y[i] = game->map.dir_y + game->map.plane_y * camera_x;
-		game->map.delta_x = fabs(1 / game->map.ray_dir_x[i]);
-		game->map.delta_y = fabs(1 / game->map.ray_dir_y[i]);
-		//printf("Raio para coluna %d: (%f, %f), Delta_X: %f, Delta_Y: %f\n", i, game->map.ray_dir_x[i], game->map.ray_dir_y[i], game->map.delta_x, game->map.delta_y);
+		game->ray.ray_dir_x[i] = game->map.dir_x + game->map.plane_x * camera_x;
+		game->ray.ray_dir_y[i] = game->map.dir_y + game->map.plane_y * camera_x;
+		printf("Raio para coluna %d: (%f, %f)\n", i, game->ray.ray_dir_x[i], game->ray.ray_dir_y[i]);
 		i++;
 	}
 }
