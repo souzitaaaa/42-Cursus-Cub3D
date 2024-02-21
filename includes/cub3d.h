@@ -7,6 +7,7 @@
 # include <stdbool.h>
 # include <stdlib.h>
 # include <string.h>
+# include <math.h>
 
 # define SCREEN_X 1024
 # define SCREEN_Y 512
@@ -67,10 +68,15 @@ typedef struct s_map
 	int		dir_y;
 	int		plane_x;
 	int		plane_y;
+	int		*ray_x; // array coordenada x do raio
+	int		*ray_y; // array coordenada y do raio
+	int		*side; //lado atingido pelo raio
 	double	*ray_dir_x; // array raios x
 	double	*ray_dir_y; // array raios y
 	double	*ray_pos_x; // array coordenada do raio x
 	double	*ray_pos_y; // array coordenada do raio x
+	double	delta_x; // distância delta do x
+	double	delta_y; // distância delta do y
 }				t_map;
 
 typedef struct s_game
@@ -105,7 +111,7 @@ void map_validations(t_game *game);
 t_playerPos	get_position(t_map *map);
 void	set_direction(t_game *game, t_playerPos position);
 void	calculate_rays(t_game *game);
-void	render_rays(t_game *game);
+void	perform_dda(t_game *game, int i);
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 

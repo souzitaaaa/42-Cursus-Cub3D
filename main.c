@@ -8,6 +8,9 @@ void init_struct(t_game *game)
 	game->map.ray_dir_y = malloc(game->map.map_y * sizeof(double));
 	game->map.ray_pos_x = malloc(game->map.map_x * sizeof(double));
 	game->map.ray_pos_y = malloc(game->map.map_y * sizeof(double));
+	game->map.ray_x = malloc(game->map.map_x * sizeof(int));
+	game->map.ray_y = malloc(game->map.map_y * sizeof(int));
+	game->map.side = malloc(game->map.map_x * sizeof(int));
 	return;
 }
 
