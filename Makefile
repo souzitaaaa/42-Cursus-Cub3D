@@ -25,14 +25,14 @@ LIBFTDIR 		= libft
 LIBFT 			= $(LIBFTDIR)/libft.a
 INCLUDE			= includes
 SRCS			= src
-_SUBFOLDERS		= 
+_SUBFOLDERS		= parse
 VPATH			= $(SRCS) $(addprefix $(SRCS)/, $(_SUBFOLDERS))
 OBJDIR			= obj
 
 #--------------------------------- FILES  ---------------------------------------
 NAME 			= cub3d
 
-_FILES 			= init map_check position dda utils
+_FILES 			= init map_check position dda utils colors parse_utils textures
 
 OBJ				= $(_FILES:%=%.o)
 TARGET			= $(addprefix $(OBJDIR)/, $(OBJ))
