@@ -12,6 +12,8 @@
 # define SCREEN_X 1024
 # define SCREEN_Y 512
 # define FOV 60 // field of view
+# define CEILING_COLOR 0x87CEEBFF
+# define FLOOR_COLOR 0xFF0000FF
 
 # if OS == 1
 #  include "../minilibx-linux/mlx.h"
@@ -60,6 +62,8 @@
 typedef struct s_map
 {
 	char	*map_folder; 	//? Ficheiro do mapa
+	char	*texture_folder;//? Ficheiro da textura
+	char	*colors;		//? array para as cores
 	int		fd;			 	//? Fd para usar quando se abre o mapa
 	char	**area;      	//? Array com o mapa
 	int		map_y;       	//? Colunas do mapa
@@ -75,6 +79,11 @@ typedef struct s_data
 {
 	void	*mlx;			//? Instância da mlx
 	void	*win;			//? Janela da mlx
+	void	*img;			// Imagem da mlx
+	char	*addr;			// Endereço da imagem
+	int		bits_per_pixel;	// Bits por pixel
+	int		line_len;	// Tamanho da linha da imagem em bytes
+	int		endian;			// Endian da imagem
 }				t_data;
 
 typedef	struct s_playerPos {
@@ -88,15 +97,21 @@ typedef struct s_ray {
 	double	ray_dir_x_2; 	//? Direção do raio no plano em x para o pixel no plano da câmara
 	double	*ray_dir_y;  	//? array raios y
 	double	ray_dir_y_2; 	//? Direção do raio no plano em y para o pixel no plano da câmara
-	double	*ray_pos_x;  	//? array coordenada do raio x
-	double	*ray_pos_y;  	//? array coordenada do raio x
+	double	*ray_pos_x;  	//? array coordenada inicial do raio x
+	double	*ray_pos_y;  	//? array coordenada inicial do raio y
+	double	ray_x;			//? coordenada do raio x conforme ele se move 
+	double	ray_y;			//? coordenada do raio y conforme ele se move 
 	double	screen_x;	 	//? Index do x relativamente á tela
+	double	screen_y;
 	int		map_x;			//? Coordenada x no grid do mapa onde o raio está a interceptar
 	int		map_y;			//? Coordenada y no grid do mapa onde o raio está a interceptar
+	int		side;			//? Lado da parede atingida pelo raio
 	double	side_dist_x;	//? Distância inicial que o raio percorre até chegar ao primeiro x no grid
 	double	side_dist_y;	//? Distância inicial que o raio percorre até chegar ao primeiro y no grid
 	double	delta_dist_x;	//? Distância que o raio fez desde um lado do grid x até ao outro
 	double	delta_dist_y;	//? Distância que o raio fez desde um lado do grid y até ao outro
+	double	step_x;			//? Direção que o raio está  movendo para a esquerda em x
+	double	step_y;			//? Direção que o raio está  movendo para a esquerda em y.
 } t_ray;
 
 typedef struct s_game
@@ -108,12 +123,25 @@ typedef struct s_game
 }				t_game;
 
 //* [src/map_check.c]
-void map_validations(t_game *game);
+void		map_validations(t_game *game);
 t_playerPos	get_position(t_map *map);
-void	set_direction(t_game *game, t_playerPos position);
-void	calculate_rays(t_game *game);
+void		set_direction(t_game *game, t_playerPos position);
+void		algoritm_dda(t_game *game);
+void		distance_step_side(t_game *game);
+void		init_game(t_game *game);
 
+/*
+Utils
+*/
+void	my_mlx_pixel_put(t_game	*game, int x, int y, int color);
+int		draw_ceiling_walls(t_game *game);
 
-void	init_game(t_game *game);
+/*
+Parse
+*/
+bool	count_commas(char *str);
+void	colors_validations(t_game *game, char *color);
+void	textures_validations(t_game *game);
+int		check_format(char	*ln);
 
 #endif

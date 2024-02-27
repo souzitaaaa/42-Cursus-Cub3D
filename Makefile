@@ -32,7 +32,7 @@ OBJDIR			= obj
 #--------------------------------- FILES  ---------------------------------------
 NAME 			= cub3d
 
-_FILES 			= init map_check position calculate_rays
+_FILES 			= init map_check position dda utils
 
 OBJ				= $(_FILES:%=%.o)
 TARGET			= $(addprefix $(OBJDIR)/, $(OBJ))

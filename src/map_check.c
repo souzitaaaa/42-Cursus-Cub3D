@@ -158,7 +158,7 @@ void map_validations(t_game *game)
 		printf("Error\n The map you provided isn't .cub\n");
 		exit (EXIT_FAILURE);
 	}
-    get_map_y(game);
+	get_map_y(game);
 	alloc_map(game);
 	get_map_x(game);
 	check_walls(game);

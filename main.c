@@ -6,13 +6,15 @@ void init_struct(t_game *game)
 	game->map.map_y = 0;
 	game->map.map_x = 0;
 	game->ray.screen_x = 0;
+	game->ray.screen_y = 0;
 	game->ray.map_x = 0;
 	game->ray.map_y = 0;
+	game->ray.side = 0;
 	return;
 }
 
-//* Esta função está a correr com a janela, e vai atribuindo os valores necessários para num futuro
-//*		puderem ser utilizados para realizar o raycasting
+//Esta função está a correr com a janela, e vai atribuindo os valores necessários para num futuro
+//		puderem ser utilizados para realizar o raycasting
 int loop(t_game *game)
 {
 	double cameraX = 0;
@@ -28,17 +30,10 @@ int loop(t_game *game)
 		//? É porque ele só ensina o do deltaDist
 		game->ray.delta_dist_x = fabs(1 / game->ray.ray_dir_x_2);
 		game->ray.delta_dist_y = fabs(1 / game->ray.ray_dir_y_2);
-		printf("---------------------------------------\n");
-		printf("cameraX: %f\n", cameraX);
-		printf("ray_dir_x: %f\n", game->ray.ray_dir_x_2);
-		printf("ray_dir_y: %f\n", game->ray.ray_dir_y_2);
-		printf("screen_x: %f\n", game->ray.screen_x);
-		printf("map_x: %d\n", game->ray.map_x);
-		printf("map_y: %d\n", game->ray.map_y);
-		printf("delta_dist_x: %f\n", game->ray.delta_dist_x);
-		printf("delta_dist_y: %f\n", game->ray.delta_dist_y);
-		printf("---------------------------------------\n");
+		draw_ceiling_walls(game);
 	}
+	mlx_clear_window(game->data.mlx, game->data.win);
+	mlx_put_image_to_window(game->data.mlx, game->data.win, game->data.img, 0, 0);
 	return 1;
 }
 
@@ -46,9 +41,12 @@ void init_game_teste(t_game *game)
 {
 	game->data.mlx = mlx_init();
 	game->data.win = mlx_new_window(game->data.mlx, SCREEN_X, SCREEN_Y, "cub3D");
+	game->data.img = mlx_new_image(game->data.mlx, SCREEN_X, SCREEN_Y);
+	game->data.addr = mlx_get_data_addr(game->data.img, &game->data.bits_per_pixel, &game->data.line_len, &game->data.endian);
 	mlx_loop_hook(game->data.mlx, loop, game);
 	mlx_loop(game->data.mlx);
 }
+
 
 int	main(int ac, char **av)
 {
@@ -79,6 +77,5 @@ int	main(int ac, char **av)
 	set_direction(&game, player);
 	game.pos = player;
 	printf("dir_x: %d, dir_y: %d, plane_x: %d, plane_y: %d\n", game.map.dir_x, game.map.dir_y, game.map.plane_x, game.map.plane_y);
-	//calculate_rays(&game);
 	init_game_teste(&game);
 }
