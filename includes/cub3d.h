@@ -62,8 +62,12 @@
 typedef struct s_map
 {
 	char	*map_folder; 	//? Ficheiro do mapa
-	char	*texture_folder;//? Ficheiro da textura
-	char	*colors;		//? array para as cores
+	char	*no_texture;	//? array textura NO
+	char	*so_texture;	//? array textura SO
+	char	*we_texture;	//? array textura WE
+	char	*ea_texture;	//? array textura EA
+	int		f_range[3];		//? range das cores p/ chao
+	int		c_range[3];		//? range das cores p/ ceu
 	int		fd;			 	//? Fd para usar quando se abre o mapa
 	char	**area;      	//? Array com o mapa
 	int		map_y;       	//? Colunas do mapa
@@ -140,8 +144,10 @@ int		draw_ceiling_walls(t_game *game);
 Parse
 */
 bool	count_commas(char *str);
-void	colors_validations(t_game *game, char *color);
-void	textures_validations(t_game *game);
-int		check_format(char	*ln);
+bool	check_format(char	*ln);
+void	floor_colors(t_game *game);
+void	ceiling_colors(t_game *game);
+int		textures_validations(t_game *game);
+void	map_info(t_game *game);
 
 #endif

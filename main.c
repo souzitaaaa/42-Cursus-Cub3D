@@ -64,6 +64,10 @@ int	main(int ac, char **av)
 		exit (EXIT_FAILURE);
 	}
 	game.map.map_folder = av[1];
+	game.map.no_texture = NULL;
+	game.map.so_texture = NULL;
+	game.map.we_texture = NULL;
+	game.map.ea_texture = NULL;
 	printf("Map folder: %s\n", game.map.map_folder);
 	init_struct(&game);
 	map_validations(&game);

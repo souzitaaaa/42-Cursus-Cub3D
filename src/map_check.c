@@ -84,7 +84,7 @@ bool flood(t_game *game, int start)
 
 	map = ft_arrdup(game->map.area);
 	valid = flood_walls(game, map, start, 0);
-	printf("Map flood walls: \n");
+	//printf("Map flood walls: \n");
 	valid = verify_flood(map);
 	print_arr(map);
 	ft_free_array(&map);
@@ -122,8 +122,8 @@ void get_map_x(t_game *game)
 		i++;
 	}
 	game->map.map_x = x;
-	printf("Map x: %i\n", game->map.map_x);
-	printf("Map y: %i\n", game->map.map_y);
+	//printf("Map x: %i\n", game->map.map_x);
+	//printf("Map y: %i\n", game->map.map_y);
 }
 
 void get_map_y(t_game *game)
@@ -160,6 +160,9 @@ void map_validations(t_game *game)
 	}
 	get_map_y(game);
 	alloc_map(game);
+	map_info(game); //jenny init insert
+	floor_colors(game);
+	ceiling_colors(game); //jenny end insert
 	get_map_x(game);
 	check_walls(game);
 }
