@@ -70,6 +70,7 @@ typedef struct s_map
 	int		c_range[3];		//? range das cores p/ ceu
 	int		fd;			 	//? Fd para usar quando se abre o mapa
 	char	**area;      	//? Array com o mapa
+	char	**map_a;		//?array com o mapa depois de tratar as texturas
 	int		map_y;       	//? Colunas do mapa
 	int		map_x;       	//? Linhas do mapa
 	//! Tudo que tinha haver com a parte do raytracer meti noutra estrutura

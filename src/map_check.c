@@ -96,7 +96,9 @@ void check_walls(t_game *game)
 	int start;
 
 	start = 0;
-	while (game->map.area[start][0] != '1')
+	ft_printf("map_a:");
+	print_arr(game->map.map_a);
+	while (game->map.map_a[start][0] != '1')//mudei aqui
 		start++;
 	printf("Start: %i\n", start);
 	if (flood(game, start)) {
@@ -160,9 +162,7 @@ void map_validations(t_game *game)
 	}
 	get_map_y(game);
 	alloc_map(game);
-	map_info(game); //jenny init insert
-	floor_colors(game);
-	ceiling_colors(game); //jenny end insert
+	map_info(game);
 	get_map_x(game);
 	check_walls(game);
 }

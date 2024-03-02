@@ -1,15 +1,6 @@
 #include "../../includes/cub3d.h"
 
-bool	count_commas(char *str)
+int	encode_rgb(uint8_t red, uint8_t green, uint8_t blue)
 {
-	int	c = 0;
-	int	i = 0;
-
-	while (str[i])
-	{
-		if (str[i] == ',')
-			c++;
-		i++;
-	}
-	return (c == 2);
+	return (red << 16 | green << 8 | blue);
 }
