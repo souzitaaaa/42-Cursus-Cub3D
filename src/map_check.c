@@ -98,7 +98,7 @@ void check_walls(t_game *game)
 	start = 0;
 	ft_printf("map_a:");
 	print_arr(game->map.map_a);
-	while (game->map.map_a[start][0] != '1')//mudei aqui
+	while (game->map.area[start][0] != '1')
 		start++;
 	printf("Start: %i\n", start);
 	if (flood(game, start)) {
