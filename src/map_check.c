@@ -26,20 +26,31 @@ void alloc_map(t_game *game)
 
 bool flood_walls(t_game *game, char **map, int col, int row)
 {
-	if (col < 0 || row < 0 || col >= game->map.mapa_y || row >= game->map.mapa_x)
+	printf("going to check: col %i\t | row %i\n", col, row);
+	printf("mapa_y: %i\t | mapa_x: %i\n", game->map.mapa_y, game->map.mapa_x);
+	if (col < 0 || row < 0 || col >= 13 || row >= 41)
 		return false;
 	else if (map[col][row] != '1')
 		return false;
 	else if (map[col][row] == 'X')
 		return false;
 	map[col][row] = 'X';
+	printf("row: %i\t | col: %i\n", row, col);
+	printf("1\n");
 	flood_walls(game, map, col + 1, row);
+	printf("2\n");
 	flood_walls(game, map, col, row + 1);
+	printf("3\n");
 	flood_walls(game, map, col + 1, row + 1);
+	printf("4\n");
 	flood_walls(game, map, col - 1, row + 1);
+	printf("5\n");
 	flood_walls(game, map, col - 1, row);
+	printf("6\n");
 	flood_walls(game, map, col, row - 1);
+	printf("7\n");
 	flood_walls(game, map, col - 1, row - 1);
+	printf("8 \n");
 	flood_walls(game, map, col + 1, row - 1);
 	return true;
 }

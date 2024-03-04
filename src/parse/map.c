@@ -42,11 +42,12 @@ void	map_info(t_game *game)
 					while (i < game->map.map_y + 1 && game->map.area[i] != NULL)
 					{
 						game->map.map_a[k] = ft_strdup(game->map.area[i]);
+						printf("map_a: %s\n", game->map.map_a[k]);
 						k++;
 						i++;
 					}
+					game->map.map_a[k] = '\0';
 					break ;
-					//game->map.map_a[k] = NULL;
 				}
 			}
 		}
