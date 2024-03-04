@@ -26,7 +26,7 @@ void alloc_map(t_game *game)
 
 bool flood_walls(t_game *game, char **map, int col, int row)
 {
-	if (col < 0 || row < 0 || col >= game->map.map_y || row >= game->map.map_x)
+	if (col < 0 || row < 0 || col >= game->map.mapa_y || row >= game->map.mapa_x)
 		return false;
 	else if (map[col][row] != '1')
 		return false;
@@ -82,7 +82,7 @@ bool flood(t_game *game, int start)
 	char **map;
 	bool valid;
 
-	map = ft_arrdup(game->map.area);
+	map = ft_arrdup(game->map.map_a);
 	valid = flood_walls(game, map, start, 0);
 	//printf("Map flood walls: \n");
 	valid = verify_flood(map);
@@ -98,7 +98,7 @@ void check_walls(t_game *game)
 	start = 0;
 	ft_printf("map_a:");
 	print_arr(game->map.map_a);
-	while (game->map.area[start][0] != '1')
+	while (game->map.map_a[start][0] != '1')//mudei aqui
 		start++;
 	printf("Start: %i\n", start);
 	if (flood(game, start)) {
@@ -161,8 +161,10 @@ void map_validations(t_game *game)
 		exit (EXIT_FAILURE);
 	}
 	get_map_y(game);
+	get_mapa_y(game);
 	alloc_map(game);
 	map_info(game);
 	get_map_x(game);
+	get_mapa_x(game);
 	check_walls(game);
 }

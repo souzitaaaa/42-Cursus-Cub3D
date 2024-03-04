@@ -5,6 +5,8 @@ void init_struct(t_game *game)
 {
 	game->map.map_y = 0;
 	game->map.map_x = 0;
+	game->map.mapa_y = 0;
+	game->map.mapa_x = 0;
 	game->ray.screen_x = 0;
 	game->ray.screen_y = 0;
 	game->ray.map_x = 0;

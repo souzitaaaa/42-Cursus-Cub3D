@@ -46,7 +46,7 @@ void	map_info(t_game *game)
 						i++;
 					}
 					break ;
-					game->map.map_a[k] = NULL;
+					//game->map.map_a[k] = NULL;
 				}
 			}
 		}

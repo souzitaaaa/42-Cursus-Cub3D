@@ -71,6 +71,8 @@ typedef struct s_map
 	int		fd;			 	//? Fd para usar quando se abre o mapa
 	char	**area;      	//? Array com o mapa
 	char	**map_a;		//?array com o mapa depois de tratar as texturas
+	int		mapa_y;
+	int		mapa_x;
 	int		map_y;       	//? Colunas do mapa
 	int		map_x;       	//? Linhas do mapa
 	//! Tudo que tinha haver com a parte do raytracer meti noutra estrutura
@@ -150,5 +152,7 @@ void	floor_colors(t_game *game);
 void	ceiling_colors(t_game *game);
 int		textures_validations(t_game *game);
 void	map_info(t_game *game);
+void	get_mapa_x(t_game *game);
+void	get_mapa_y(t_game *game);
 
 #endif
