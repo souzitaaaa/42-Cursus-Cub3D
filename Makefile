@@ -14,7 +14,7 @@ CC				= cc
 RM 				= rm -rf
 
 #-----------------------------------  FLAGS  -----------------------------------
-CFLAGS			= -Wall -Wextra -Werror -g
+CFLAGS 			= -Wall -Wextra -Werror -g -lm
 NPD				= --no-print-directory
 MINILIBX 		= ./minilibx
 MLXFLAGS 		= -L ./minilibx -lmlx -Ilmlx -lXext -lX11
@@ -32,7 +32,7 @@ OBJDIR			= obj
 #--------------------------------- FILES  ---------------------------------------
 NAME 			= cub3d
 
-_FILES 			= init map_check position calculate_rays
+_FILES 			= init map_check position calculate_rays dda
 
 OBJ				= $(_FILES:%=%.o)
 TARGET			= $(addprefix $(OBJDIR)/, $(OBJ))
@@ -47,7 +47,7 @@ ifeq ($(shell uname), Linux)
 	OS          = 1
 else ifeq ($(shell uname), Darwin)
 	MINILIBX 	= ./minilibx
-	MLXFLAGS	= -L ./minilibx -lmlx -framework OpenGL -framework Appkit -lm 
+	MLXFLAGS	= -L ./minilibx -lmlx -framework OpenGL -framework Appkit -lm
 	CP_CMD 		= cp ./minilibx/libmlx.dylib ./
 	OS          = 2
 endif
@@ -58,7 +58,7 @@ $(NAME): $(OBJDIR) $(TARGET) $(LIBFT) main.c
 	echo "[$(CYAN)Compiling minilibx$(RESET)] $(CFLAGS) $<$(RESET)"
 	$(MAKE) --no-print-directory -C $(MINILIBX)
 	echo "[$(GREEN)Success$(RESET)] Compiling minilibx$(BOLD)$(RESET)"
-	$(CC) $(CFLAGS) main.c $(TARGET) $(MLXFLAGS) -I $(INCLUDE) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) main.c $(TARGET) $(MLXFLAGS) -I $(INCLUDE) $(LIBFT) -o $(NAME) -lm
 	echo "[$(GREEN)Success$(RESET)] cub3d created$(BOLD)$(RESET)"
 
 $(OBJDIR)/%.o : %.c $(HDR)

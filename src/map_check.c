@@ -98,7 +98,6 @@ void check_walls(t_game *game)
 	start = 0;
 	while (game->map.area[start][0] != '1')
 		start++;
-	printf("Start: %i\n", start);
 	if (flood(game, start)) {
 		printf("Error\n The map isn't surrounded by walls\n");
 		//! FREE
@@ -122,8 +121,8 @@ void get_map_x(t_game *game)
 		i++;
 	}
 	game->map.map_x = x;
-	printf("Map x: %i\n", game->map.map_x);
-	printf("Map y: %i\n", game->map.map_y);
+	printf("Map col(y): %i\n", game->map.map_y);
+	printf("Map row(x): %i\n", game->map.map_x);
 }
 
 void get_map_y(t_game *game)
