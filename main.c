@@ -12,7 +12,39 @@ void init_struct(t_game *game)
 	game->map.map_y = 0;
 	game->map.map_x = 0;
 	game->ray.screen_pixel = 0;
+	assign_vector_values(&game->ray.distTo, 0, 0);
+	assign_vector_values(&game->ray.step, 0, 0);
 	return;
+}
+
+int key_press(int kc, t_game *game) {
+	(void)game;
+	if (kc == 65307) {
+		printf("Thanks for playing :P\n");
+	}
+	if (kc == 119) {
+		printf("|\tW\t|\n");
+		game->pos.col -= 0.2;
+	}
+	if (kc == 97) {
+		printf("|\tA\t|\n");
+		game->pos.row -= 0.2;
+	}
+	if (kc == 115) {
+		printf("|\tS\t|\n");
+		game->pos.col += 0.2;
+	}
+	if (kc == 100) {
+		printf("|\tD\t|\n");
+		game->pos.row += 0.2;
+	}
+	if (kc == 65361) {
+		printf("|\tL\t|\n");
+	}
+	if (kc == 65363) {
+		printf("|\tR\t|\n");
+	}
+	return 1;
 }
 
 /**
@@ -27,6 +59,7 @@ void init_game_teste(t_game *game)
 	game->data.win = mlx_new_window(game->data.mlx, SCREEN_X, SCREEN_Y, "cub3D");
 	game->data.img = mlx_new_image(game->data.mlx, SCREEN_X, SCREEN_Y);
 	game->data.addr = mlx_get_data_addr(game->data.img, &game->data.bits_per_pixel, &game->data.line_len, &game->data.endian);
+	mlx_hook(game->data.win, 2, 1L << 0, key_press, game);
 	mlx_loop_hook(game->data.mlx, loop, game);
 	mlx_loop(game->data.mlx);
 }

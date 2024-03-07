@@ -19,7 +19,7 @@
 
 # if OS == 1
 #  include "../minilibx-linux/mlx.h"
-#  define ESC 65307
+# 	define ESC 65307
 #  define LEFT 65361
 #  define RIGHT 65363
 #  define UP 65362
@@ -71,7 +71,6 @@ typedef struct s_line {
 	double y;
 } t_line;
 
-
 typedef struct s_vector {
 	float	x;
 	float	y;
@@ -112,30 +111,11 @@ typedef struct s_ray {
 	double		deltaDistX;			//? Distância base entre cada X
 	double		deltaDistY;			//? Distância base entre cada Y
 	t_vector	mapPos;				//? Vetor com as coordenadas do player no mapa
-	double		distToX;
-	double		distToY;
-	int			stepX;
-	int			stepY;
-	double		wallLineSize;
+	t_vector	distTo;				//? Coordenadas de x e y do distTo
+	t_vector	step;				//? Informação do step relativamente ao x e y
+	double		wallLineSize;		//? Tamanho da linha da parede
 	double		lineStartY;
 	double		lineEndY;
-	//double	*ray_dir_x;  	//? array raios x
-	//double	*ray_dir_y;  	//? array raios y
-	//double	*ray_pos_x;  	//? array coordenada do raio x
-	//double	*ray_pos_y;  	//? array coordenada do raio x
-	//double	ray_dir_x_2; 	//? Direção do raio no plano em x para o pixel no plano da câmara
-	//double	ray_dir_y_2; 	//? Direção do raio no plano em y para o pixel no plano da câmara
-	//int		map_x;			//? Coordenada x no grid do mapa onde o raio está a interceptar
-	//int		map_y;			//? Coordenada y no grid do mapa onde o raio está a interceptar
-	//double	side_dist_x;	//? Distância inicial que o raio percorre até chegar ao primeiro x no grid
-	//double	side_dist_y;	//? Distância inicial que o raio percorre até chegar ao primeiro y no grid
-	//double	delta_dist_x;	//? Distância que o raio fez desde um lado do grid x até ao outro
-	//double	delta_dist_y;	//? Distância que o raio fez desde um lado do grid y até ao outro
-	//int		ray_step_x;		//? Direção em que o raio se movimenta em x
-	//int		ray_step_y;		//? Direção em que o raio se movimenta em y
-	//int		hit_wall;		//? Flag para verificar se o raio chegou a uma parede
-	//char	cord_side;		//? Side em que o raio encontrou a parede, N, E, S, W
-	//double	perpWallDist;	//! Sem muitas certezas
 } t_ray;
 
 typedef struct s_game
@@ -147,14 +127,27 @@ typedef struct s_game
 }				t_game;
 
 //* [src/map_check.c]
-void 		map_validations(t_game *game);
+void map_validations(t_game *game);
+void get_map_y(t_game *game);
+void get_map_x(t_game *game);
+void 		check_walls(t_game *game);
+bool 		flood(t_game *game, int start);
+bool 		verify_flood(char **map);
+bool 		flood_walls(t_game *game, char **map, int col, int row);
+void 		alloc_map(t_game *game);
+
+//* [src/position.c]
 t_playerPos	get_position(t_map *map);
 void		set_direction(t_game *game, t_playerPos position);
-void		calculate_rays(t_game *game);
-void		render_rays(t_game *game);
+
+//* [src/algorithm/dda-1.c]
+
+
 int 		loop(t_game *game);
 void assign_vector_values(t_vector *vector, double y, double x);
 
 void		init_game(t_game *game);
+void dda(t_game *game);
+double  get_max(double dif_x, double dif_y);
 
 #endif

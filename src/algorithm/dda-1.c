@@ -16,7 +16,7 @@ void assign_vector_values(t_vector *vector, double y, double x)
 /**
  * @brief 			Function to calculate the magnitude of a vector
  * 				@param Magnitude is the lenght of a vector
- * 
+ *
  * @param vector 	Vector that will be used to measure the magnitude
  * @return double 	The return value of this function will be the magnitude of
  * 				the vector
@@ -44,23 +44,23 @@ void get_distToSides(t_game *game)
 {
         if (game->ray.rayDir.x < 0)
         {
-                game->ray.distToX = (game->pos.row - game->ray.mapPos.x) * game->ray.deltaDistX;
-                game->ray.stepX = -1;
+                game->ray.distTo.x = (game->pos.row - game->ray.mapPos.x) * game->ray.deltaDistX;
+                game->ray.step.x = -1;
         }
         else
         {
-                game->ray.distToX = (game->ray.mapPos.x + 1 - game->pos.row) * game->ray.deltaDistX;
-                game->ray.stepX = 1;
+                game->ray.distTo.x = (game->ray.mapPos.x + 1 - game->pos.row) * game->ray.deltaDistX;
+                game->ray.step.x = 1;
         }
         if (game->ray.rayDir.y < 0)
         {
-                game->ray.distToY = (game->pos.col - game->ray.mapPos.y) * game->ray.deltaDistY;
-                game->ray.stepY = -1;
+                game->ray.distTo.y = (game->pos.col - game->ray.mapPos.y) * game->ray.deltaDistY;
+                game->ray.step.y = -1;
         }
         else
         {
-                game->ray.distToY = (game->ray.mapPos.y + 1 - game->pos.col) * game->ray.deltaDistY;
-                game->ray.stepY = 1;
+                game->ray.distTo.y = (game->ray.mapPos.y + 1 - game->pos.col) * game->ray.deltaDistY;
+                game->ray.step.y = 1;
         }
 }
 
@@ -75,116 +75,6 @@ double  get_max(double dif_x, double dif_y) {
         if (dif_x > dif_y)
                 return (dif_x);
         return (dif_y);
-}
-
-void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
-{
-	char	*dst;
-
-	dst = game->data.addr + (y * game->data.line_len + x * (game->data.bits_per_pixel / 8));
-	
-        *(unsigned int *)dst = color;
-}
-
-void	draw_line(t_game *game, int hitSide)
-{
-	//t_line	line;
-	int		i;
-        double dif_x = 0;
-	double dif_y = 0;
-	int n_step = 0;
-	double x_step = 0;
-	double y_step = 0;
-	double x = 0;
-	double y = 0;
-
-	dif_x = game->ray.screen_pixel - game->ray.screen_pixel;
-	dif_y = game->ray.lineEndY - game->ray.lineStartY;
-	n_step = get_max(fabs(dif_x), fabs(dif_y));
-	x_step = dif_x / n_step;
-	y_step = dif_y / n_step;
-	x = game->ray.screen_pixel;
-	y = game->ray.lineStartY;
-        printf("dif_y: %f\n", dif_y);
-        printf("dif_x: %f\n", dif_x);
-        printf("n_step: %i\n", n_step);
-        printf("x_step: %f\n", x_step);
-        printf("y_step: %f\n", y_step);
-        printf("x: %f\n", x);
-        printf("y: %f\n", y);
-	i = 0;
-	while (i <= n_step)
-	{
-                if (hitSide == 1)
-		        my_mlx_pixel_put(game, (int)x, (int)y, COLOR);
-                else
-                        my_mlx_pixel_put(game, (int)x, (int)y, COLOR2);
-		x += x_step;
-		y += y_step;
-		i++;
-	}
-
-}
-
-/**
- * @brief       This function implements the Digital Differential Analyzer(DDA)
- * 			algorithm, which calculates the intersections of rays with the walls
- * 			in the game map
- * 				@brief //? NOT FINISHED BECAUSE I NEED TO SORT IN STRUCTS
- * 
- * @param game  Struct that contains every information on the program
- */
-void dda(t_game *game)
-{
-        bool hit;
-        double lineSizeY;
-        double lineSizeX;
-        int     hitSide;
-        double perpendicularDist;
-        double x = 0;
-        double y = 0;
-
-        x = game->ray.mapPos.x;
-        y = game->ray.mapPos.y;
-        lineSizeY = game->ray.distToY;
-        lineSizeX = game->ray.distToX;
-        hit = false;
-        hitSide = 0;
-        perpendicularDist = 0;
-        //! calcula o caminho em que o raio passa até chegar á parede
-        while (!hit)
-        {
-                printf( YELLOW "LineSize\t| col(y): %f\t| row(x): %f\t|\n" RESET, lineSizeY, lineSizeX);
-                printf("WallMapPos\t| col(y): %f\t| row(x): %f\t|\n", y, x);
-                if (lineSizeX < lineSizeY)
-                {
-                        x += game->ray.stepX;
-                        lineSizeX += game->ray.deltaDistX;
-                        hitSide = 0;
-                }
-                else
-                {
-                        y += game->ray.stepY;
-                        lineSizeY += game->ray.deltaDistY;
-                        hitSide = 1;
-                }
-                if (game->map.area[(int)y][(int)x] == '1') {
-                        hit = true;
-                }
-        }
-                printf("hitWall\t\t| col(y): %i\t\t| row(x): %i\t\t|\n", (int)y, (int)x);
-                printf("hitSide\t\t| %i\t\t\t|\n", hitSide);
-        if (hitSide == 0) {
-                perpendicularDist = fabs(x - game->pos.row + ((1 - game->ray.stepX)/2))/game->ray.rayDir.x;
-        }
-        else {
-                perpendicularDist = fabs(y - game->pos.col + ((1 - game->ray.stepY)/2))/game->ray.rayDir.y;
-        }
-                printf("perpendicularD\t| %f\t\t|\n", perpendicularDist);
-        game->ray.wallLineSize = SCREEN_Y/perpendicularDist;
-        game->ray.lineStartY = SCREEN_Y/2 - game->ray.wallLineSize/2;
-        game->ray.lineEndY = SCREEN_Y/2 + game->ray.wallLineSize/2;
-        draw_line(game, hitSide);
 }
 
 /**
@@ -218,7 +108,7 @@ int loop(t_game *game)
 
         multiplier = 0;
 
-        //game->ray.screen_pixel = 0;
+        game->ray.screen_pixel = 0;
         //! Não tenho a certeza quanto ao <=, mas se ele não tiver para no 0.998047
         while (game->ray.screen_pixel < SCREEN_X)
         {
@@ -254,13 +144,13 @@ int loop(t_game *game)
                 assign_vector_values(&game->ray.mapPos, floor(game->pos.col), floor(game->pos.row));
                 printf("MapPos vector\t| col(y): %f\t| row(x): %f\t|\n", game->ray.mapPos.y, game->ray.mapPos.x);
                 get_distToSides(game);
-                printf("DistToSide\t| col(y): %f\t| row(x): %f\t|\n", game->ray.distToY, game->ray.distToX);
+                printf("DistToSide\t| col(y): %f\t| row(x): %f\t|\n", game->ray.distTo.y, game->ray.distTo.x);
                 //* END
                 //*DDA
                 dda(game);
                 game->ray.screen_pixel++;
         }
-        mlx_clear_window(game->data.mlx, game->data.win);
-		mlx_put_image_to_window(game->data.mlx, game->data.win, game->data.img, 0, 0);
+        printf("Player Info | col(y): %f | row(x): %f | orientation: %c |\n", game->pos.col, game->pos.row, game->pos.orientation);
+        mlx_put_image_to_window(game->data.mlx, game->data.win, game->data.img, 0, 0);
         return 1;
 }
