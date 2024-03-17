@@ -34,5 +34,5 @@ int	draw_ceiling_walls(t_game *game)
 		}
 		y++;
 	}
-	return 0;
+	return (0);
 }

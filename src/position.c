@@ -1,31 +1,46 @@
 #include "../includes/cub3d.h"
 
-/*Essa função e para saber a posição do jogador porque os calculos dos raios começam nessa posição*/
-t_playerPos	get_position(t_map *map)
+bool	is_valid_char(char c)
+{
+	return (c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'W' || c == 'E' || c == ' ');
+}
+
+/*Essa função e para saber a posição do jogador, verifico se os caracteres validos do mapa e se tem mais de um jogador*/
+t_playerPos	get_position(t_game *game, char **map)
 {
 	t_playerPos	pos = {-1, -1, ' '};
+	int x;
+	int y = 0;
 
-	char	**area = map->area;
-	int		rows = map->map_y;
-	int		cols = map->map_x;
-	int x = 0;
-	int y;
-
-	while (x < rows)
+	while (y < game->map.mapa_y)
 	{
-		y = 0;
-		while (y < cols)
+		x = 0;
+		while (map[y][x] != '\0')
 		{
-			if (area[x][y] == 'N' || area[x][y] == 'S' || area[x][y] == 'E' || area[x][y] == 'W')
+			if (!is_valid_char(map[y][x]))
 			{
+				ft_printf("Error\n Invalid map character.\n");
+				exit(EXIT_FAILURE);
+			}
+			if (map[y][x] == 'N' || map[y][x] == 'S' || map[y][x] == 'E' || map[y][x] == 'W')
+			{
+				if (pos.row != -1 || pos.col != -1)
+				{
+					ft_printf("Error\n It's not possible to have more than one player.\n");
+					exit(EXIT_FAILURE);
+				}
 				pos.row = x;
 				pos.col = y;
-				pos.orientation = area[x][y];
-				return (pos);
+				pos.orientation = map[y][x];
 			}
-			y++;
+			x++;
 		}
-		x++;
+		y++;
+	}
+	if (pos.orientation == ' ')
+	{
+	 	ft_printf("Error\n The game must have one player.");
+	 	exit(EXIT_FAILURE);
 	}
 	return (pos);
 }

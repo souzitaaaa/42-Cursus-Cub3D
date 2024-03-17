@@ -3,8 +3,8 @@
 
 void init_struct(t_game *game)
 {
-	game->map.map_y = 0;
-	game->map.map_x = 0;
+	game->map.area_y = 0;
+	game->map.area_x = 0;
 	game->map.mapa_y = 0;
 	game->map.mapa_x = 0;
 	game->ray.screen_x = 0;
@@ -36,7 +36,7 @@ int loop(t_game *game)
 	}
 	mlx_clear_window(game->data.mlx, game->data.win);
 	mlx_put_image_to_window(game->data.mlx, game->data.win, game->data.img, 0, 0);
-	return 1;
+	return (1);
 }
 
 void init_game_teste(t_game *game)
@@ -73,12 +73,12 @@ int	main(int ac, char **av)
 	printf("Map folder: %s\n", game.map.map_folder);
 	init_struct(&game);
 	map_validations(&game);
-	player = get_position(&(game.map));
+	player = get_position(&game, game.map.map_a);
 	//! estavas a iniciar valores com o map_x e map_y que estavam a 0 ainda, porque nao tinham sido atribuidos
-	game.ray.ray_dir_x = malloc(game.map.map_x * sizeof(double));
-	game.ray.ray_dir_y = malloc(game.map.map_y * sizeof(double));
-	game.ray.ray_pos_x = malloc(game.map.map_x * sizeof(double));
-	game.ray.ray_pos_y = malloc(game.map.map_y * sizeof(double));
+	game.ray.ray_dir_x = malloc(game.map.area_x * sizeof(double));
+	game.ray.ray_dir_y = malloc(game.map.area_y * sizeof(double));
+	game.ray.ray_pos_x = malloc(game.map.area_x * sizeof(double));
+	game.ray.ray_pos_y = malloc(game.map.area_y * sizeof(double));
 	printf("Posição do jogador: linha %d, coluna %d, orientation %c\n", player.row, player.col, player.orientation);
 	set_direction(&game, player);
 	game.pos = player;

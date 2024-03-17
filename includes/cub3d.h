@@ -73,8 +73,8 @@ typedef struct s_map
 	char	**map_a;		//?array com o mapa depois de tratar as texturas
 	int		mapa_y;
 	int		mapa_x;
-	int		map_y;       	//? Colunas do mapa
-	int		map_x;       	//? Linhas do mapa
+	int		area_y;       	//? Colunas do mapa
+	int		area_x;       	//? Linhas do mapa
 	//! Tudo que tinha haver com a parte do raytracer meti noutra estrutura
 	int		dir_x;       	//? Valor de x do jogador (câmara está a olhar)
 	int		dir_y;       	//? Valor de y do jogador (câmara está a olhar)
@@ -131,7 +131,7 @@ typedef struct s_game
 
 //* [src/map_check.c]
 void		map_validations(t_game *game);
-t_playerPos	get_position(t_map *map);
+t_playerPos	get_position(t_game *game, char **map);
 void		set_direction(t_game *game, t_playerPos position);
 void		algoritm_dda(t_game *game);
 void		distance_step_side(t_game *game);
@@ -143,16 +143,21 @@ Utils
 void	my_mlx_pixel_put(t_game	*game, int x, int y, int color);
 int		draw_ceiling_walls(t_game *game);
 
+/* Map */
+void	read_map_area(t_game *game);
+void	get_area_x(t_game *game);
+void	get_area_y(t_game *game);
+
 /*
 Parse
 */
-bool	count_commas(char *str);
-bool	check_format(char	*ln);
 void	floor_colors(t_game *game);
 void	ceiling_colors(t_game *game);
-int		textures_validations(t_game *game);
 void	map_info(t_game *game);
 void	get_mapa_x(t_game *game);
-void	get_mapa_y(t_game *game);
+void	print_map(t_game *game);
+void	check_textures(t_game *game);
+bool	is_valid_char(char c);
+bool	verify_around_spaces(t_game *game, char **map);
 
 #endif
