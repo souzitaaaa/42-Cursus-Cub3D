@@ -14,6 +14,14 @@ void init_struct(t_game *game)
 	game->ray.screen_pixel = 0;
 	assign_vector_values(&game->ray.distTo, 0, 0);
 	assign_vector_values(&game->ray.step, 0, 0);
+	assign_vector_values(&game->ray.velocity, 0, 0);
+	game->key.w = false;
+	game->key.a = false;
+	game->key.s = false;
+	game->key.d = false;
+	game->key.l = false;
+	game->key.r = false;
+	game->ray.speed = 5;
 	return;
 }
 
@@ -24,28 +32,32 @@ int key_press(int kc, t_game *game) {
 	}
 	if (kc == 119) {
 		printf("|\tW\t|\n");
+		game->key.w = true;
 		game->pos.col -= 0.2;
 	}
 	if (kc == 97) {
 		printf("|\tA\t|\n");
+		game->key.a = true;
 		game->pos.row -= 0.2;
 	}
 	if (kc == 115) {
 		printf("|\tS\t|\n");
+		game->key.s = true;
 		game->pos.col += 0.2;
 	}
 	if (kc == 100) {
 		printf("|\tD\t|\n");
+		game->key.d = true;
 		game->pos.row += 0.2;
 	}
 	if (kc == 65361) {
 		printf("|\tL\t|\n");
+		game->key.l = true;
 	}
 	if (kc == 65363) {
 		printf("|\tR\t|\n");
+		game->key.r = true;
 	}
-	//mlx_clear_window(game->data.mlx, game->data.win);
-	//mlx_put_image_to_window(game->data.mlx, game->data.win, game->data.img, 0, 0);
 	return (1);
 }
 

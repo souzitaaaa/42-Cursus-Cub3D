@@ -9,8 +9,8 @@
 # include <string.h>
 # include <math.h>
 
-# define SCREEN_X 1024
-# define SCREEN_Y 512
+# define SCREEN_X 800
+# define SCREEN_Y 500
 # define FOV 60 // field of view
 # define YELLOW "\033[0;31m"
 # define RESET "\033[0m"
@@ -127,7 +127,18 @@ typedef struct s_ray {
 	double		wallLineSize;		//? Tamanho da linha da parede
 	double		lineStartY;
 	double		lineEndY;
+	t_vector	velocity;
+	int			speed;
 } t_ray;
+
+typedef struct s_key {
+	bool		w;
+	bool		a;
+	bool		s;
+	bool		d;
+	bool		l;
+	bool		r;
+} t_key;
 
 typedef struct s_game
 {
@@ -135,6 +146,7 @@ typedef struct s_game
 	t_data		data;		//? Estrutura com as informações para a mlx
 	t_ray		ray;		//? Estrutura com as informações para o raycasting
 	t_playerPos pos;		//? Estrutura com as informações do jogador
+	t_key		key;
 }				t_game;
 
 //* [src/map_check.c]
@@ -188,5 +200,8 @@ void	print_map(t_game *game);
 void	check_textures(t_game *game);
 bool	is_valid_char(char c);
 bool	verify_around_spaces(t_game *game, char **map);
+
+void    updateInput(t_game *game);
+
 
 #endif
