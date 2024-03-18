@@ -1,14 +1,5 @@
 #include "../includes/cub3d.h"
 
-void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
-{
-	char	*dst;
-
-	dst = game->data.addr + (y * game->data.line_len + x * (game->data.bits_per_pixel / 8));
-	
-        *(unsigned int *)dst = color;
-}
-
 void	draw_line(t_game *game, int hitSide)
 {
 	//t_line	line;
@@ -28,13 +19,13 @@ void	draw_line(t_game *game, int hitSide)
 	y_step = dif_y / n_step;
 	x = game->ray.screen_pixel;
 	y = game->ray.lineStartY;
-        printf("dif_y: %f\n", dif_y);
-        printf("dif_x: %f\n", dif_x);
-        printf("n_step: %i\n", n_step);
-        printf("x_step: %f\n", x_step);
-        printf("y_step: %f\n", y_step);
-        printf("x: %f\n", x);
-        printf("y: %f\n", y);
+        //printf("dif_y: %f\n", dif_y);
+        //printf("dif_x: %f\n", dif_x);
+        //printf("n_step: %i\n", n_step);
+        //printf("x_step: %f\n", x_step);
+        //printf("y_step: %f\n", y_step);
+        //printf("x: %f\n", x);
+        //printf("y: %f\n", y);
 	i = 0;
 	while (i <= n_step)
 	{
@@ -77,8 +68,8 @@ void dda(t_game *game)
         //! calcula o caminho em que o raio passa até chegar á parede
         while (!hit)
         {
-                printf( YELLOW "LineSize\t| col(y): %f\t| row(x): %f\t|\n" RESET, lineSizeY, lineSizeX);
-                printf("WallMapPos\t| col(y): %f\t| row(x): %f\t|\n", y, x);
+                //printf( YELLOW "LineSize\t| col(y): %f\t| row(x): %f\t|\n" RESET, lineSizeY, lineSizeX);
+                //printf("WallMapPos\t| col(y): %f\t| row(x): %f\t|\n", y, x);
                 if (lineSizeX < lineSizeY)
                 {
                         x += game->ray.step.x;
@@ -91,19 +82,19 @@ void dda(t_game *game)
                         lineSizeY += game->ray.deltaDistY;
                         hitSide = 1;
                 }
-                if (game->map.area[(int)y][(int)x] == '1') {
+                if (game->map.map_a[(int)y][(int)x] == '1') {
                         hit = true;
                 }
         }
-                printf("hitWall\t\t| col(y): %i\t\t| row(x): %i\t\t|\n", (int)y, (int)x);
-                printf("hitSide\t\t| %i\t\t\t|\n", hitSide);
+                //printf("hitWall\t\t| col(y): %i\t\t| row(x): %i\t\t|\n", (int)y, (int)x);
+                //printf("hitSide\t\t| %i\t\t\t|\n", hitSide);
         if (hitSide == 0) {
                 perpendicularDist = fabs(x - game->pos.row + ((1 - game->ray.step.x)/2))/game->ray.rayDir.x;
         }
         else {
                 perpendicularDist = fabs(y - game->pos.col + ((1 - game->ray.step.y)/2))/game->ray.rayDir.y;
         }
-                printf("perpendicularD\t| %f\t\t|\n", perpendicularDist);
+                //printf("perpendicularD\t| %f\t\t|\n", perpendicularDist);
         game->ray.wallLineSize = SCREEN_Y/perpendicularDist;
         game->ray.lineStartY = SCREEN_Y/2 - game->ray.wallLineSize/2;
         game->ray.lineEndY = SCREEN_Y/2 + game->ray.wallLineSize/2;

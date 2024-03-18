@@ -9,8 +9,8 @@
  */
 void init_struct(t_game *game)
 {
-	game->map.map_y = 0;
-	game->map.map_x = 0;
+	game->map.mapa_y = 0;
+	game->map.mapa_x = 0;
 	game->ray.screen_pixel = 0;
 	assign_vector_values(&game->ray.distTo, 0, 0);
 	assign_vector_values(&game->ray.step, 0, 0);
@@ -44,7 +44,9 @@ int key_press(int kc, t_game *game) {
 	if (kc == 65363) {
 		printf("|\tR\t|\n");
 	}
-	return 1;
+	//mlx_clear_window(game->data.mlx, game->data.win);
+	//mlx_put_image_to_window(game->data.mlx, game->data.win, game->data.img, 0, 0);
+	return (1);
 }
 
 /**
@@ -87,10 +89,14 @@ int	main(int ac, char **av)
 		exit (EXIT_FAILURE);
 	}
 	game.map.map_folder = av[1];
+	game.map.no_texture = NULL;
+	game.map.so_texture = NULL;
+	game.map.we_texture = NULL;
+	game.map.ea_texture = NULL;
 	printf("Map folder: %s\n", game.map.map_folder);
 	init_struct(&game);
 	map_validations(&game);
-	player = get_position(&(game.map));
+	player = get_position(&game, game.map.map_a);
 	game.pos = player;
 	printf("Player Info | col(y): %f | row(x): %f | orientation: %c |\n", game.pos.col, game.pos.row, game.pos.orientation);
 	set_direction(&game, player);

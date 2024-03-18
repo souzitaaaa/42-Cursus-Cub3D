@@ -12,10 +12,12 @@
 # define SCREEN_X 1024
 # define SCREEN_Y 512
 # define FOV 60 // field of view
-#define YELLOW "\033[0;31m"
-#define RESET "\033[0m"
+# define YELLOW "\033[0;31m"
+# define RESET "\033[0m"
 # define COLOR 0x00AAFF
 # define COLOR2 0xFFFFFF
+# define CEILING_COLOR 0x87CEEBFF
+# define FLOOR_COLOR 0xFF0000FF
 
 # if OS == 1
 #  include "../minilibx-linux/mlx.h"
@@ -79,10 +81,19 @@ typedef struct s_vector {
 typedef struct s_map
 {
 	char	*map_folder; 	//? Ficheiro do mapa
+	char	*no_texture;	//? array textura NO
+	char	*so_texture;	//? array textura SO
+	char	*we_texture;	//? array textura WE
+	char	*ea_texture;	//? array textura EA
+	int		f_range[3];		//? range das cores p/ chao
+	int		c_range[3];		//? range das cores p/ ceu
 	int		fd;			 	//? Fd para usar quando se abre o mapa
 	char	**area;      	//? Array com o mapa
-	int		map_y;       	//? Colunas do mapa
-	int		map_x;       	//? Linhas do mapa
+	char	**map_a;		//?array com o mapa depois de tratar as texturas
+	int		mapa_y;
+	int		mapa_x;
+	int		area_y;       	//? Colunas do mapa
+	int		area_x;       	//? Linhas do mapa
 	t_vector	dir;		//? Vetor com os valores da direção da câmara
 	t_vector	plane;		//? Vetor com os valores da posição do plano
 }				t_map;
@@ -137,7 +148,7 @@ bool 		flood_walls(t_game *game, char **map, int col, int row);
 void 		alloc_map(t_game *game);
 
 //* [src/position.c]
-t_playerPos	get_position(t_map *map);
+t_playerPos	get_position(t_game *game, char **map);
 void		set_direction(t_game *game, t_playerPos position);
 
 //* [src/algorithm/dda-1.c]
@@ -149,5 +160,33 @@ void assign_vector_values(t_vector *vector, double y, double x);
 void		init_game(t_game *game);
 void dda(t_game *game);
 double  get_max(double dif_x, double dif_y);
+void		map_validations(t_game *game);
+void		set_direction(t_game *game, t_playerPos position);
+void		algoritm_dda(t_game *game);
+void		distance_step_side(t_game *game);
+void		init_game(t_game *game);
+
+/*
+Utils
+*/
+void	my_mlx_pixel_put(t_game	*game, int x, int y, int color);
+int		draw_ceiling_walls(t_game *game);
+
+/* Map */
+void	read_map_area(t_game *game);
+void	get_area_x(t_game *game);
+void	get_area_y(t_game *game);
+
+/*
+Parse
+*/
+void	floor_colors(t_game *game);
+void	ceiling_colors(t_game *game);
+void	map_info(t_game *game);
+void	get_mapa_x(t_game *game);
+void	print_map(t_game *game);
+void	check_textures(t_game *game);
+bool	is_valid_char(char c);
+bool	verify_around_spaces(t_game *game, char **map);
 
 #endif

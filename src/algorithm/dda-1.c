@@ -109,16 +109,17 @@ int loop(t_game *game)
         multiplier = 0;
 
         game->ray.screen_pixel = 0;
+        //draw_ceiling_walls(game);
         //! Não tenho a certeza quanto ao <=, mas se ele não tiver para no 0.998047
         while (game->ray.screen_pixel < SCREEN_X)
         {
                 //* ASSIGNMENT PART
                 multiplier = 2 * (game->ray.screen_pixel / SCREEN_X) - 1;
-                printf(YELLOW "Multiplier\t| %f\t\t|\n" RESET, multiplier);
+                //printf(YELLOW "Multiplier\t| %f\t\t|\n" RESET, multiplier);
                 assign_vector_values(&game->ray.camera, game->map.plane.y * multiplier, game->map.plane.x * multiplier);
-                printf("Camera vector\t| col(y): %f\t| row(x): %f\t|\n", game->ray.camera.y, game->ray.camera.x);
+                //printf("Camera vector\t| col(y): %f\t| row(x): %f\t|\n", game->ray.camera.y, game->ray.camera.x);
                 assign_vector_values(&game->ray.rayDir, game->map.dir.y + game->ray.camera.y, game->map.dir.x + game->ray.camera.x);
-                printf("RayDir vector\t| col(y): %f\t| row(x): %f\t|\n", game->ray.rayDir.y, game->ray.rayDir.x);
+                //printf("RayDir vector\t| col(y): %f\t| row(x): %f\t|\n", game->ray.rayDir.y, game->ray.rayDir.x);
                 
                 //! Treating raydir 0
                 if (game->ray.rayDir.x == 0) {
@@ -130,7 +131,7 @@ int loop(t_game *game)
                                 game->ray.deltaDistX = fabs(magnitude(game->ray.rayDir) / game->ray.rayDir.x);
                         }
                 }
-                printf("DeltaDistX\t| %f\t\t|\n", game->ray.deltaDistX);
+                //printf("DeltaDistX\t| %f\t\t|\n", game->ray.deltaDistX);
                 if (game->ray.rayDir.y == 0) {
                         game->ray.deltaDistX = 0;
                         game->ray.deltaDistY = 1;
@@ -140,17 +141,17 @@ int loop(t_game *game)
                                 game->ray.deltaDistY = fabs(magnitude(game->ray.rayDir) / game->ray.rayDir.y);
                         }
                 }
-                printf("DeltaDistY\t| %f\t\t|\n", game->ray.deltaDistY);
+                //printf("DeltaDistY\t| %f\t\t|\n", game->ray.deltaDistY);
                 assign_vector_values(&game->ray.mapPos, floor(game->pos.col), floor(game->pos.row));
-                printf("MapPos vector\t| col(y): %f\t| row(x): %f\t|\n", game->ray.mapPos.y, game->ray.mapPos.x);
+                //printf("MapPos vector\t| col(y): %f\t| row(x): %f\t|\n", game->ray.mapPos.y, game->ray.mapPos.x);
                 get_distToSides(game);
-                printf("DistToSide\t| col(y): %f\t| row(x): %f\t|\n", game->ray.distTo.y, game->ray.distTo.x);
+                //printf("DistToSide\t| col(y): %f\t| row(x): %f\t|\n", game->ray.distTo.y, game->ray.distTo.x);
                 //* END
                 //*DDA
                 dda(game);
                 game->ray.screen_pixel++;
+                mlx_put_image_to_window(game->data.mlx, game->data.win, game->data.img, 0, 0);
         }
-        printf("Player Info | col(y): %f | row(x): %f | orientation: %c |\n", game->pos.col, game->pos.row, game->pos.orientation);
-        mlx_put_image_to_window(game->data.mlx, game->data.win, game->data.img, 0, 0);
+        //printf("Player Info | col(y): %f | row(x): %f | orientation: %c |\n", game->pos.col, game->pos.row, game->pos.orientation);
         return 1;
 }
