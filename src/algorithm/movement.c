@@ -16,5 +16,7 @@ void walkDown(t_game *game) {
 }
 
 void    updateInput(t_game *game) {
-    game->ray.velocity
+    game->ray.velocity.y *= (1/60);
+    game->ray.velocity.x *= (1/60);
+    assign_vector_values(&game->ray.mapPos, game->ray.velocity.y, game->ray.velocity.x);
 }

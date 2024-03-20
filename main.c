@@ -32,23 +32,58 @@ int key_press(int kc, t_game *game) {
 	}
 	if (kc == 119) {
 		printf("|\tW\t|\n");
-		game->key.w = true;
-		game->pos.col -= 0.2;
+		printf("value y: %i\n", (int)(game->pos.col + game->map.dir.y * 0.2));
+		printf("value x: %i\n", (int)game->pos.row);
+		printf("on arr: %c\n", game->map.map_a[(int)(game->pos.col + game->map.dir.y * 0.2)][(int)game->pos.row]);
+		if (game->map.map_a[(int)(game->pos.col + game->map.dir.y * 0.2)][(int)game->pos.row] != '1')
+		{
+			printf("entrou w\n");
+			game->pos.col += game->map.dir.y * 0.2;
+			game->ray.screen_pixel = 0;
+			draw_ceiling_walls(game);
+		}
+		/*game->key.w = true;
+		game->pos.col -= 0.2;*/
 	}
 	if (kc == 97) {
 		printf("|\tA\t|\n");
-		game->key.a = true;
-		game->pos.row -= 0.2;
+		printf("value y: %i\n", (int)game->pos.col);
+		printf("value x: %i\n", (int)(game->pos.row - game->map.dir.x * 0.2));
+		printf("on arr: %c\n", game->map.map_a[(int)(game->pos.col + game->map.dir.y * 0.2)][(int)game->pos.row]);
+		if (game->map.map_a[(int)game->pos.col][(int)(game->pos.row - game->map.dir.x * 0.2)]  != '1')
+		{
+			printf("entrou a\n");
+			game->pos.row -= game->map.dir.x * 0.2;
+			game->ray.screen_pixel = 0;
+			draw_ceiling_walls(game);
+		}
 	}
 	if (kc == 115) {
 		printf("|\tS\t|\n");
-		game->key.s = true;
-		game->pos.col += 0.2;
+		printf("value y: %i\n", (int)(game->pos.col - game->map.dir.y * 0.2));
+		printf("value x: %i\n", (int)game->pos.row);
+		printf("on arr: %c\n", game->map.map_a[(int)(game->pos.col - game->map.dir.y * 1)][(int)game->pos.row]);
+		if (game->map.map_a[(int)(game->pos.col - game->map.dir.y * 0.2)][(int)game->pos.row] != '1')
+		{
+			printf("entrou s\n");
+			game->pos.col -= game->map.dir.y * 0.2;
+			game->ray.screen_pixel = 0;
+			draw_ceiling_walls(game);
+		}
 	}
 	if (kc == 100) {
 		printf("|\tD\t|\n");
-		game->key.d = true;
-		game->pos.row += 0.2;
+		printf("value y: %i\n", (int)game->pos.col);
+		printf("value x: %i\n", (int)(game->pos.row + game->map.dir.x * 0.2));
+		printf("on arr: %c\n", game->map.map_a[(int)(game->pos.col - game->map.dir.y * 1)][(int)game->pos.row]);
+
+		if (game->map.map_a[(int)game->pos.col][(int)(game->pos.row + game->map.dir.x * 0.2)]  != '1')
+		{
+			printf("entrou d\n");
+			game->pos.row += game->map.dir.x * 0.2;
+			game->ray.screen_pixel = 0;
+			draw_ceiling_walls(game);
+		}
 	}
 	if (kc == 65361) {
 		printf("|\tL\t|\n");
@@ -73,8 +108,9 @@ void init_game_teste(t_game *game)
 	game->data.win = mlx_new_window(game->data.mlx, SCREEN_X, SCREEN_Y, "cub3D");
 	game->data.img = mlx_new_image(game->data.mlx, SCREEN_X, SCREEN_Y);
 	game->data.addr = mlx_get_data_addr(game->data.img, &game->data.bits_per_pixel, &game->data.line_len, &game->data.endian);
-	mlx_hook(game->data.win, 2, 1L << 0, key_press, game);
 	mlx_loop_hook(game->data.mlx, loop, game);
+	mlx_hook(game->data.win, 2, 1L << 0, key_press, game);
+	draw_ceiling_walls(game);
 	mlx_loop(game->data.mlx);
 }
 /**

@@ -12,6 +12,9 @@
 # define SCREEN_X 800
 # define SCREEN_Y 500
 # define FOV 60 // field of view
+# define MOVESPEED	5.0
+# define ROTSPEED	3.0
+
 # define YELLOW "\033[0;31m"
 # define RESET "\033[0m"
 # define COLOR 0x00AAFF
@@ -202,6 +205,8 @@ bool	is_valid_char(char c);
 bool	verify_around_spaces(t_game *game, char **map);
 
 void    updateInput(t_game *game);
+void walkUp(t_game *game);
 
+void walkDown(t_game *game);
 
 #endif
