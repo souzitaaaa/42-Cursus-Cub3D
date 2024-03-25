@@ -107,9 +107,13 @@ int loop(t_game *game)
         double multiplier;
 
         multiplier = 0;
-        //game->ray.screen_pixel = 0;
         //! Não tenho a certeza quanto ao <=, mas se ele não tiver para no 0.998047
-        while (game->ray.screen_pixel < SCREEN_X)
+        //?  && !game->ray.rendered
+        if (game->ray.screen_pixel == 0 && !game->ray.rendered) {
+                printf("INICIO DA RENDERIZACAO\n");
+                draw_ceiling_walls(game);
+        }
+        while (game->ray.screen_pixel < SCREEN_X && !game->ray.rendered)
         {
                 //* ASSIGNMENT PART
                 multiplier = 2 * (game->ray.screen_pixel / SCREEN_X) - 1;
@@ -149,6 +153,8 @@ int loop(t_game *game)
                 dda(game);
                 game->ray.screen_pixel++;
                 mlx_put_image_to_window(game->data.mlx, game->data.win, game->data.img, 0, 0);
+                if (game->ray.screen_pixel == SCREEN_X)
+                        game->ray.rendered = true;
                 //printf("Player Info | col(y): %f | row(x): %f | orientation: %c |\n", game->pos.col, game->pos.row, game->pos.orientation);
         }
         return 1;

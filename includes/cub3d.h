@@ -17,10 +17,13 @@
 
 # define YELLOW "\033[0;31m"
 # define RESET "\033[0m"
-# define COLOR 0x00AAFF
-# define COLOR2 0xFFFFFF
-# define CEILING_COLOR 0x87CEEBFF
-# define FLOOR_COLOR 0xFF0000FF
+# define COLOR1 0x0155ac
+# define COLOR2 0x0c184e
+# define COLOR3 0xffcc41
+# define COLOR4 0xef8833
+# define CEILING_COLOR 0xffffff
+//# define CEILING_COLOR 0x8ae5ff
+# define FLOOR_COLOR 0x8b5a2b
 
 # if OS == 1
 #  include "../minilibx-linux/mlx.h"
@@ -65,6 +68,8 @@
 #  define L
 #  define H
 # endif
+
+//? col = y || row = x
 
 typedef struct s_line {
 	double dif_x;
@@ -132,6 +137,7 @@ typedef struct s_ray {
 	double		lineEndY;
 	t_vector	velocity;
 	int			speed;
+	bool		rendered;
 } t_ray;
 
 typedef struct s_key {

@@ -2,50 +2,37 @@
 
 void draw_line(t_game *game, int hitSide)
 {
-	int drawStart = -game->ray.wallLineSize / 2 + SCREEN_Y / 2;
+	int drawEnd = (game->ray.wallLineSize / 2 + SCREEN_Y / 2);
+	//printf("\t\t----------------DRAW LINE---------------------\n");
+	if (drawEnd > SCREEN_Y)
+		drawEnd = SCREEN_Y;
+	else if (drawEnd < 0)
+		drawEnd = 0;
+	//printf("fez drawend\n");
+	int drawStart = (-game->ray.wallLineSize / 2 + SCREEN_Y / 2);
 	if (drawStart < 0)
 		drawStart = 0;
-	else if (drawStart >= SCREEN_Y)
-		drawStart = 0;
-	int drawEnd = game->ray.wallLineSize / 2 + SCREEN_Y / 2;
-	if (drawEnd >= SCREEN_Y)
-		drawEnd = SCREEN_Y - 1;
-	else if (drawEnd < 0)
-		drawEnd = SCREEN_Y;
-	//printf("draws |start: %i | end: %i |\n", drawStart, drawEnd);
+	else if (drawStart > SCREEN_Y)
+		drawStart = SCREEN_Y;
+	//printf("fez drawstart\n");
+	//printf("draws\t\t|start: %i\t\t| end: %i\t\t\t|\n", drawStart, drawEnd);
 	//printf("hitSide\t\t| %i\t\t\t|\n", hitSide);
 	if (drawStart <= drawEnd)
 	{
 		int i = drawStart;
 		while (i < drawEnd)
 		{
-			if (hitSide == 1)
-			{
-				my_mlx_pixel_put(game, (int)game->ray.screen_pixel, (int)i, COLOR);
-			}
-			else
-			{
+			if (hitSide == 0)
+				my_mlx_pixel_put(game, (int)game->ray.screen_pixel, (int)i, COLOR1);
+			else if (hitSide == 1)
 				my_mlx_pixel_put(game, (int)game->ray.screen_pixel, (int)i, COLOR2);
-			}
+			else if (hitSide == 2)
+				my_mlx_pixel_put(game, (int)game->ray.screen_pixel, (int)i, COLOR3);
+			else if (hitSide == 3)
+				my_mlx_pixel_put(game, (int)game->ray.screen_pixel, (int)i, COLOR4);
 			i++;
 		}
-	//printf("i: %i\n", i);
-	}
-	else {
-		int i = drawStart;
-		while (i > drawEnd)
-		{
-			if (hitSide == 1)
-			{
-				my_mlx_pixel_put(game, (int)game->ray.screen_pixel, (int)i, COLOR);
-			}
-			else
-			{
-				my_mlx_pixel_put(game, (int)game->ray.screen_pixel, (int)i, COLOR2);
-			}
-			i--;
-		}
-	//printf("i: %i\n", i);
+		//printf("i: %i\n", i);
 	}
 }
 
@@ -83,13 +70,19 @@ void dda(t_game *game)
 		{
 			x += game->ray.step.x;
 			lineSizeX += game->ray.deltaDistX;
-			hitSide = 0;
+			if (game->ray.step.x == -1)
+				hitSide = 0;
+			else
+				hitSide = 1;
 		}
 		else
 		{
 			y += game->ray.step.y;
 			lineSizeY += game->ray.deltaDistY;
-			hitSide = 1;
+			if (game->ray.step.y == -1)
+				hitSide = 2;
+			else
+				hitSide = 3;
 		}
 		if (game->map.map_a[(int)y][(int)x] == '1')
 		{
@@ -98,7 +91,7 @@ void dda(t_game *game)
 	}
 	//printf("hitWall\t\t| col(y): %i\t\t| row(x): %i\t\t|\n", (int)y, (int)x);
 	//printf("hitSide\t\t| %i\t\t\t|\n", hitSide);
-	if (hitSide == 0)
+	if (hitSide == 0 || hitSide == 1)
 	{
 		perpendicularDist = fabs(x - game->pos.row + ((1 - game->ray.step.x) / 2)) / game->ray.rayDir.x;
 	}
@@ -107,7 +100,8 @@ void dda(t_game *game)
 		perpendicularDist = fabs(y - game->pos.col + ((1 - game->ray.step.y) / 2)) / game->ray.rayDir.y;
 	}
 	//printf("perpendicularD\t| %f\t\t|\n", perpendicularDist);
-	game->ray.wallLineSize = SCREEN_Y / perpendicularDist;
+	game->ray.wallLineSize = fabs(SCREEN_Y / perpendicularDist);
+	//printf("wallLineSize\t| %f\t|\n", game->ray.wallLineSize);
 	game->ray.lineStartY = SCREEN_Y / 2 - game->ray.wallLineSize / 2;
 	game->ray.lineEndY = SCREEN_Y / 2 + game->ray.wallLineSize / 2;
 	draw_line(game, hitSide);

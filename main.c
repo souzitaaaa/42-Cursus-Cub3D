@@ -22,6 +22,7 @@ void init_struct(t_game *game)
 	game->key.l = false;
 	game->key.r = false;
 	game->ray.speed = 5;
+	game->ray.rendered = false;
 	return;
 }
 
@@ -35,63 +36,145 @@ int key_press(int kc, t_game *game) {
 		printf("value y: %i\n", (int)(game->pos.col + game->map.dir.y * 0.2));
 		printf("value x: %i\n", (int)game->pos.row);
 		printf("on arr: %c\n", game->map.map_a[(int)(game->pos.col + game->map.dir.y * 0.2)][(int)game->pos.row]);
-		if (game->map.map_a[(int)(game->pos.col + game->map.dir.y * 0.2)][(int)game->pos.row] != '1')
-		{
-			printf("entrou w\n");
-			game->pos.col += game->map.dir.y * 0.2;
-			game->ray.screen_pixel = 0;
-			draw_ceiling_walls(game);
-		}
-		/*game->key.w = true;
-		game->pos.col -= 0.2;*/
+		// if (game->map.map_a[(int)(game->pos.col + game->map.dir.y * 0.2)][(int)game->pos.row] != '1')
+		// {
+		// 	printf("entrou w\n");
+		// 	printf("antes pos col: %f\n", game->pos.col);
+		// 	printf("dir y: %f\n", game->map.dir.y);
+		// 	game->pos.col += game->map.dir.y * 0.2;
+		// 	printf("depois pos col: %f\n", game->pos.col);
+		// 	game->ray.screen_pixel = 0;
+		// 	//draw_ceiling_walls(game);
+		// 	game->ray.rendered = false;
+		// }
+		double move_step = 0.2; // Adjust this value according to your needs
+    	double new_x = game->pos.row + game->map.dir.x * move_step;
+    	double new_y = game->pos.col + game->map.dir.y * move_step;
+    	if (game->map.map_a[(int)new_y][(int)new_x] != '1') {
+        	game->pos.row = new_x;
+        	game->pos.col = new_y;
+        	game->ray.screen_pixel = 0;
+       		game->ray.rendered = false;
+    	}
 	}
 	if (kc == 97) {
 		printf("|\tA\t|\n");
 		printf("value y: %i\n", (int)game->pos.col);
 		printf("value x: %i\n", (int)(game->pos.row - game->map.dir.x * 0.2));
 		printf("on arr: %c\n", game->map.map_a[(int)(game->pos.col + game->map.dir.y * 0.2)][(int)game->pos.row]);
-		if (game->map.map_a[(int)game->pos.col][(int)(game->pos.row - game->map.dir.x * 0.2)]  != '1')
-		{
-			printf("entrou a\n");
-			game->pos.row -= game->map.dir.x * 0.2;
-			game->ray.screen_pixel = 0;
-			draw_ceiling_walls(game);
-		}
+		// if (game->map.map_a[(int)game->pos.col][(int)(game->pos.row + game->map.dir.y * 0.2)]  != '1')
+		// {
+		// 	printf("entrou a\n");
+		// 	printf("antes pos row: %f\n", game->pos.row);
+		// 	printf("dir y: %f\n", game->map.dir.y);
+		// 	game->pos.row += game->map.dir.y * 0.2;
+		// 	printf("before pos row: %f\n", game->pos.row);
+		// 	game->ray.screen_pixel = 0;
+		// 	//draw_ceiling_walls(game);
+		// 	game->ray.rendered = false;
+		// }
+		double move_step = 0.2; // Adjust this value according to your needs
+    	double new_x = game->pos.row + game->map.dir.y * move_step;
+    	double new_y = game->pos.col - game->map.dir.x * move_step;
+    	if (game->map.map_a[(int)new_y][(int)new_x] != '1') {
+        	game->pos.row = new_x;
+        	game->pos.col = new_y;
+        	game->ray.screen_pixel = 0;
+        	game->ray.rendered = false;
+    	}
 	}
 	if (kc == 115) {
 		printf("|\tS\t|\n");
 		printf("value y: %i\n", (int)(game->pos.col - game->map.dir.y * 0.2));
 		printf("value x: %i\n", (int)game->pos.row);
 		printf("on arr: %c\n", game->map.map_a[(int)(game->pos.col - game->map.dir.y * 1)][(int)game->pos.row]);
-		if (game->map.map_a[(int)(game->pos.col - game->map.dir.y * 0.2)][(int)game->pos.row] != '1')
-		{
-			printf("entrou s\n");
-			game->pos.col -= game->map.dir.y * 0.2;
-			game->ray.screen_pixel = 0;
-			draw_ceiling_walls(game);
-		}
+		// if (game->map.map_a[(int)(game->pos.col - game->map.dir.y * 0.2)][(int)game->pos.row] != '1')
+		// {
+		// 	printf("entrou s\n");
+		// 	printf("antes pos col: %f\n", game->pos.col);
+		// 	printf("dir y: %f\n", game->map.dir.y);
+		// 	game->pos.col -= game->map.dir.y * 0.2;
+		// 	printf("depois pos col: %f\n", game->pos.col);
+		// 	game->ray.screen_pixel = 0;
+		// 	//draw_ceiling_walls(game);
+		// 	game->ray.rendered = false;
+		// }
+		double move_step = 0.2; // Adjust this value according to your needs
+    	double new_x = game->pos.row - game->map.dir.x * move_step;
+    	double new_y = game->pos.col - game->map.dir.y * move_step;
+    	if (game->map.map_a[(int)new_y][(int)new_x] != '1') {
+        	game->pos.row = new_x;
+        	game->pos.col = new_y;
+        	game->ray.screen_pixel = 0;
+        	game->ray.rendered = false;
+    	}
 	}
 	if (kc == 100) {
 		printf("|\tD\t|\n");
 		printf("value y: %i\n", (int)game->pos.col);
 		printf("value x: %i\n", (int)(game->pos.row + game->map.dir.x * 0.2));
 		printf("on arr: %c\n", game->map.map_a[(int)(game->pos.col - game->map.dir.y * 1)][(int)game->pos.row]);
-
-		if (game->map.map_a[(int)game->pos.col][(int)(game->pos.row + game->map.dir.x * 0.2)]  != '1')
-		{
-			printf("entrou d\n");
-			game->pos.row += game->map.dir.x * 0.2;
-			game->ray.screen_pixel = 0;
-			draw_ceiling_walls(game);
-		}
-	}
-	if (kc == 65361) {
-		printf("|\tL\t|\n");
-		game->key.l = true;
+		// if (game->map.map_a[(int)game->pos.col][(int)(game->pos.row - game->map.dir.y * 0.2)]  != '1')
+		// {
+		// 	printf("entrou d\n");
+		// 	printf("antes pos row: %f\n", game->pos.row);
+		// 	printf("dir y: %f\n", game->map.dir.y);
+		// 	game->pos.row -= game->map.dir.y * 0.2;
+		// 	printf("before pos row: %f\n", game->pos.row);
+		// 	game->ray.screen_pixel = 0;
+		// 	//draw_ceiling_walls(game);
+		// 	game->ray.rendered = false;
+		// }
+		double move_step = 0.2; // Adjust this value according to your needs
+    	double new_x = game->pos.row - game->map.dir.y * move_step;
+    	double new_y = game->pos.col + game->map.dir.x * move_step;
+    	if (game->map.map_a[(int)new_y][(int)new_x] != '1') {
+        	game->pos.row = new_x;
+        	game->pos.col = new_y;
+        	game->ray.screen_pixel = 0;
+        	game->ray.rendered = false;
+    	}
 	}
 	if (kc == 65363) {
 		printf("|\tR\t|\n");
-		game->key.r = true;
+		t_vector	oldDir;
+		t_vector	oldPlane;
+
+		assign_vector_values(&oldDir, game->map.dir.y, game->map.dir.x);
+		printf("oldDir  | y:  %f  |  x: %f  |\n", oldDir.y, oldDir.x);
+		printf("dir     | y:  %f  |  x: %f  |\n", game->map.dir.y, game->map.dir.x);
+		game->map.dir.y = game->map.dir.y * cos(-0.2) - game->map.dir.x * sin(-0.2);
+		game->map.dir.x = oldDir.y * sin(-0.2) + game->map.dir.x * cos(-0.2);
+		printf("dir     | y:  %f  |  x: %f  |\n", game->map.dir.y, game->map.dir.x);
+		assign_vector_values(&oldPlane, game->map.plane.y, game->map.plane.x);
+		printf("oldPlane| y:  %f  |  x: %f  |\n", oldPlane.y, oldPlane.x);
+		printf("Plane   | y:  %f  |  x: %f  |\n", game->map.plane.y, game->map.plane.x);
+		game->map.plane.y = game->map.plane.y * cos(-0.2) - game->map.plane.x * sin(-0.2);
+		game->map.plane.x = oldPlane.y * sin(-0.2) + game->map.plane.x * cos(-0.2);
+		printf("Plane   | y:  %f  |  x: %f  |\n", game->map.plane.y, game->map.plane.x);
+		game->ray.screen_pixel = 0;
+		//draw_ceiling_walls(game);
+		game->ray.rendered = false;
+	}
+	if (kc == 65361) {
+		printf("|\tL\t|\n");
+		t_vector	oldDir;
+		t_vector	oldPlane;
+
+		assign_vector_values(&oldDir, game->map.dir.y, game->map.dir.x);
+		printf("oldDir| y:  %f  |  x: %f  |\n", oldDir.y, oldDir.x);
+		printf("dir     | y:  %f  |  x: %f  |\n", game->map.dir.y, game->map.dir.x);
+		game->map.dir.y = game->map.dir.y * cos(0.2) - game->map.dir.x * sin(0.2);
+		game->map.dir.x = oldDir.y * sin(0.2) + game->map.dir.x * cos(0.2);
+		printf("dir     | y:  %f  |  x: %f  |\n", game->map.dir.y, game->map.dir.x);
+		assign_vector_values(&oldPlane, game->map.plane.y, game->map.plane.x);
+		printf("oldPlane| y:  %f  |  x: %f  |\n", oldPlane.y, oldPlane.x);
+		printf("Plane   | y:  %f  |  x: %f  |\n", game->map.plane.y, game->map.plane.x);
+		game->map.plane.y = game->map.plane.y * cos(0.2) - game->map.plane.x * sin(0.2);
+		game->map.plane.x = oldPlane.y * sin(0.2) + game->map.plane.x * cos(0.2);
+		game->ray.screen_pixel = 0;
+		//draw_ceiling_walls(game);
+		game->ray.rendered = false;
 	}
 	return (1);
 }
