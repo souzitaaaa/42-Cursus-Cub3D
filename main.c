@@ -43,6 +43,7 @@ int key_press(int kc, t_game *game) {
 		exit(1);
 	}
 	if (kc == 109) {
+		printf("|\tM\t|\n");
 		mlx_put_image_to_window(game->data.mlx, game->data.win,
 			game->texture.N, 0 * 64, 0 * 64);
 	}
