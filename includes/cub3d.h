@@ -10,7 +10,7 @@
 # include <math.h>
 
 # define SCREEN_X 800
-# define SCREEN_Y 500
+# define SCREEN_Y 400
 # define FOV 60 // field of view
 # define MOVESPEED	5.0
 # define ROTSPEED	3.0
@@ -24,6 +24,8 @@
 # define CEILING_COLOR 0xffffff
 //# define CEILING_COLOR 0x8ae5ff
 # define FLOOR_COLOR 0x8b5a2b
+
+# define TESTE "./textures/N-texture.xpm"
 
 # if OS == 1
 #  include "../minilibx-linux/mlx.h"
@@ -115,6 +117,11 @@ typedef struct s_data
 	int		bits_per_pixel;	// Bits por pixel
 	int		line_len;	// Tamanho da linha da imagem em bytes
 	int		endian;			// Endian da imagem
+	void	*mm_img;			// Imagem da mlx
+	char	*mm_addr;			// Endereço da imagem
+	int		mm_bits_per_pixel;	// Bits por pixel
+	int		mm_line_len;	// Tamanho da linha da imagem em bytes
+	int		mm_endian;			// Endian da imagem
 }				t_data;
 
 typedef	struct s_playerPos {
@@ -141,13 +148,16 @@ typedef struct s_ray {
 } t_ray;
 
 typedef struct s_key {
-	bool		w;
-	bool		a;
-	bool		s;
-	bool		d;
-	bool		l;
-	bool		r;
+	bool		minimap;
 } t_key;
+
+typedef struct s_texture {
+	void		*N;
+	char		*N_addr;			// Endereço da imagem
+	int		N_bitsPixel;	// Bits por pixel
+	int		N_lineLen;	// Tamanho da linha da imagem em bytes
+	int		N_endian;
+} t_texture;
 
 typedef struct s_game
 {
@@ -156,6 +166,7 @@ typedef struct s_game
 	t_ray		ray;		//? Estrutura com as informações para o raycasting
 	t_playerPos pos;		//? Estrutura com as informações do jogador
 	t_key		key;
+	t_texture	texture;
 }				t_game;
 
 //* [src/map_check.c]

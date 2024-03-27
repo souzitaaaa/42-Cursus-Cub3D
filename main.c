@@ -15,21 +15,36 @@ void init_struct(t_game *game)
 	assign_vector_values(&game->ray.distTo, 0, 0);
 	assign_vector_values(&game->ray.step, 0, 0);
 	assign_vector_values(&game->ray.velocity, 0, 0);
-	game->key.w = false;
-	game->key.a = false;
-	game->key.s = false;
-	game->key.d = false;
-	game->key.l = false;
-	game->key.r = false;
+	game->key.minimap = false;
 	game->ray.speed = 5;
 	game->ray.rendered = false;
 	return;
+}
+
+void get_xpm(t_game *game) {
+	int tile_size = 32;
+	game->texture.N = mlx_xpm_file_to_image(game->data.mlx, TESTE,
+			&tile_size, &tile_size);
+}
+
+void get_pixel(t_game *game) {
+	game->texture.N_addr = mlx_get_data_addr(game->texture.N, &game->texture.N_bitsPixel, &game->texture.N_lineLen, &game->texture.N_endian);
+	unsigned int a = mlx_get_color_value(game->data.mlx, COLOR2);
+	printf("N_bitsPixel: %i\n", game->texture.N_bitsPixel);
+	printf("N_lineLen: %i\n", game->texture.N_lineLen);
+	printf("N_endian: %i\n", game->texture.N_endian);
+	printf("a: %i\n", a);
 }
 
 int key_press(int kc, t_game *game) {
 	(void)game;
 	if (kc == 65307) {
 		printf("Thanks for playing :P\n");
+		exit(1);
+	}
+	if (kc == 109) {
+		mlx_put_image_to_window(game->data.mlx, game->data.win,
+			game->texture.N, 0 * 64, 0 * 64);
 	}
 	if (kc == 119) {
 		printf("|\tW\t|\n");
@@ -47,7 +62,7 @@ int key_press(int kc, t_game *game) {
 		// 	//draw_ceiling_walls(game);
 		// 	game->ray.rendered = false;
 		// }
-		double move_step = 0.2; // Adjust this value according to your needs
+		double move_step = 0.1; // Adjust this value according to your needs
     	double new_x = game->pos.row + game->map.dir.x * move_step;
     	double new_y = game->pos.col + game->map.dir.y * move_step;
     	if (game->map.map_a[(int)new_y][(int)new_x] != '1') {
@@ -73,7 +88,7 @@ int key_press(int kc, t_game *game) {
 		// 	//draw_ceiling_walls(game);
 		// 	game->ray.rendered = false;
 		// }
-		double move_step = 0.2; // Adjust this value according to your needs
+		double move_step = 0.1; // Adjust this value according to your needs
     	double new_x = game->pos.row + game->map.dir.y * move_step;
     	double new_y = game->pos.col - game->map.dir.x * move_step;
     	if (game->map.map_a[(int)new_y][(int)new_x] != '1') {
@@ -99,7 +114,7 @@ int key_press(int kc, t_game *game) {
 		// 	//draw_ceiling_walls(game);
 		// 	game->ray.rendered = false;
 		// }
-		double move_step = 0.2; // Adjust this value according to your needs
+		double move_step = 0.1; // Adjust this value according to your needs
     	double new_x = game->pos.row - game->map.dir.x * move_step;
     	double new_y = game->pos.col - game->map.dir.y * move_step;
     	if (game->map.map_a[(int)new_y][(int)new_x] != '1') {
@@ -125,7 +140,7 @@ int key_press(int kc, t_game *game) {
 		// 	//draw_ceiling_walls(game);
 		// 	game->ray.rendered = false;
 		// }
-		double move_step = 0.2; // Adjust this value according to your needs
+		double move_step = 0.1; // Adjust this value according to your needs
     	double new_x = game->pos.row - game->map.dir.y * move_step;
     	double new_y = game->pos.col + game->map.dir.x * move_step;
     	if (game->map.map_a[(int)new_y][(int)new_x] != '1') {
@@ -191,6 +206,8 @@ void init_game_teste(t_game *game)
 	game->data.win = mlx_new_window(game->data.mlx, SCREEN_X, SCREEN_Y, "cub3D");
 	game->data.img = mlx_new_image(game->data.mlx, SCREEN_X, SCREEN_Y);
 	game->data.addr = mlx_get_data_addr(game->data.img, &game->data.bits_per_pixel, &game->data.line_len, &game->data.endian);
+	get_xpm(game);
+	get_pixel(game);
 	mlx_loop_hook(game->data.mlx, loop, game);
 	mlx_hook(game->data.win, 2, 1L << 0, key_press, game);
 	draw_ceiling_walls(game);
