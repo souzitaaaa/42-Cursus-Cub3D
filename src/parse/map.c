@@ -72,13 +72,41 @@ void	parse_textures(t_game *game, char *line)
 	if (line[0] != '\0')
 	{
 		if (ft_strncmp(line, "NO ", 3) == 0)
+		{
+			if (game->map.no_texture)
+			{
+				ft_printf("Error\nDuplicate texture");
+				exit(EXIT_FAILURE);
+			}
 			game->map.no_texture = ft_strdup(line + 3);
+		}
 		else if (ft_strncmp(line, "SO ", 3) == 0)
+		{
+			if (game->map.so_texture)
+			{
+				ft_printf("Error\nDuplicate texture");
+				exit(EXIT_FAILURE);
+			}
 			game->map.so_texture = ft_strdup(line + 3);
+		}
 		else if (ft_strncmp(line, "WE ", 3) == 0)
+		{
+			if (game->map.we_texture)
+			{
+				ft_printf("Error\nDuplicate texture");
+				exit(EXIT_FAILURE);
+			}
 			game->map.we_texture = ft_strdup(line + 3);
+		}
 		else if (ft_strncmp(line, "EA ", 3) == 0)
+		{
+			if (game->map.ea_texture)
+			{
+				ft_printf("Error\nDuplicate texture");
+				exit(EXIT_FAILURE);
+			}
 			game->map.ea_texture = ft_strdup(line + 3);
+		}
 		else if (ft_strncmp(line, "F ", 2) == 0)
 			floor_colors(game);
 		else if (ft_strncmp(line, "C ", 2) == 0)
@@ -148,7 +176,6 @@ void	map_info(t_game *game)
 		exit(EXIT_FAILURE);
 	}
 }
-
 /* Guarda as texturas, cores e o mapa em lugares diferentes para serem tratados.|
 Aloca memória para o map_a que é onde guardamos o mapa para fazer as validações e futuramente usar para renderizar o mapa. */
 // tem que dar free na map_a!!!
