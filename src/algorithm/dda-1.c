@@ -111,12 +111,12 @@ int loop(t_game *game)
         //?  && !game->ray.rendered
         if (game->ray.screen_pixel == 0 && !game->ray.rendered) {
                 printf("INICIO DA RENDERIZACAO\n");
-                draw_ceiling_walls(game);
+                //draw_ceiling_walls(game);
         }
         while (game->ray.screen_pixel < SCREEN_X && !game->ray.rendered)
         {
                 //* ASSIGNMENT PART
-                multiplier = 2 * (game->ray.screen_pixel / SCREEN_X) - 1;
+                multiplier = 2 * game->ray.screen_pixel / (double) SCREEN_X - 1;
                 //printf(YELLOW "Multiplier\t| %f\t\t|\n" RESET, multiplier);
                 assign_vector_values(&game->ray.camera, game->map.plane.y * multiplier, game->map.plane.x * multiplier);
                 //printf("Camera vector\t| col(y): %f\t| row(x): %f\t|\n", game->ray.camera.y, game->ray.camera.x);

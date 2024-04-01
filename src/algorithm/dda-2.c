@@ -1,38 +1,43 @@
 #include "../includes/cub3d.h"
 
-void draw_line(t_game *game, int hitSide)
+void draw_line(t_game *game, int hitSide, double wallX)
 {
-	int drawEnd = (game->ray.wallLineSize / 2 + SCREEN_Y / 2);
-	//printf("\t\t----------------DRAW LINE---------------------\n");
-	if (drawEnd > SCREEN_Y)
-		drawEnd = SCREEN_Y;
-	else if (drawEnd < 0)
-		drawEnd = 0;
-	//printf("fez drawend\n");
-	int drawStart = (-game->ray.wallLineSize / 2 + SCREEN_Y / 2);
-	if (drawStart < 0)
-		drawStart = 0;
-	else if (drawStart > SCREEN_Y)
-		drawStart = SCREEN_Y;
-	//printf("fez drawstart\n");
-	//printf("draws\t\t|start: %i\t\t| end: %i\t\t\t|\n", drawStart, drawEnd);
-	//printf("hitSide\t\t| %i\t\t\t|\n", hitSide);
-	if (drawStart <= drawEnd)
-	{
-		int i = drawStart;
-		while (i < drawEnd)
-		{
-			if (hitSide == 0)
-				my_mlx_pixel_put(game, (int)game->ray.screen_pixel, (int)i, COLOR1);
-			else if (hitSide == 1)
-				my_mlx_pixel_put(game, (int)game->ray.screen_pixel, (int)i, COLOR2);
-			else if (hitSide == 2)
-				my_mlx_pixel_put(game, (int)game->ray.screen_pixel, (int)i, COLOR3);
-			else if (hitSide == 3)
-				my_mlx_pixel_put(game, (int)game->ray.screen_pixel, (int)i, COLOR4);
-			i++;
+	int y = 0;
+	int	textureX = 0;
+	textureX = (int)(wallX * (double)TEXTURE_X);
+	if ((hitSide == 0 || hitSide == 1) && game->ray.rayDir.y > 0)
+		textureX = TEXTURE_X - textureX - 1;
+	if ((hitSide == 2 || hitSide == 3) && game->ray.rayDir.x < 0)
+		textureX = TEXTURE_X - textureX - 1;
+	double step = 1.0 * TEXTURE_X / game->ray.wallLineSize;
+	double texturePos = (game->ray.lineStartY - SCREEN_Y / 2 + game->ray.wallLineSize / 2) * step;
+	while (y < game->ray.lineStartY) {
+		game->data.addr[y * SCREEN_X + game->ray.screen_pixel] = CEILING_COLOR;
+		y++;
+	}
+	int textureY = 0;
+	unsigned int color = 0;
+	while (y < game->ray.lineEndY) {
+		color = 0;
+		textureY = (int)texturePos & (TEXTURE_X - 1);
+		texturePos += step;
+		if (hitSide == 0){
+			game->data.addr[y * SCREEN_X + game->ray.screen_pixel] = COLOR1;
 		}
-		//printf("i: %i\n", i);
+		else if (hitSide == 1)
+			game->data.addr[y * SCREEN_X + game->ray.screen_pixel] = COLOR2;
+	 	else if (hitSide == 2) {
+			color = game->texture.N_addr[textureY * TEXTURE_X + textureX];
+			game->data.addr[y] = color;
+		}
+			//game->data.addr[y * SCREEN_X + game->ray.screen_pixel] = COLOR3;
+	 	else if (hitSide == 3)
+			game->data.addr[y * SCREEN_X + game->ray.screen_pixel] = COLOR4;
+		y++;
+	}
+	while (y <= SCREEN_Y) {
+		game->data.addr[y * SCREEN_X + game->ray.screen_pixel] = FLOOR_COLOR;
+		y++;
 	}
 }
 
@@ -92,17 +97,23 @@ void dda(t_game *game)
 	//printf("hitWall\t\t| col(y): %i\t\t| row(x): %i\t\t|\n", (int)y, (int)x);
 	//printf("hitSide\t\t| %i\t\t\t|\n", hitSide);
 	if (hitSide == 0 || hitSide == 1)
-	{
 		perpendicularDist = fabs(x - game->pos.row + ((1 - game->ray.step.x) / 2)) / game->ray.rayDir.x;
-	}
 	else
-	{
 		perpendicularDist = fabs(y - game->pos.col + ((1 - game->ray.step.y) / 2)) / game->ray.rayDir.y;
-	}
 	//printf("perpendicularD\t| %f\t\t|\n", perpendicularDist);
 	game->ray.wallLineSize = fabs(SCREEN_Y / perpendicularDist);
 	//printf("wallLineSize\t| %f\t|\n", game->ray.wallLineSize);
 	game->ray.lineStartY = SCREEN_Y / 2 - game->ray.wallLineSize / 2;
+	if (game->ray.lineStartY < 0)
+		game->ray.lineStartY = 0;
 	game->ray.lineEndY = SCREEN_Y / 2 + game->ray.wallLineSize / 2;
-	draw_line(game, hitSide);
+	if (game->ray.lineEndY >= SCREEN_Y)
+		game->ray.lineEndY = SCREEN_Y - 1;
+	double wallX;
+	if (hitSide == 0 || hitSide == 1)
+		wallX = game->pos.row + perpendicularDist * game->ray.rayDir.x;
+	else
+		wallX = game->pos.col + perpendicularDist * game->ray.rayDir.y;
+	wallX -= floor(wallX);
+	draw_line(game, hitSide, wallX);
 }

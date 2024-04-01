@@ -2,7 +2,7 @@
 
 void	my_mlx_pixel_put(t_game *game, int x, int y, int color)
 {
-	char	*dst;
+	unsigned int	*dst;
 
 	dst = game->data.addr + (y * game->data.line_len + x * (game->data.bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
@@ -36,3 +36,4 @@ int	draw_ceiling_walls(t_game *game)
 	}
 	return (0);
 }
+

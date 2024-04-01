@@ -17,14 +17,15 @@
 
 # define YELLOW "\033[0;31m"
 # define RESET "\033[0m"
-# define COLOR1 0x0155ac
-# define COLOR2 0x0c184e
-# define COLOR3 0xffcc41
-# define COLOR4 0xef8833
-# define CEILING_COLOR 0xffffff
+# define COLOR1 0x000155ac
+# define COLOR2 0x000c184e
+# define COLOR3 0x00ffcc41
+# define COLOR4 0x00ef8833
+# define CEILING_COLOR 0x00ffffff
 //# define CEILING_COLOR 0x8ae5ff
-# define FLOOR_COLOR 0x8b5a2b
+# define FLOOR_COLOR 0x008b5a2b
 
+# define TEXTURE_X 64
 # define TESTE "./textures/N-texture.xpm"
 
 # if OS == 1
@@ -113,7 +114,7 @@ typedef struct s_data
 	void	*mlx;			//? Instância da mlx
 	void	*win;			//? Janela da mlx
 	void	*img;			// Imagem da mlx
-	char	*addr;			// Endereço da imagem
+	unsigned int		*addr;			// Endereço da imagem
 	int		bits_per_pixel;	// Bits por pixel
 	int		line_len;	// Tamanho da linha da imagem em bytes
 	int		endian;			// Endian da imagem
@@ -131,7 +132,7 @@ typedef	struct s_playerPos {
 } t_playerPos;
 
 typedef struct s_ray {
-	double		screen_pixel;	 	//? Index do x relativamente á tela
+	int		screen_pixel;	 	//? Index do x relativamente á tela
 	t_vector	camera;				//? Vetor com os valores da camera (ajuda ao calculo do raydir)
 	t_vector	rayDir;				//? Vetor com os valores da direção do raio
 	double		deltaDistX;			//? Distância base entre cada X
@@ -153,7 +154,7 @@ typedef struct s_key {
 
 typedef struct s_texture {
 	void		*N;
-	char		*N_addr;			// Endereço da imagem
+	unsigned int		*N_addr;			// Endereço da imagem
 	int		N_bitsPixel;	// Bits por pixel
 	int		N_lineLen;	// Tamanho da linha da imagem em bytes
 	int		N_endian;
