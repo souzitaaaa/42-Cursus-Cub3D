@@ -5,12 +5,20 @@ void draw_line(t_game *game, int hitSide, double wallX)
 	int y = 0;
 	int	textureX = 0;
 	textureX = (int)(wallX * (double)TEXTURE_X);
-	if ((hitSide == 0 || hitSide == 1) && game->ray.rayDir.y > 0)
+	if ((hitSide == 0 || hitSide == 1) && game->ray.rayDir.x > 0)
 		textureX = TEXTURE_X - textureX - 1;
-	if ((hitSide == 2 || hitSide == 3) && game->ray.rayDir.x < 0)
+	if ((hitSide == 2 || hitSide == 3) && game->ray.rayDir.y < 0)
 		textureX = TEXTURE_X - textureX - 1;
 	double step = 1.0 * TEXTURE_X / game->ray.wallLineSize;
+	printf(YELLOW "linestart: %f\n" RESET, game->ray.lineStartY);
+	printf("Step Math: %f\n", 1.0 * 64 / game->ray.wallLineSize);
+	printf("wallLineStart: %f\n", game->ray.wallLineSize);
 	double texturePos = (game->ray.lineStartY - SCREEN_Y / 2 + game->ray.wallLineSize / 2) * step;
+	printf("Math1: %f\n", game->ray.lineStartY - SCREEN_Y / 2);
+	printf("Math2: %f\n", game->ray.wallLineSize / 2);
+	printf("step: %f\n", step);
+	printf("texturePos: %f\n", texturePos);
+	//usleep(99999999);
 	while (y < game->ray.lineStartY) {
 		game->data.addr[y * SCREEN_X + game->ray.screen_pixel] = CEILING_COLOR;
 		y++;
@@ -27,8 +35,8 @@ void draw_line(t_game *game, int hitSide, double wallX)
 		else if (hitSide == 1)
 			game->data.addr[y * SCREEN_X + game->ray.screen_pixel] = COLOR2;
 	 	else if (hitSide == 2) {
-			color = game->texture.N_addr[textureY * TEXTURE_X + textureX];
-			game->data.addr[y] = color;
+			color = game->texture.N_addr[TEXTURE_X * textureY + textureX];
+			game->data.addr[y * SCREEN_X + game->ray.screen_pixel] = color;
 		}
 			//game->data.addr[y * SCREEN_X + game->ray.screen_pixel] = COLOR3;
 	 	else if (hitSide == 3)
@@ -98,15 +106,17 @@ void dda(t_game *game)
 	//printf("hitSide\t\t| %i\t\t\t|\n", hitSide);
 	if (hitSide == 0 || hitSide == 1)
 		perpendicularDist = fabs(x - game->pos.row + ((1 - game->ray.step.x) / 2)) / game->ray.rayDir.x;
+		//perpendicularDist = game->ray.distTo.y - game->ray.deltaDistY; 
 	else
 		perpendicularDist = fabs(y - game->pos.col + ((1 - game->ray.step.y) / 2)) / game->ray.rayDir.y;
+		//perpendicularDist = game->ray.distTo.x - game->ray.deltaDistX; 
 	//printf("perpendicularD\t| %f\t\t|\n", perpendicularDist);
 	game->ray.wallLineSize = fabs(SCREEN_Y / perpendicularDist);
 	//printf("wallLineSize\t| %f\t|\n", game->ray.wallLineSize);
-	game->ray.lineStartY = SCREEN_Y / 2 - game->ray.wallLineSize / 2;
+	game->ray.lineStartY = -game->ray.wallLineSize / 2 + SCREEN_Y / 2;
 	if (game->ray.lineStartY < 0)
 		game->ray.lineStartY = 0;
-	game->ray.lineEndY = SCREEN_Y / 2 + game->ray.wallLineSize / 2;
+	game->ray.lineEndY = game->ray.wallLineSize / 2 + SCREEN_Y / 2;
 	if (game->ray.lineEndY >= SCREEN_Y)
 		game->ray.lineEndY = SCREEN_Y - 1;
 	double wallX;

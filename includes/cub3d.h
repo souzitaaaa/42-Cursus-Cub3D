@@ -26,7 +26,7 @@
 # define FLOOR_COLOR 0x008b5a2b
 
 # define TEXTURE_X 64
-# define TESTE "./textures/N-texture.xpm"
+# define TESTE "./textures/Tori-gate.xpm"
 
 # if OS == 1
 #  include "../minilibx-linux/mlx.h"
