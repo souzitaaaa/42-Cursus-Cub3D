@@ -141,6 +141,7 @@ typedef struct s_ray {
 	t_vector	distTo;				//? Coordenadas de x e y do distTo
 	t_vector	step;				//? Informação do step relativamente ao x e y
 	double		wallLineSize;		//? Tamanho da linha da parede
+	int			wallLineSize2;
 	double		lineStartY;
 	double		lineEndY;
 	t_vector	velocity;
