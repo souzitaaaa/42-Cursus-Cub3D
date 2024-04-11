@@ -46,11 +46,11 @@ void	floor_colors(t_game *game)
 	int i = 0;
 	int color_values[3];
 
-	while (i < game->map.mapa_y)
+	while (i < game->map.area_y)
 	{
-		if (ft_strncmp(game->map.map_a[i], "F ", 2) == 0)
+		if (ft_strncmp(game->map.area[i], "F ", 2) == 0)
 		{
-			color_str = game->map.map_a[i] + 2;
+			color_str = game->map.area[i] + 2;
 			parse_color(color_str, color_values);
 			game->map.f_range[0] = color_values[0];
 			game->map.f_range[1] = color_values[1];
@@ -64,6 +64,9 @@ void	floor_colors(t_game *game)
 		}
 		i++;
 	}
+	// ft_printf("color floor 1: %d\n", color_values[0]);
+	// ft_printf("color floor 1: %d\n", color_values[1]);
+	// ft_printf("color floor 1: %d\n", color_values[2]);
 }
 
 void	ceiling_colors(t_game *game)
@@ -72,11 +75,11 @@ void	ceiling_colors(t_game *game)
 	int	i = 0;
 	int color_values[3];
 
-	while (i < game->map.mapa_y)
+	while (i < game->map.area_y)
 	{
-		if (ft_strncmp(game->map.map_a[i], "C ", 2) == 0)
+		if (ft_strncmp(game->map.area[i], "C ", 2) == 0)
 		{
-			color_str = game->map.map_a[i] + 2;
+			color_str = game->map.area[i] + 2;
 			parse_color(color_str, color_values);
 			game->map.c_range[0] = color_values[0];
 			game->map.c_range[1] = color_values[1];

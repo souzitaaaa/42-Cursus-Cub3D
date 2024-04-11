@@ -29,13 +29,25 @@ bool	is_wall_or_space(char c)
 bool verify_neighbors(t_game *game, char **map, int x, int y)
 {
 	if (x > 0 && is_wall_or_space(map[y][x - 1]) == false)
+	{
+			ft_printf("em cima\n");
 			return (false);
+	}
 	if (x + 1 < game->map.mapa_x && is_wall_or_space(map[y][x + 1]) == false)
+	{
+		ft_printf("em baixo: x: %d | y: %d\n", game->map.mapa_x, game->map.mapa_y);
 		return (false);
+	}
 	if (y > 0 && (int)ft_strlen(map[y - 1]) > x && is_wall_or_space(map[y - 1][x]) == false)
+	{
+		ft_printf("para esquerda\n");
 		return (false);
+	}
 	if (y + 1 < game->map.mapa_y && (int)ft_strlen(map[y + 1]) > x && is_wall_or_space(map[y + 1][x]) == false)
+	{
+		ft_printf("para direita\n");
 		return (false);
+	}
 	return (true);
 }
 

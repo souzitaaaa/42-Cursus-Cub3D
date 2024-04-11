@@ -108,7 +108,7 @@ int loop(t_game *game)
 
         multiplier = 0;
 
-        game->ray.screen_pixel = 0;
+        // game->ray.screen_pixel = 0;
         //draw_ceiling_walls(game);
         //! Não tenho a certeza quanto ao <=, mas se ele não tiver para no 0.998047
         while (game->ray.screen_pixel < SCREEN_X)

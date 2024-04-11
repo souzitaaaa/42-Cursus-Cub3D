@@ -29,6 +29,26 @@ char	*ft_strtrim(char const *str, char const *set)
 	}
 	return (ft_substr(str, 0, len + 1));
 }
+
+char	*special_strtrim(char *str)
+{
+	int len; 
+	int i;
+
+	len = ft_strlen(str);
+	i = len - 1;
+	if (str == NULL || *str == '\0')
+	{
+		return (str);
+	}
+	while (i >= 0 && (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || str[i] == '\r'))
+	{
+		str[i] = '\0';
+		i--;
+	}
+	return (str);
+}
+
 /*
 int	main(void)
 {

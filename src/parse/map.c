@@ -72,13 +72,41 @@ void	parse_textures(t_game *game, char *line)
 	if (line[0] != '\0')
 	{
 		if (ft_strncmp(line, "NO ", 3) == 0)
+		{
+			if (game->map.no_texture)
+			{
+				ft_printf("Error\nDuplicate texture");
+				exit(EXIT_FAILURE);
+			}
 			game->map.no_texture = ft_strdup(line + 3);
+		}
 		else if (ft_strncmp(line, "SO ", 3) == 0)
+		{
+			if (game->map.so_texture)
+			{
+				ft_printf("Error\nDuplicate texture");
+				exit(EXIT_FAILURE);
+			}
 			game->map.so_texture = ft_strdup(line + 3);
+		}
 		else if (ft_strncmp(line, "WE ", 3) == 0)
+		{
+			if (game->map.we_texture)
+			{
+				ft_printf("Error\nDuplicate texture");
+				exit(EXIT_FAILURE);
+			}
 			game->map.we_texture = ft_strdup(line + 3);
+		}
 		else if (ft_strncmp(line, "EA ", 3) == 0)
+		{
+			if (game->map.ea_texture)
+			{
+				ft_printf("Error\nDuplicate texture");
+				exit(EXIT_FAILURE);
+			}
 			game->map.ea_texture = ft_strdup(line + 3);
+		}
 		else if (ft_strncmp(line, "F ", 2) == 0)
 			floor_colors(game);
 		else if (ft_strncmp(line, "C ", 2) == 0)
@@ -105,50 +133,51 @@ void	map_info(t_game *game)
 	int	i;
 	char	*line;
 
-	while (y < game->map.area_y + 1)
+	printf("Area y: %d\n", game->map.area_y);
+	while (y < game->map.area_y)
 	{
 		line = ft_strtrim(game->map.area[y], " \t");
-		if (line[0] != '\0')
+		parse_textures(game, line);
+		if (is_beg_map(line))
 		{
-			parse_textures(game, line);
-			if (is_beg_map(line))
+			x = 0;
+			while (line[x] != '\0')
 			{
-				x = 0;
-				while (line[x] != '\0')
+				if (ft_isalpha(line[x]))
 				{
-					if (ft_isalpha(line[x]))
-					{
-						ft_printf("Error\n Invalid map.");
-						exit(EXIT_FAILURE);
-					}
-					x++;
+					ft_printf("Error\n Invalid map.");
+					exit(EXIT_FAILURE);
 				}
-				if (ft_strchr(line, '1') != NULL)
+				x++;
+			}
+			if (ft_strchr(line, '1') != NULL)
+			{
+				game->map.map_a = (char **)malloc(sizeof(char *) * (game->map.area_y + 1));
+				i = 0;
+				while (y < game->map.area_y && game->map.area[y][0] != '\0')
 				{
-					game->map.map_a = (char **)malloc(sizeof(char *) * (game->map.area_y + 1));
-					i = 0;
-					while (y < game->map.area_y + 1 && game->map.area[y] != NULL)
-					{
-						game->map.map_a[i] = ft_strdup(game->map.area[y]);
-						 i++;
-						 y++;
-					}
-					game->map.map_a[i] = NULL;
-					game->map.mapa_y = i;
-					print_arr(game->map.map_a);
-					break ;
+					game->map.map_a[i] = special_strtrim(ft_strdup(game->map.area[y]));
+					i++;
+					y++;
+				}
+				game->map.map_a[i] = NULL;
+				game->map.mapa_y = i;
+				if (y < game->map.area_y)
+				{
+					
 				}
 			}
+
 		}
 		y++;
 	}
+	print_arr(game->map.map_a);
 	if (!game->map.no_texture || !game->map.so_texture || !game->map.we_texture || !game->map.ea_texture)
 	{
 		ft_printf("Error\n Not all required textures are specified.");
 		exit(EXIT_FAILURE);
 	}
 }
-
 /* Guarda as texturas, cores e o mapa em lugares diferentes para serem tratados.|
 Aloca memória para o map_a que é onde guardamos o mapa para fazer as validações e futuramente usar para renderizar o mapa. */
 // tem que dar free na map_a!!!
