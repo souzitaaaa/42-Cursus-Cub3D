@@ -44,22 +44,22 @@ void get_distToSides(t_game *game)
 {
         if (game->ray.rayDir.x < 0)
         {
-                game->ray.distTo.x = (game->pos.row - game->ray.mapPos.x) * game->ray.deltaDistX;
+                game->ray.distTo.x = (game->pos.row - game->ray.mapPos.x) * game->ray.deltaDist.x;
                 game->ray.step.x = -1;
         }
         else
         {
-                game->ray.distTo.x = (game->ray.mapPos.x + 1 - game->pos.row) * game->ray.deltaDistX;
+                game->ray.distTo.x = (game->ray.mapPos.x + 1.0 - game->pos.row) * game->ray.deltaDist.x;
                 game->ray.step.x = 1;
         }
         if (game->ray.rayDir.y < 0)
         {
-                game->ray.distTo.y = (game->pos.col - game->ray.mapPos.y) * game->ray.deltaDistY;
+                game->ray.distTo.y = (game->pos.col - game->ray.mapPos.y) * game->ray.deltaDist.y;
                 game->ray.step.y = -1;
         }
         else
         {
-                game->ray.distTo.y = (game->ray.mapPos.y + 1 - game->pos.col) * game->ray.deltaDistY;
+                game->ray.distTo.y = (game->ray.mapPos.y + 1.0 - game->pos.col) * game->ray.deltaDist.y;
                 game->ray.step.y = 1;
         }
 }
@@ -75,6 +75,17 @@ double  get_max(double dif_x, double dif_y) {
         if (dif_x > dif_y)
                 return (dif_x);
         return (dif_y);
+}
+
+void loop_assignment(t_game *game, double *multiplier) {
+        *multiplier = 2 * game->ray.screen_pixel / (double)SCREEN_X - 1;
+        assign_vector_values(&game->ray.rayDir, game->map.dir.y + game->map.plane.y * *multiplier,
+                game->map.dir.x + game->map.plane.x * *multiplier);
+        assign_vector_values(&game->ray.deltaDist, sqrt(1 + (game->ray.rayDir.x * game->ray.rayDir.x) / (game->ray.rayDir.y * game->ray.rayDir.y)),
+                sqrt(1 + (game->ray.rayDir.y * game->ray.rayDir.y) / (game->ray.rayDir.x * game->ray.rayDir.x)));
+        assign_vector_values(&game->ray.mapPos, floor(game->pos.col), floor(game->pos.row));
+        game->ray.deltaDist.x = (game->ray.rayDir.x == 0) ? 1e30 : fabs(1 / game->ray.rayDir.x);
+        game->ray.deltaDist.y = (game->ray.rayDir.y == 0) ? 1e30 : fabs(1 / game->ray.rayDir.y);
 }
 
 /**
@@ -107,55 +118,20 @@ int loop(t_game *game)
         double multiplier;
 
         multiplier = 0;
-        //! Não tenho a certeza quanto ao <=, mas se ele não tiver para no 0.998047
-        //?  && !game->ray.rendered
-        if (game->ray.screen_pixel == 0 && !game->ray.rendered) {
-                printf("INICIO DA RENDERIZACAO\n");
-                //draw_ceiling_walls(game);
-        }
-        while (game->ray.screen_pixel < SCREEN_X && !game->ray.rendered)
+        while (game->ray.screen_pixel < SCREEN_X)
         {
-                //* ASSIGNMENT PART
-                multiplier = 2 * game->ray.screen_pixel / (double) SCREEN_X - 1;
-                //printf(YELLOW "Multiplier\t| %f\t\t|\n" RESET, multiplier);
-                assign_vector_values(&game->ray.camera, game->map.plane.y * multiplier, game->map.plane.x * multiplier);
-                //printf("Camera vector\t| col(y): %f\t| row(x): %f\t|\n", game->ray.camera.y, game->ray.camera.x);
-                assign_vector_values(&game->ray.rayDir, game->map.dir.y + game->ray.camera.y, game->map.dir.x + game->ray.camera.x);
-                //printf("RayDir vector\t| col(y): %f\t| row(x): %f\t|\n", game->ray.rayDir.y, game->ray.rayDir.x);
-                
-                //! Treating raydir 0
-                if (game->ray.rayDir.x == 0) {
-                        game->ray.deltaDistX = 1;
-                        game->ray.deltaDistY = 0;
-                }
-                else {
-                        if (game->ray.rayDir.y) {
-                                game->ray.deltaDistX = fabs(magnitude(game->ray.rayDir) / game->ray.rayDir.x);
-                        }
-                }
-                //printf("DeltaDistX\t| %f\t\t|\n", game->ray.deltaDistX);
-                if (game->ray.rayDir.y == 0) {
-                        game->ray.deltaDistX = 0;
-                        game->ray.deltaDistY = 1;
-                }
-                else {
-                        if (game->ray.rayDir.x) {
-                                game->ray.deltaDistY = fabs(magnitude(game->ray.rayDir) / game->ray.rayDir.y);
-                        }
-                }
-                //printf("DeltaDistY\t| %f\t\t|\n", game->ray.deltaDistY);
-                assign_vector_values(&game->ray.mapPos, floor(game->pos.col), floor(game->pos.row));
-                //printf("MapPos vector\t| col(y): %f\t| row(x): %f\t|\n", game->ray.mapPos.y, game->ray.mapPos.x);
+                loop_assignment(game, &multiplier);
+                        // printf(YELLOW "Multiplier\t| %f\t\t|\n" RESET, multiplier);
+                        // printf("RayDir vector\t| col(y): %f\t| row(x): %f\t|\n", game->ray.rayDir.y, game->ray.rayDir.x);
+                        // printf("Delta vector\t| col(y): %f\t| row(x): %f\t|\n", game->ray.deltaDist.y, game->ray.deltaDist.x);
+                        // printf("MapPos vector\t| col(y): %f\t| row(x): %f\t|\n", game->ray.mapPos.y, game->ray.mapPos.x);
                 get_distToSides(game);
-                //printf("DistToSide\t| col(y): %f\t| row(x): %f\t|\n", game->ray.distTo.y, game->ray.distTo.x);
-                //* END
-                //*DDA
+                        // printf("DistToSide\t| col(y): %f\t| row(x): %f\t|\n", game->ray.distTo.y, game->ray.distTo.x);
+                        // printf("Step\t\t| col(y): %f\t| row(x): %f\t|\n", game->ray.step.y, game->ray.step.x);
                 dda(game);
                 game->ray.screen_pixel++;
                 mlx_put_image_to_window(game->data.mlx, game->data.win, game->data.img, 0, 0);
-                if (game->ray.screen_pixel == SCREEN_X)
-                        game->ray.rendered = true;
-                //printf("Player Info | col(y): %f | row(x): %f | orientation: %c |\n", game->pos.col, game->pos.row, game->pos.orientation);
+                        //printf("Player Info | col(y): %f | row(x): %f | orientation: %c |\n", game->pos.col, game->pos.row, game->pos.orientation);
         }
         return 1;
 }

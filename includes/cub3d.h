@@ -21,12 +21,13 @@
 # define COLOR2 0x000c184e
 # define COLOR3 0x00ffcc41
 # define COLOR4 0x00ef8833
-# define CEILING_COLOR 0x00ffffff
+# define CEILING_COLOR 0x0094e3e4
 //# define CEILING_COLOR 0x8ae5ff
-# define FLOOR_COLOR 0x008b5a2b
+# define FLOOR_COLOR 0x0033ac25
 
 # define TEXTURE_X 64
 # define TESTE "./textures/Tori-gate.xpm"
+# define TESTE2	 "./textures/Sakura-tree.xpm"
 
 # if OS == 1
 #  include "../minilibx-linux/mlx.h"
@@ -85,8 +86,8 @@ typedef struct s_line {
 } t_line;
 
 typedef struct s_vector {
-	float	x;
-	float	y;
+	double	x;
+	double	y;
 } 				t_vector;
 
 typedef struct s_map
@@ -135,15 +136,16 @@ typedef struct s_ray {
 	int		screen_pixel;	 	//? Index do x relativamente á tela
 	t_vector	camera;				//? Vetor com os valores da camera (ajuda ao calculo do raydir)
 	t_vector	rayDir;				//? Vetor com os valores da direção do raio
+	t_vector	deltaDist;
 	double		deltaDistX;			//? Distância base entre cada X
 	double		deltaDistY;			//? Distância base entre cada Y
 	t_vector	mapPos;				//? Vetor com as coordenadas do player no mapa
 	t_vector	distTo;				//? Coordenadas de x e y do distTo
 	t_vector	step;				//? Informação do step relativamente ao x e y
 	double		wallLineSize;		//? Tamanho da linha da parede
-	int			wallLineSize2;
-	double		lineStartY;
-	double		lineEndY;
+	int			wallLineSizeInt;
+	int			lineStart;
+	int			lineEnd;
 	t_vector	velocity;
 	int			speed;
 	bool		rendered;
@@ -159,6 +161,11 @@ typedef struct s_texture {
 	int		N_bitsPixel;	// Bits por pixel
 	int		N_lineLen;	// Tamanho da linha da imagem em bytes
 	int		N_endian;
+	void		*WE;
+	unsigned int		*W_addr;			// Endereço da imagem
+	int		W_bitsPixel;	// Bits por pixel
+	int		W_lineLen;	// Tamanho da linha da imagem em bytes
+	int		W_endian;
 } t_texture;
 
 typedef struct s_game

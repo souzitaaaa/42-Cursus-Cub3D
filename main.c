@@ -26,6 +26,9 @@ void get_xpm(t_game *game) {
 	game->texture.N = mlx_xpm_file_to_image(game->data.mlx, TESTE,
 			&tile_size, &tile_size);
 	game->texture.N_addr = (unsigned int *)mlx_get_data_addr(game->texture.N, &game->texture.N_bitsPixel, &game->texture.N_lineLen, &game->texture.N_endian);
+	game->texture.WE = mlx_xpm_file_to_image(game->data.mlx, TESTE2,
+			&tile_size, &tile_size);
+	game->texture.W_addr = (unsigned int *)mlx_get_data_addr(game->texture.WE, &game->texture.W_bitsPixel, &game->texture.W_lineLen, &game->texture.W_endian);
 }
 
 void get_pixel(t_game *game) {
@@ -46,6 +49,8 @@ int key_press(int kc, t_game *game) {
 		printf("|\tM\t|\n");
 		mlx_put_image_to_window(game->data.mlx, game->data.win,
 			game->texture.N, 0 * 64, 0 * 64);
+		mlx_put_image_to_window(game->data.mlx, game->data.win,
+			game->texture.WE, 1 * 64, 0 * 64);
 		printf("%i\n", mlx_get_color_value(game->data.mlx, COLOR1));
 		//game->data.addr[1] = 0x000155ac;
 		//mlx_put_image_to_window(game->data.mlx, game->data.win, game->data.img, 0, 0);
@@ -254,6 +259,7 @@ int	main(int ac, char **av)
 	set_direction(&game, player);
 	printf("Dir vector  | col(y): %i | row(x): %i |\n", (int)game.map.dir.y, (int)game.map.dir.x);
 	printf("Plane vector| col(y): %i | row(x): %i |\n", (int)game.map.plane.y, (int)game.map.plane.x);
+	//usleep(9999999);
 	game.pos.col += 0.5;
 	game.pos.row += 0.5;
 	init_game_teste(&game);
