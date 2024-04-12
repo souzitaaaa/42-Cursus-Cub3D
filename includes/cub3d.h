@@ -11,9 +11,8 @@
 
 # define SCREEN_X 800
 # define SCREEN_Y 400
-# define FOV 60 // field of view
-# define MOVESPEED	5.0
-# define ROTSPEED	3.0
+# define FOV 60
+# define MOVESTEP	0.1
 
 # define YELLOW "\033[0;31m"
 # define RESET "\033[0m"
@@ -22,12 +21,11 @@
 # define COLOR3 0x00ffcc41
 # define COLOR4 0x00ef8833
 # define CEILING_COLOR 0x0094e3e4
-//# define CEILING_COLOR 0x8ae5ff
 # define FLOOR_COLOR 0x0033ac25
 
 # define TEXTURE_X 64
 # define TESTE "./textures/Tori-gate.xpm"
-# define TESTE2	 "./textures/Sakura-tree.xpm"
+# define TESTE2	 "./textures/kingdom.xpm"
 
 # if OS == 1
 #  include "../minilibx-linux/mlx.h"
@@ -148,11 +146,11 @@ typedef struct s_ray {
 	int			lineEnd;
 	t_vector	velocity;
 	int			speed;
-	bool		rendered;
 } t_ray;
 
 typedef struct s_key {
-	bool		minimap;
+	double		new_x;
+	double		new_y;
 } t_key;
 
 typedef struct s_texture {
@@ -174,7 +172,7 @@ typedef struct s_game
 	t_data		data;		//? Estrutura com as informações para a mlx
 	t_ray		ray;		//? Estrutura com as informações para o raycasting
 	t_playerPos pos;		//? Estrutura com as informações do jogador
-	t_key		key;
+	t_key		key;		//? Estrutura com as informacoes para tratar do movimento
 	t_texture	texture;
 }				t_game;
 
@@ -210,8 +208,7 @@ void		init_game(t_game *game);
 /*
 Utils
 */
-void	my_mlx_pixel_put(t_game	*game, int x, int y, int color);
-int		draw_ceiling_walls(t_game *game);
+void error(t_game *game, char *msg);
 
 /* Map */
 void	read_map_area(t_game *game);
@@ -230,9 +227,8 @@ void	check_textures(t_game *game);
 bool	is_valid_char(char c);
 bool	verify_around_spaces(t_game *game, char **map);
 
-void    updateInput(t_game *game);
-void walkUp(t_game *game);
-
-void walkDown(t_game *game);
+int	esc_key(t_game *game);
+void moviment_key(t_game *game, double new_x, double new_y);
+void direction_key(t_game *game, double val);
 
 #endif

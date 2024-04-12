@@ -10,13 +10,13 @@ void draw_line(t_game *game, int hitSide, double wallX)
 		textureX = TEXTURE_X - textureX - 1;
 	if ((hitSide == 2 || hitSide == 3) && game->ray.rayDir.y < 0)
 		textureX = TEXTURE_X - textureX - 1;
-	printf( "textureX\t| %i\t\t\t|\n"  , textureX);
+	//printf( "textureX\t| %i\t\t\t|\n"  , textureX);
 	double step = 1.0 * TEXTURE_X / game->ray.wallLineSizeInt;
-	printf( "step\t\t| %f\t\t|\n", step);
+	//printf( "step\t\t| %f\t\t|\n", step);
 			//printf( "linestart: %f\n", game->ray.lineStartY);
 			//printf("wallLineSize: %f\n", game->ray.wallLineSize);
 	double texturePos = (game->ray.lineStart - SCREEN_Y / 2 + game->ray.wallLineSizeInt / 2) * step;
-	printf( "texturePos\t| %f\t\t|\n"  , texturePos);
+	//printf( "texturePos\t| %f\t\t|\n"  , texturePos);
 	while (y < game->ray.lineStart) {
 		game->data.addr[y * SCREEN_X + game->ray.screen_pixel] = CEILING_COLOR;
 		y++;
@@ -93,17 +93,17 @@ void dda(t_game *game)
 		perpendicularDist = (game->ray.distTo.x - game->ray.deltaDist.x);
 	else
 		perpendicularDist = (game->ray.distTo.y - game->ray.deltaDist.y);
-	printf("perpendicularD\t| %f\t\t|\n", perpendicularDist);
+	//printf("perpendicularD\t| %f\t\t|\n", perpendicularDist);
 	game->ray.wallLineSizeInt = (int)(SCREEN_Y / perpendicularDist);
-	printf( "wallLineSize\t| %i\t\t\t|\n"  , game->ray.wallLineSizeInt);
+	//printf( "wallLineSize\t| %i\t\t\t|\n"  , game->ray.wallLineSizeInt);
 	game->ray.lineStart = -game->ray.wallLineSizeInt / 2 + SCREEN_Y / 2;
 	if (game->ray.lineStart < 0)
 		game->ray.lineStart = 0;
 	game->ray.lineEnd = game->ray.wallLineSizeInt / 2 + SCREEN_Y / 2;
 	if (game->ray.lineEnd >= SCREEN_Y)
 		game->ray.lineEnd = SCREEN_Y - 1;
-	printf( "lineStart\t| %i\t\t\t|\n"  ,game->ray.lineStart);
-	printf( "lineEnd\t\t| %i\t\t\t|\n"  ,game->ray.lineEnd);
+	//printf( "lineStart\t| %i\t\t\t|\n"  ,game->ray.lineStart);
+	//printf( "lineEnd\t\t| %i\t\t\t|\n"  ,game->ray.lineEnd);
 	double wallX;
 	//? ERRO DE TEXTURA ANDAR PODE ESTAR AQUI, TROCAR A ROW PELA COL
 	if (hitSide == 0 || hitSide == 1)
@@ -111,6 +111,6 @@ void dda(t_game *game)
 	else
 		wallX = game->pos.row + perpendicularDist * game->ray.rayDir.x;
 	wallX -= floor(wallX);
-	printf( "wallX\t\t| %f\t\t|\n"  ,wallX);
+	//printf( "wallX\t\t| %f\t\t|\n"  ,wallX);
 	draw_line(game, hitSide, wallX);
 }

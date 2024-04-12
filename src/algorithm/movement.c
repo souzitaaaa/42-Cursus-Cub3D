@@ -1,22 +1,44 @@
 #include "../includes/cub3d.h"
 
-void stopWalking(t_game *game) {
-    game->ray.velocity.y *= 0;
-    game->ray.velocity.x *= 0;
+int esc_key(t_game *game) {
+    (void)game;
+    printf(YELLOW " ░▒███████\n");
+    printf("░██▓▒░░▒▓██\n");
+    printf("██▓▒░__░▒▓██___██████\n");
+    printf("██▓▒░____░▓███▓__░▒▓██\n");
+    printf("██▓▒░___░▓██▓_____░▒▓██\n");
+    printf("██▓▒░_______________░▒▓██\n");
+    printf(" ██▓▒░______________░▒▓██\n");
+    printf("  ██▓▒░____________░▒▓██\n");
+    printf("   ██▓▒░__________░▒▓██\n");
+    printf("    ██▓▒░________░▒▓██\n");
+    printf("     ██▓▒░_____░▒▓██\n");
+    printf("      ██▓▒░__░▒▓██\n");
+    printf("       █▓▒░░▒▓██\n");
+    printf("         ░▒▓██\n");
+    printf("       ░▒▓██\n");
+    printf("     ░▒▓██" RESET "\tThanks for playing <3\n");
+    //! FUNCAO PARA DAR FREE AS COISAS
+    exit(1);
 }
 
-void walkUp(t_game *game) {
-    game->ray.velocity.y = game->map.dir.y * game->ray.speed;
-    game->ray.velocity.x = game->map.dir.x * game->ray.speed;
+void moviment_key(t_game *game, double new_x, double new_y) {
+    if (game->map.map_a[(int)new_y][(int)new_x] != '\0' && ft_strchr("NSWE0", game->map.map_a[(int)new_y][(int)new_x])) {
+        game->pos.row = new_x;
+        game->pos.col = new_y;
+        game->ray.screen_pixel = 0;
+    }
 }
 
-void walkDown(t_game *game) {
-    game->ray.velocity.y = (game->map.dir.y * -1) * game->ray.speed;
-    game->ray.velocity.x = (game->map.dir.x * -1) * game->ray.speed;
-}
+void direction_key(t_game *game, double val) {
+    t_vector	oldDir;
+    t_vector	oldPlane;
 
-void    updateInput(t_game *game) {
-    game->ray.velocity.y *= (1/60);
-    game->ray.velocity.x *= (1/60);
-    assign_vector_values(&game->ray.mapPos, game->ray.velocity.y, game->ray.velocity.x);
+    assign_vector_values(&oldDir, game->map.dir.y, game->map.dir.x);
+    assign_vector_values(&oldPlane, game->map.plane.y, game->map.plane.x);
+    game->map.dir.y = game->map.dir.y * cos(val) - game->map.dir.x * sin(val);
+    game->map.dir.x = oldDir.y * sin(val) + game->map.dir.x * cos(val);
+    game->map.plane.y = game->map.plane.y * cos(val) - game->map.plane.x * sin(val);
+    game->map.plane.x = oldPlane.y * sin(val) + game->map.plane.x * cos(val);
+    game->ray.screen_pixel = 0;
 }
