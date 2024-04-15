@@ -96,10 +96,7 @@ void map_validations(t_game *game)
 
 	pos = strlen(game->map.map_folder) - 4;
 	if (ft_strncmp(".cub", &game->map.map_folder[pos], 4) != 0)
-	{
-		printf("Error\n The map you provided isn't .cub\n");
-		exit (EXIT_FAILURE);
-	}
+		error(game, "The map isn't .cub");
 	get_area_y(game);
 	read_map_area(game);
 	get_area_x(game);
@@ -107,8 +104,5 @@ void map_validations(t_game *game)
 	check_textures(game);
 	get_mapa_x(game);
 	if (verify_walls(game) == false)
-	{
-		ft_printf("Error\n The map has to be surrounded by walls.");
-		exit(EXIT_FAILURE);
-	}
+		error(game, "The map needs to be surrounded by walls");
 }

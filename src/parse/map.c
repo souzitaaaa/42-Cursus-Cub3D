@@ -146,7 +146,7 @@ bool	verify_end_map(char *line)
 {
 	bool	flag;
 	int	i;
-	
+
 	flag = false;
 	i = 0;
 	while (line[i])
@@ -211,10 +211,12 @@ void	map_info(t_game *game)
 						y++;
 					}
 				}
+				free(line);
 				break ;
 			}
 		}
 		y++;
+		free(line);
 	}
 	if (ceiling == false || floor == false)
 	{

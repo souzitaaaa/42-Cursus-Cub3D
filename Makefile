@@ -14,7 +14,7 @@ CC				= cc
 RM 				= rm -rf
 
 #-----------------------------------  FLAGS  -----------------------------------
-CFLAGS 			= -Wall -Wextra -Werror -g
+CFLAGS 			= -Wall  -g
 NPD				= --no-print-directory
 MINILIBX 		= ./minilibx
 MLXFLAGS 		= -L ./minilibx -lmlx -Ilmlx -lXext -lX11
@@ -32,7 +32,7 @@ OBJDIR			= obj
 #--------------------------------- FILES  ---------------------------------------
 NAME 			= cub3d
 
-_FILES 			= position utils colors parse_utils textures map walls_utils movement map_validations dda-1 dda-2
+_FILES 			= position utils colors parse_utils textures map walls_utils movement map_validations dda-1 dda-2 lines
 OBJ				= $(_FILES:%=%.o)
 TARGET			= $(addprefix $(OBJDIR)/, $(OBJ))
 _HEADERS		= cub3d.h

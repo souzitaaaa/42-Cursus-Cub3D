@@ -78,6 +78,11 @@ typedef struct s_vector {
 	double	y;
 } 				t_vector;
 
+typedef struct s_ivector {
+	int		x;
+	int		y;
+} 				t_ivector;
+
 typedef struct s_map
 {
 	char	*map_folder; 	//? Ficheiro do mapa
@@ -129,7 +134,7 @@ typedef struct s_dda {
 
 typedef struct s_lines {
 	int			y;
-	t_vector	texture;
+	t_ivector	texture;
 	double		step;
 	double		texturePos;
 	unsigned int color;
@@ -208,6 +213,8 @@ void		init_game(t_game *game);
 Utils
 */
 void		error(t_game *game, char *msg);
+void	assign_ivector_values(t_ivector *vector, int y, int x);
+
 
 /* Map */
 void		read_map_area(t_game *game);
@@ -229,5 +236,7 @@ bool		verify_around_spaces(t_game *game, char **map);
 int			esc_key(t_game *game);
 void 		moviment_key(t_game *game, double new_x, double new_y);
 void 		direction_key(t_game *game, double val);
+void		draw_line(t_game *game);
+void	free_exit(t_game *game);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:30:06 by dinoguei          #+#    #+#             */
-/*   Updated: 2024/04/15 19:09:48 by dinoguei         ###   ########.fr       */
+/*   Updated: 2024/04/15 23:35:56 by dinoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@
  */
 void	init_struct(t_game *game)
 {
+	game->data.mlx = NULL;
+	game->data.win = NULL;
+	game->data.img = NULL;
 	game->map.mapa_y = 0;
 	game->map.mapa_x = 0;
 	game->ray.screen_pixel = 0;
@@ -37,6 +40,11 @@ void	init_struct(t_game *game)
 	game->ray.dda.hitSide = 0;
 	game->ray.dda.perpendicularDist = 0;
 	game->ray.dda.wallX = 0;
+	game->ray.line.y = 0;
+	assign_ivector_values(&game->ray.line.texture, 0, 0);
+	game->ray.line.step = 0;
+	game->ray.line.texturePos = 0;
+	game->ray.line.color = 0;
 }
 
 void	get_xpm(t_game *game)
@@ -111,11 +119,19 @@ int	main(int ac, char **av)
 {
 	t_game		game;
 	t_playerPos	player;
+	int			i;
 
+	i = 0;
 	if (ac != 2)
 		error(&game, "Wrong number of arguments");
 	if (av[1][0] == '\0')
 		error(&game, "No map inserted");
+	while (av[1][i] == ' ' || av[1][i] == '\t')
+	{
+		if (av[1][i + 1] == '\0')
+			error(&game, "No map inserted");
+		i++;
+	}
 	game.map.map_folder = av[1];
 	init_struct(&game);
 	map_validations(&game);

@@ -91,12 +91,17 @@ void	loop_assignment(t_game *game, double *multiplier)
 		game->ray.deltaDist.y = fabs(1 / game->ray.rayDir.y);
 }
 
-void	restart_dda_struct(t_game *game)
+void	restart_structs(t_game *game)
 {
 	game->ray.dda.hit = false;
 	game->ray.dda.hitSide = 0;
 	game->ray.dda.perpendicularDist = 0;
 	game->ray.dda.wallX = 0;
+	game->ray.line.y = 0;
+	assign_ivector_values(&game->ray.line.texture, 0, 0);
+	game->ray.line.step = 0;
+	game->ray.line.texturePos = 0;
+	game->ray.line.color = 0;
 }
 
 /**
@@ -141,7 +146,7 @@ int	loop(t_game *game)
 		game->ray.screen_pixel++;
 		mlx_put_image_to_window(game->data.mlx, game->data.win,
 			game->data.img, 0, 0);
-		restart_dda_struct(game);
+		restart_structs(game);
 	}
 	return (1);
 }
