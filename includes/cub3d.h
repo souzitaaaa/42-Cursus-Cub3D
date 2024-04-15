@@ -9,15 +9,23 @@
 # include <string.h>
 # include <math.h>
 
-# define SCREEN_X 1024
-# define SCREEN_Y 512
-# define FOV 60 // field of view
+# define SCREEN_X 800
+# define SCREEN_Y 400
+# define FOV 60
+# define MOVESTEP	0.1
+
 # define YELLOW "\033[0;31m"
 # define RESET "\033[0m"
-# define COLOR 0x00AAFF
-# define COLOR2 0xFFFFFF
-# define CEILING_COLOR 0x87CEEBFF
-# define FLOOR_COLOR 0xFF0000FF
+# define COLOR1 0x000155ac
+# define COLOR2 0x000c184e
+# define COLOR3 0x00ffcc41
+# define COLOR4 0x00ef8833
+# define CEILING_COLOR 0x0094e3e4
+# define FLOOR_COLOR 0x0033ac25
+
+# define TEXTURE_X 64
+# define TESTE "./textures/Tori-gate.xpm"
+# define TESTE2	 "./textures/kingdom.xpm"
 
 # if OS == 1
 #  include "../minilibx-linux/mlx.h"
@@ -63,19 +71,11 @@
 #  define H
 # endif
 
-typedef struct s_line {
-	double dif_x;
-	double dif_y;
-	int n_step;
-	double x_step;
-	double y_step;
-	double x;
-	double y;
-} t_line;
+//? col = y || row = x
 
 typedef struct s_vector {
-	float	x;
-	float	y;
+	double	x;
+	double	y;
 } 				t_vector;
 
 typedef struct s_map
@@ -103,10 +103,15 @@ typedef struct s_data
 	void	*mlx;			//? Instância da mlx
 	void	*win;			//? Janela da mlx
 	void	*img;			// Imagem da mlx
-	char	*addr;			// Endereço da imagem
+	unsigned int		*addr;			// Endereço da imagem
 	int		bits_per_pixel;	// Bits por pixel
 	int		line_len;	// Tamanho da linha da imagem em bytes
 	int		endian;			// Endian da imagem
+	void	*mm_img;			// Imagem da mlx
+	char	*mm_addr;			// Endereço da imagem
+	int		mm_bits_per_pixel;	// Bits por pixel
+	int		mm_line_len;	// Tamanho da linha da imagem em bytes
+	int		mm_endian;			// Endian da imagem
 }				t_data;
 
 typedef	struct s_playerPos {
@@ -115,19 +120,53 @@ typedef	struct s_playerPos {
 	char	orientation;	//? Orientação do jogador (N, S, E, W)
 } t_playerPos;
 
+typedef struct s_dda {
+	bool		hit;
+	int			hitSide;
+	double		perpendicularDist;
+	double		wallX;
+} t_dda;
+
+typedef struct s_lines {
+	int			y;
+	t_vector	texture;
+	double		step;
+	double		texturePos;
+	unsigned int color;
+} t_lines;
+
 typedef struct s_ray {
-	double		screen_pixel;	 	//? Index do x relativamente á tela
+	int			screen_pixel;	 	//? Index do x relativamente á tela
 	t_vector	camera;				//? Vetor com os valores da camera (ajuda ao calculo do raydir)
 	t_vector	rayDir;				//? Vetor com os valores da direção do raio
+	t_vector	deltaDist;
 	double		deltaDistX;			//? Distância base entre cada X
 	double		deltaDistY;			//? Distância base entre cada Y
 	t_vector	mapPos;				//? Vetor com as coordenadas do player no mapa
 	t_vector	distTo;				//? Coordenadas de x e y do distTo
 	t_vector	step;				//? Informação do step relativamente ao x e y
 	double		wallLineSize;		//? Tamanho da linha da parede
-	double		lineStartY;
-	double		lineEndY;
+	int			wallLineSizeInt;
+	int			lineStart;
+	int			lineEnd;
+	t_vector	velocity;
+	int			speed;
+	t_dda		dda;
+	t_lines		line;
 } t_ray;
+
+typedef struct s_texture {
+	void		*N;
+	unsigned int		*N_addr;			// Endereço da imagem
+	int		N_bitsPixel;	// Bits por pixel
+	int		N_lineLen;	// Tamanho da linha da imagem em bytes
+	int		N_endian;
+	void		*WE;
+	unsigned int		*W_addr;			// Endereço da imagem
+	int		W_bitsPixel;	// Bits por pixel
+	int		W_lineLen;	// Tamanho da linha da imagem em bytes
+	int		W_endian;
+} t_texture;
 
 typedef struct s_game
 {
@@ -135,12 +174,13 @@ typedef struct s_game
 	t_data		data;		//? Estrutura com as informações para a mlx
 	t_ray		ray;		//? Estrutura com as informações para o raycasting
 	t_playerPos pos;		//? Estrutura com as informações do jogador
+	t_texture	texture;
 }				t_game;
 
 //* [src/map_check.c]
-void map_validations(t_game *game);
-void get_map_y(t_game *game);
-void get_map_x(t_game *game);
+void 		map_validations(t_game *game);
+void 		get_map_y(t_game *game);
+void 		get_map_x(t_game *game);
 void 		check_walls(t_game *game);
 bool 		flood(t_game *game, int start);
 bool 		verify_flood(char **map);
@@ -155,11 +195,9 @@ void		set_direction(t_game *game, t_playerPos position);
 
 
 int 		loop(t_game *game);
-void assign_vector_values(t_vector *vector, double y, double x);
-
+void		assign_vector_values(t_vector *vector, double y, double x);
 void		init_game(t_game *game);
-void dda(t_game *game);
-double  get_max(double dif_x, double dif_y);
+void 		dda(t_game *game);
 void		map_validations(t_game *game);
 void		set_direction(t_game *game, t_playerPos position);
 void		algoritm_dda(t_game *game);
@@ -169,24 +207,27 @@ void		init_game(t_game *game);
 /*
 Utils
 */
-void	my_mlx_pixel_put(t_game	*game, int x, int y, int color);
-int		draw_ceiling_walls(t_game *game);
+void		error(t_game *game, char *msg);
 
 /* Map */
-void	read_map_area(t_game *game);
-void	get_area_x(t_game *game);
-void	get_area_y(t_game *game);
+void		read_map_area(t_game *game);
+void		get_area_x(t_game *game);
+void		get_area_y(t_game *game);
 
 /*
 Parse
 */
-void	floor_colors(t_game *game);
-void	ceiling_colors(t_game *game);
-void	map_info(t_game *game);
-void	get_mapa_x(t_game *game);
-void	print_map(t_game *game);
-void	check_textures(t_game *game);
-bool	is_valid_char(char c);
-bool	verify_around_spaces(t_game *game, char **map);
+void		floor_colors(t_game *game);
+void		ceiling_colors(t_game *game);
+void		map_info(t_game *game);
+void		get_mapa_x(t_game *game);
+void		print_map(t_game *game);
+void		check_textures(t_game *game);
+bool		is_valid_char(char c);
+bool		verify_around_spaces(t_game *game, char **map);
+
+int			esc_key(t_game *game);
+void 		moviment_key(t_game *game, double new_x, double new_y);
+void 		direction_key(t_game *game, double val);
 
 #endif

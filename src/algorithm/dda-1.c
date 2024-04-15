@@ -1,32 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dda-1.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/15 18:34:59 by dinoguei          #+#    #+#             */
+/*   Updated: 2024/04/15 19:24:04 by dinoguei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/cub3d.h"
+
+//! NORMINETTADO
 
 /**
  * @brief			Function to assign the initial values on a vector
- * 
+ *
  * @param vector	Vector struct that will be the one beeing initializated
  * @param y 		Value of y that will be initializated on the vector
  * @param x 		Value of x that will be initializated on the vector
  */
-void assign_vector_values(t_vector *vector, double y, double x)
+void	assign_vector_values(t_vector *vector, double y, double x)
 {
-        vector->y = y;
-        vector->x = x;
-}
-
-/**
- * @brief 			Function to calculate the magnitude of a vector
- * 				@param Magnitude is the lenght of a vector
- *
- * @param vector 	Vector that will be used to measure the magnitude
- * @return double 	The return value of this function will be the magnitude of
- * 				the vector
- */
-double magnitude(t_vector vector)
-{
-        double result;
-
-        result = sqrt(vector.y * vector.y + vector.x * vector.x);
-        return result;
+	vector->y = y;
+	vector->x = x;
 }
 
 /**
@@ -37,44 +35,65 @@ double magnitude(t_vector vector)
  * 			deltaDist values, so these distTo calculate the first value untill a grid
  * 				The @param step variables are going to be used to know the direction of
  * 			the ray
- * 
+ *
  * @param game	Struct that contains every information on the program
  */
-void get_distToSides(t_game *game)
+void	get_distto(t_game *game)
 {
-        if (game->ray.rayDir.x < 0)
-        {
-                game->ray.distTo.x = (game->pos.row - game->ray.mapPos.x) * game->ray.deltaDistX;
-                game->ray.step.x = -1;
-        }
-        else
-        {
-                game->ray.distTo.x = (game->ray.mapPos.x + 1 - game->pos.row) * game->ray.deltaDistX;
-                game->ray.step.x = 1;
-        }
-        if (game->ray.rayDir.y < 0)
-        {
-                game->ray.distTo.y = (game->pos.col - game->ray.mapPos.y) * game->ray.deltaDistY;
-                game->ray.step.y = -1;
-        }
-        else
-        {
-                game->ray.distTo.y = (game->ray.mapPos.y + 1 - game->pos.col) * game->ray.deltaDistY;
-                game->ray.step.y = 1;
-        }
+	if (game->ray.rayDir.x < 0)
+	{
+		game->ray.distTo.x = (game->pos.row - game->ray.mapPos.x)
+			* game->ray.deltaDist.x;
+		game->ray.step.x = -1;
+	}
+	else
+	{
+		game->ray.distTo.x = (game->ray.mapPos.x + 1.0 - game->pos.row)
+			* game->ray.deltaDist.x;
+		game->ray.step.x = 1;
+	}
+	if (game->ray.rayDir.y < 0)
+	{
+		game->ray.distTo.y = (game->pos.col - game->ray.mapPos.y)
+			* game->ray.deltaDist.y;
+		game->ray.step.y = -1;
+	}
+	else
+	{
+		game->ray.distTo.y = (game->ray.mapPos.y + 1.0 - game->pos.col)
+			* game->ray.deltaDist.y;
+		game->ray.step.y = 1;
+	}
 }
 
-/**
- * @brief 			Get the max value between two numbers
- * 
- * @param dif_x 	First value to be compared
- * @param dif_y 	Second value to be compared
- * @return double 	This function return the biggest number between those two
- */
-double  get_max(double dif_x, double dif_y) {
-        if (dif_x > dif_y)
-                return (dif_x);
-        return (dif_y);
+void	loop_assignment(t_game *game, double *multiplier)
+{
+	*multiplier = 2 * game->ray.screen_pixel / (double)SCREEN_X - 1;
+	assign_vector_values(&game->ray.rayDir, game->map.dir.y + game->map.plane.y
+		* *multiplier, game->map.dir.x + game->map.plane.x * *multiplier);
+	assign_vector_values(&game->ray.deltaDist,
+		sqrt(1 + (game->ray.rayDir.x * game->ray.rayDir.x)
+			/ (game->ray.rayDir.y * game->ray.rayDir.y)),
+		sqrt(1 + (game->ray.rayDir.y * game->ray.rayDir.y)
+			/ (game->ray.rayDir.x * game->ray.rayDir.x)));
+	assign_vector_values(&game->ray.mapPos, floor(game->pos.col),
+		floor(game->pos.row));
+	if (game->ray.rayDir.x == 0)
+		game->ray.deltaDist.x = 1e30;
+	else
+		game->ray.deltaDist.x = fabs(1 / game->ray.rayDir.x);
+	if (game->ray.rayDir.y == 0)
+		game->ray.deltaDist.y = 1e30;
+	else
+		game->ray.deltaDist.y = fabs(1 / game->ray.rayDir.y);
+}
+
+void	restart_dda_struct(t_game *game)
+{
+	game->ray.dda.hit = false;
+	game->ray.dda.hitSide = 0;
+	game->ray.dda.perpendicularDist = 0;
+	game->ray.dda.wallX = 0;
 }
 
 /**
@@ -102,56 +121,20 @@ double  get_max(double dif_x, double dif_y) {
  * @param game  Struct that contains every information on the program
  * @return int  The function on the mlx_loop_hook must return a int type
  */
-int loop(t_game *game)
+int	loop(t_game *game)
 {
-        double multiplier;
+	double	multiplier;
 
-        multiplier = 0;
-
-        game->ray.screen_pixel = 0;
-        //draw_ceiling_walls(game);
-        //! Não tenho a certeza quanto ao <=, mas se ele não tiver para no 0.998047
-        while (game->ray.screen_pixel < SCREEN_X)
-        {
-                //* ASSIGNMENT PART
-                multiplier = 2 * (game->ray.screen_pixel / SCREEN_X) - 1;
-                //printf(YELLOW "Multiplier\t| %f\t\t|\n" RESET, multiplier);
-                assign_vector_values(&game->ray.camera, game->map.plane.y * multiplier, game->map.plane.x * multiplier);
-                //printf("Camera vector\t| col(y): %f\t| row(x): %f\t|\n", game->ray.camera.y, game->ray.camera.x);
-                assign_vector_values(&game->ray.rayDir, game->map.dir.y + game->ray.camera.y, game->map.dir.x + game->ray.camera.x);
-                //printf("RayDir vector\t| col(y): %f\t| row(x): %f\t|\n", game->ray.rayDir.y, game->ray.rayDir.x);
-                
-                //! Treating raydir 0
-                if (game->ray.rayDir.x == 0) {
-                        game->ray.deltaDistX = 1;
-                        game->ray.deltaDistY = 0;
-                }
-                else {
-                        if (game->ray.rayDir.y) {
-                                game->ray.deltaDistX = fabs(magnitude(game->ray.rayDir) / game->ray.rayDir.x);
-                        }
-                }
-                //printf("DeltaDistX\t| %f\t\t|\n", game->ray.deltaDistX);
-                if (game->ray.rayDir.y == 0) {
-                        game->ray.deltaDistX = 0;
-                        game->ray.deltaDistY = 1;
-                }
-                else {
-                        if (game->ray.rayDir.x) {
-                                game->ray.deltaDistY = fabs(magnitude(game->ray.rayDir) / game->ray.rayDir.y);
-                        }
-                }
-                //printf("DeltaDistY\t| %f\t\t|\n", game->ray.deltaDistY);
-                assign_vector_values(&game->ray.mapPos, floor(game->pos.col), floor(game->pos.row));
-                //printf("MapPos vector\t| col(y): %f\t| row(x): %f\t|\n", game->ray.mapPos.y, game->ray.mapPos.x);
-                get_distToSides(game);
-                //printf("DistToSide\t| col(y): %f\t| row(x): %f\t|\n", game->ray.distTo.y, game->ray.distTo.x);
-                //* END
-                //*DDA
-                dda(game);
-                game->ray.screen_pixel++;
-                mlx_put_image_to_window(game->data.mlx, game->data.win, game->data.img, 0, 0);
-        }
-        //printf("Player Info | col(y): %f | row(x): %f | orientation: %c |\n", game->pos.col, game->pos.row, game->pos.orientation);
-        return 1;
+	multiplier = 0;
+	while (game->ray.screen_pixel < SCREEN_X)
+	{
+		loop_assignment(game, &multiplier);
+		get_distto(game);
+		dda(game);
+		game->ray.screen_pixel++;
+		mlx_put_image_to_window(game->data.mlx, game->data.win,
+			game->data.img, 0, 0);
+		restart_dda_struct(game);
+	}
+	return (1);
 }

@@ -14,8 +14,7 @@
 
 size_t	ft_strlen(const char *str)
 {
-	size_t	i;
-
+	auto size_t i = 0;
 	if (!str)
 	{
 		write(1, "error: NULL string", 19);

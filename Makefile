@@ -32,7 +32,7 @@ OBJDIR			= obj
 #--------------------------------- FILES  ---------------------------------------
 NAME 			= cub3d
 
-_FILES 			= position utils colors parse_utils textures map walls_utils map_validations dda-1 dda-2
+_FILES 			= position utils colors parse_utils textures map walls_utils movement map_validations dda-1 dda-2
 OBJ				= $(_FILES:%=%.o)
 TARGET			= $(addprefix $(OBJDIR)/, $(OBJ))
 _HEADERS		= cub3d.h
