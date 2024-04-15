@@ -158,8 +158,8 @@ int 		loop(t_game *game);
 void assign_vector_values(t_vector *vector, double y, double x);
 
 void		init_game(t_game *game);
-void dda(t_game *game);
-double  get_max(double dif_x, double dif_y);
+void		dda(t_game *game);
+double 		get_max(double dif_x, double dif_y);
 void		map_validations(t_game *game);
 void		set_direction(t_game *game, t_playerPos position);
 void		algoritm_dda(t_game *game);

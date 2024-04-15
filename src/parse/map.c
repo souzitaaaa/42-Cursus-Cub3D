@@ -67,7 +67,7 @@ void	get_area_y(t_game *game)
 	close(game->map.fd);
 }
 
-void	parse_textures(t_game *game, char *line)
+void	parse_textures(t_game *game, char *line, bool *ceiling, bool *floor)
 {
 	if (line[0] != '\0')
 	{
@@ -108,9 +108,25 @@ void	parse_textures(t_game *game, char *line)
 			game->map.ea_texture = ft_strdup(line + 3);
 		}
 		else if (ft_strncmp(line, "F ", 2) == 0)
+		{
+			if (*floor == true)
+			{
+				ft_printf("Error\nDuplicate floor color");
+				exit(EXIT_FAILURE);
+			}
+			*floor = true;
 			floor_colors(game);
+		}
 		else if (ft_strncmp(line, "C ", 2) == 0)
+		{
+			if (*ceiling == true)
+			{
+				ft_printf("Error\nDuplicate ceiling floor");
+				exit(EXIT_FAILURE);
+			}
+			*ceiling = true;
 			ceiling_colors(game);
+		}
 	}
 }
 
@@ -126,18 +142,38 @@ bool	is_beg_map(char *line)
 	return (false);
 }
 
+bool	verify_end_map(char *line)
+{
+	bool	flag;
+	int	i;
+	
+	flag = false;
+	i = 0;
+	while (line[i])
+	{
+		if (ft_isprint(line[i]))
+		{
+			ft_printf("caractere: %d.\n", line[i]);
+			return (true);
+		}
+		i++;
+	}
+	return (false);
+}
+
 void	map_info(t_game *game)
 {
 	int	y = 0;
 	int	x;
 	int	i;
 	char	*line;
+	bool	ceiling = false;
+	bool	floor = false;
 
-	printf("Area y: %d\n", game->map.area_y);
 	while (y < game->map.area_y)
 	{
 		line = ft_strtrim(game->map.area[y], " \t");
-		parse_textures(game, line);
+		parse_textures(game, line, &ceiling, &floor);
 		if (is_beg_map(line))
 		{
 			x = 0;
@@ -164,12 +200,26 @@ void	map_info(t_game *game)
 				game->map.mapa_y = i;
 				if (y < game->map.area_y)
 				{
-					
+					while (y < game->map.area_y)
+					{
+						if (verify_end_map(game->map.area[y]) == true)
+						{
+							ft_printf("char: %s.\n", game->map.area[y]);
+							ft_printf("Error\n Invalid map.");
+							exit(EXIT_FAILURE);
+						}
+						y++;
+					}
 				}
+				break ;
 			}
-
 		}
 		y++;
+	}
+	if (ceiling == false || floor == false)
+	{
+		ft_printf("Error\n Not all required colors are specified.");
+		exit(EXIT_FAILURE);
 	}
 	print_arr(game->map.map_a);
 	if (!game->map.no_texture || !game->map.so_texture || !game->map.we_texture || !game->map.ea_texture)
