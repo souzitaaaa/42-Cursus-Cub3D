@@ -22,7 +22,7 @@ int esc_key(t_game *game) {
     exit(1);
 }
 
-void moviment_key(t_game *game, double new_x, double new_y) {
+void    moviment_key(t_game *game, double new_x, double new_y) {
     if (game->map.map_a[(int)new_y][(int)new_x] != '\0' && ft_strchr("NSWE0", game->map.map_a[(int)new_y][(int)new_x])) {
         game->pos.row = new_x;
         game->pos.col = new_y;
@@ -30,7 +30,7 @@ void moviment_key(t_game *game, double new_x, double new_y) {
     }
 }
 
-void direction_key(t_game *game, double val) {
+void    direction_key(t_game *game, double val) {
     t_vector	oldDir;
     t_vector	oldPlane;
 
