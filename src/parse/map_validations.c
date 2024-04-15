@@ -28,6 +28,7 @@ bool	verify_long_lines(t_game *game, char **map)
 			len_next_line = len_current_line;
 		if (len_prev_line < len_current_line || len_next_line < len_current_line)
 		{
+
 			x = get_min(len_prev_line, len_next_line);
 			while (map[y][x] != '\0')
 			{
@@ -62,25 +63,25 @@ bool	check_middle_lines(t_game *game, char **map)
 
 bool	check_peripheral_lines(char *line)
 {
-	int j; 
+	int x; 
 	
-	j = 0;
-	while (line[j] != '\0')
+	x = 0;
+	while (line[x] != '\0')
 	{
-		if (line[j] != '1' && line[j] != ' ')
+		if (line[x] != '1' && line[x] != ' ')
 			return (false);
-		j++;
+		x++;
 	}
 	return (true);
 }
 
 bool	verify_walls(t_game *game)
 {
-	//Verifica a volta do mapa:
+	// Verifica a volta do mapa:
 	//1º caracter e ultimo de todas as linhas tem que ser 1 ou espaço
 	if (check_middle_lines(game, game->map.map_a) == false)
 	 	return (false);
-	// //1ª e ultima linha tem que ser 1 ou espaço
+	// // //1ª e ultima linha tem que ser 1 ou espaço
 	if (check_peripheral_lines(game->map.map_a[0]) == false || check_peripheral_lines(game->map.map_a[game->map.mapa_y - 1]) == false)
 	 	return (false);
 	// ////verifica os buracos

@@ -67,22 +67,66 @@ void	get_area_y(t_game *game)
 	close(game->map.fd);
 }
 
-void	parse_textures(t_game *game, char *line)
+void	parse_textures(t_game *game, char *line, bool *ceiling, bool *floor)
 {
 	if (line[0] != '\0')
 	{
 		if (ft_strncmp(line, "NO ", 3) == 0)
+		{
+			if (game->map.no_texture)
+			{
+				ft_printf("Error\nDuplicate texture");
+				exit(EXIT_FAILURE);
+			}
 			game->map.no_texture = ft_strdup(line + 3);
+		}
 		else if (ft_strncmp(line, "SO ", 3) == 0)
+		{
+			if (game->map.so_texture)
+			{
+				ft_printf("Error\nDuplicate texture");
+				exit(EXIT_FAILURE);
+			}
 			game->map.so_texture = ft_strdup(line + 3);
+		}
 		else if (ft_strncmp(line, "WE ", 3) == 0)
+		{
+			if (game->map.we_texture)
+			{
+				ft_printf("Error\nDuplicate texture");
+				exit(EXIT_FAILURE);
+			}
 			game->map.we_texture = ft_strdup(line + 3);
+		}
 		else if (ft_strncmp(line, "EA ", 3) == 0)
+		{
+			if (game->map.ea_texture)
+			{
+				ft_printf("Error\nDuplicate texture");
+				exit(EXIT_FAILURE);
+			}
 			game->map.ea_texture = ft_strdup(line + 3);
+		}
 		else if (ft_strncmp(line, "F ", 2) == 0)
+		{
+			if (*floor == true)
+			{
+				ft_printf("Error\nDuplicate floor color");
+				exit(EXIT_FAILURE);
+			}
+			*floor = true;
 			floor_colors(game);
+		}
 		else if (ft_strncmp(line, "C ", 2) == 0)
+		{
+			if (*ceiling == true)
+			{
+				ft_printf("Error\nDuplicate ceiling floor");
+				exit(EXIT_FAILURE);
+			}
+			*ceiling = true;
 			ceiling_colors(game);
+		}
 	}
 }
 
@@ -98,57 +142,92 @@ bool	is_beg_map(char *line)
 	return (false);
 }
 
+bool	verify_end_map(char *line)
+{
+	bool	flag;
+	int	i;
+	
+	flag = false;
+	i = 0;
+	while (line[i])
+	{
+		if (ft_isprint(line[i]))
+		{
+			ft_printf("caractere: %d.\n", line[i]);
+			return (true);
+		}
+		i++;
+	}
+	return (false);
+}
+
 void	map_info(t_game *game)
 {
 	int	y = 0;
 	int	x;
 	int	i;
 	char	*line;
+	bool	ceiling = false;
+	bool	floor = false;
 
-	while (y < game->map.area_y + 1)
+	while (y < game->map.area_y)
 	{
 		line = ft_strtrim(game->map.area[y], " \t");
-		if (line[0] != '\0')
+		parse_textures(game, line, &ceiling, &floor);
+		if (is_beg_map(line))
 		{
-			parse_textures(game, line);
-			if (is_beg_map(line))
+			x = 0;
+			while (line[x] != '\0')
 			{
-				x = 0;
-				while (line[x] != '\0')
+				if (ft_isalpha(line[x]))
 				{
-					if (ft_isalpha(line[x]))
-					{
-						ft_printf("Error\n Invalid map.");
-						exit(EXIT_FAILURE);
-					}
-					x++;
+					ft_printf("Error\n Invalid map.");
+					exit(EXIT_FAILURE);
 				}
-				if (ft_strchr(line, '1') != NULL)
+				x++;
+			}
+			if (ft_strchr(line, '1') != NULL)
+			{
+				game->map.map_a = (char **)malloc(sizeof(char *) * (game->map.area_y + 1));
+				i = 0;
+				while (y < game->map.area_y && game->map.area[y][0] != '\0')
 				{
-					game->map.map_a = (char **)malloc(sizeof(char *) * (game->map.area_y + 1));
-					i = 0;
-					while (y < game->map.area_y + 1 && game->map.area[y] != NULL)
-					{
-						game->map.map_a[i] = ft_strdup(game->map.area[y]);
-						 i++;
-						 y++;
-					}
-					game->map.map_a[i] = NULL;
-					game->map.mapa_y = i;
-					print_arr(game->map.map_a);
-					break ;
+					game->map.map_a[i] = special_strtrim(ft_strdup(game->map.area[y]));
+					i++;
+					y++;
 				}
+				game->map.map_a[i] = NULL;
+				game->map.mapa_y = i;
+				if (y < game->map.area_y)
+				{
+					while (y < game->map.area_y)
+					{
+						if (verify_end_map(game->map.area[y]) == true)
+						{
+							ft_printf("char: %s.\n", game->map.area[y]);
+							ft_printf("Error\n Invalid map.");
+							exit(EXIT_FAILURE);
+						}
+						y++;
+					}
+				}
+				break ;
 			}
 		}
 		y++;
 	}
+	if (ceiling == false || floor == false)
+	{
+		ft_printf("Error\n Not all required colors are specified.");
+		exit(EXIT_FAILURE);
+	}
+	print_arr(game->map.map_a);
 	if (!game->map.no_texture || !game->map.so_texture || !game->map.we_texture || !game->map.ea_texture)
 	{
 		ft_printf("Error\n Not all required textures are specified.");
 		exit(EXIT_FAILURE);
 	}
 }
-
 /* Guarda as texturas, cores e o mapa em lugares diferentes para serem tratados.|
 Aloca memória para o map_a que é onde guardamos o mapa para fazer as validações e futuramente usar para renderizar o mapa. */
 // tem que dar free na map_a!!!

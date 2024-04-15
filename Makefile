@@ -46,7 +46,7 @@ ifeq ($(shell uname), Linux)
 	OS          = 1
 else ifeq ($(shell uname), Darwin)
 	MINILIBX 	= ./minilibx
-	MLXFLAGS	= -L ./minilibx -lmlx -framework OpenGL -framework Appkit -lm
+	MLXFLAGS	= -L ./minilibx -lmlx -framework OpenGL -framework Appkit
 	CP_CMD 		= cp ./minilibx/libmlx.dylib ./
 	OS          = 2
 endif

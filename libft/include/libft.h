@@ -49,6 +49,7 @@ int		ft_atoi(const char *str);
 void	*ft_calloc(size_t n, size_t size);
 char	*ft_substr(char const *str, unsigned int start, size_t len);
 char	*ft_strtrim(char const *str, char const *set);
+char	*special_strtrim(char *str);
 char	**ft_split(char const *str, char c);
 char	*ft_itoa(int n);
 char	*ft_strmapi(char const *str, char (*f)(unsigned int, char));
