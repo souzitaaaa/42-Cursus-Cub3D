@@ -8,7 +8,7 @@ int	get_min(int	a, int b)
 }
 
 bool	verify_long_lines(t_game *game, char **map)
-{	
+{
 	int	len_current_line;
 	int	len_prev_line;
 	int	len_next_line;
@@ -63,8 +63,8 @@ bool	check_middle_lines(t_game *game, char **map)
 
 bool	check_peripheral_lines(char *line)
 {
-	int x; 
-	
+	int x;
+
 	x = 0;
 	while (line[x] != '\0')
 	{
@@ -81,13 +81,10 @@ bool	verify_walls(t_game *game)
 	//1º caracter e ultimo de todas as linhas tem que ser 1 ou espaço
 	if (check_middle_lines(game, game->map.map_a) == false)
 	 	return (false);
-	// // //1ª e ultima linha tem que ser 1 ou espaço
 	if (check_peripheral_lines(game->map.map_a[0]) == false || check_peripheral_lines(game->map.map_a[game->map.mapa_y - 1]) == false)
 	 	return (false);
-	// ////verifica os buracos
 	if (verify_around_spaces(game, game->map.map_a) == false)
 		return (false);
-	//verifica se as linhas maiores p/ direita
 	 if (verify_long_lines(game, game->map.map_a) == false)
 	 	return (false);
 	return(true);

@@ -221,7 +221,6 @@ void	map_info(t_game *game)
 		ft_printf("Error\n Not all required colors are specified.");
 		exit(EXIT_FAILURE);
 	}
-	print_arr(game->map.map_a);
 	if (!game->map.no_texture || !game->map.so_texture || !game->map.we_texture || !game->map.ea_texture)
 	{
 		ft_printf("Error\n Not all required textures are specified.");
