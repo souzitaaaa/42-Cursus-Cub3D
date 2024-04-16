@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   colors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:24:20 by jede-ara          #+#    #+#             */
-/*   Updated: 2024/04/16 16:43:19 by jede-ara         ###   ########.fr       */
+/*   Updated: 2024/04/17 00:06:59 by dinoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-void	validate_color(char *color_str)
+void	validate_color(t_game *game, char *color_str)
 {
 	int		comma;
 
@@ -24,13 +24,10 @@ void	validate_color(char *color_str)
 		color_str++;
 	}
 	if (comma != 2)
-	{
-		ft_printf("Error\n Invalid color format.\n");
-		exit(EXIT_FAILURE);
-	}
+		error(game, "Invalid color format");
 }
 
-void	parse_color(char *color_str, int *color_values)
+void	parse_color(t_game *game, char *color_str, int *color_values)
 {
 	int		count;
 	char	*ptr;
@@ -42,10 +39,7 @@ void	parse_color(char *color_str, int *color_values)
 		while (*ptr == ' ' || *ptr == '\t')
 			ptr++;
 		if (!ft_isdigit(*ptr))
-		{
-			ft_printf("Error\n Invalid color format.\n");
-			exit(EXIT_FAILURE);
-		}
+			error(game, "Invalid color format");
 		color_values[count++] = ft_atoi(ptr);
 		while (ft_isdigit(*ptr))
 			ptr++;
@@ -53,10 +47,7 @@ void	parse_color(char *color_str, int *color_values)
 			ptr++;
 	}
 	if (count != 3)
-	{
-		printf("Error\n Invalid color format.\n");
-		exit(EXIT_FAILURE);
-	}
+		error(game, "Invalid color format");
 }
 
 void	floor_colors(t_game *game)
@@ -71,8 +62,8 @@ void	floor_colors(t_game *game)
 		if (ft_strncmp(game->map.area[i], "F ", 2) == 0)
 		{
 			color_str = game->map.area[i] + 2;
-			validate_color(color_str);
-			parse_color(color_str, color_values);
+			validate_color(game, color_str);
+			parse_color(game, color_str, color_values);
 			game->map.f_range[0] = color_values[0];
 			game->map.f_range[1] = color_values[1];
 			game->map.f_range[2] = color_values[2];
@@ -100,8 +91,8 @@ void	ceiling_colors(t_game *game)
 		if (ft_strncmp(game->map.area[i], "C ", 2) == 0)
 		{
 			color_str = game->map.area[i] + 2;
-			validate_color(color_str);
-			parse_color(color_str, color_values);
+			validate_color(game, color_str);
+			parse_color(game, color_str, color_values);
 			game->map.c_range[0] = color_values[0];
 			game->map.c_range[1] = color_values[1];
 			game->map.c_range[2] = color_values[2];

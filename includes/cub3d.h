@@ -25,8 +25,6 @@
 # define FLOOR_COLOR 0x0033ac25
 
 # define TEXTURE_X 64
-# define TESTE "./textures/Tori-gate.xpm"
-# define TESTE2	 "./textures/kingdom.xpm"
 
 # if OS == 1
 #  include "../minilibx-linux/mlx.h"
@@ -168,16 +166,26 @@ typedef struct s_ray {
 } t_ray;
 
 typedef struct s_texture {
-	void		*N;
-	unsigned int		*N_addr;			// Endereço da imagem
-	int		N_bitsPixel;	// Bits por pixel
-	int		N_lineLen;	// Tamanho da linha da imagem em bytes
-	int		N_endian;
-	void		*WE;
-	unsigned int		*W_addr;			// Endereço da imagem
-	int		W_bitsPixel;	// Bits por pixel
-	int		W_lineLen;	// Tamanho da linha da imagem em bytes
-	int		W_endian;
+	void			*N;
+	void			*WE;
+	void			*SO;
+	void			*EA;
+	unsigned int	*N_addr;		// Endereço da imagem
+	unsigned int	*W_addr;		// Endereço da imagem
+	unsigned int	*S_addr;
+	unsigned int	*E_addr;
+	int				N_bitsPixel;	// Bits por pixel
+	int				W_bitsPixel;	// Bits por pixel
+	int				S_bitsPixel;
+	int				E_bitsPixel;
+	int				N_lineLen;		// Tamanho da linha da imagem em bytes
+	int				W_lineLen;		// Tamanho da linha da imagem em bytes
+	int				S_lineLen;
+	int				E_lineLen;
+	int				N_endian;
+	int				W_endian;
+	int				S_endian;
+	int				E_endian;
 } t_texture;
 
 typedef struct s_game
@@ -207,7 +215,7 @@ int			get_len_line(t_game *game, char **map, int y, t_len_line *len_info);
 bool		verify_long_lines(t_game *game, char **map);
 bool		check_middle_lines(t_game *game, char **map);
 bool		first_last_lines(char *line);
-
+void	init_len_info(t_len_line *leninfo);
 
 //* [src/position.c]
 t_playerPos	get_position(t_game *game, char **map);

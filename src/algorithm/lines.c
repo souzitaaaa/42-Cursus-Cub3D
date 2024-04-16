@@ -6,7 +6,7 @@
 /*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 23:05:12 by dinoguei          #+#    #+#             */
-/*   Updated: 2024/04/15 23:06:40 by dinoguei         ###   ########.fr       */
+/*   Updated: 2024/04/16 22:57:26 by dinoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	draw_textures_2(t_game *game)
 	}
 	else if (game->ray.dda.hitSide == 3)
 	{
-		game->ray.line.color = game->texture.N_addr[TEXTURE_X
+		game->ray.line.color = game->texture.S_addr[TEXTURE_X
 			* game->ray.line.texture.y + game->ray.line.texture.x];
 		game->data.addr[game->ray.line.y * SCREEN_X
 			+ game->ray.screen_pixel] = game->ray.line.color;
@@ -41,7 +41,7 @@ void	draw_textures(t_game *game)
 	}
 	else if (game->ray.dda.hitSide == 1)
 	{
-		game->ray.line.color = game->texture.W_addr[TEXTURE_X
+		game->ray.line.color = game->texture.E_addr[TEXTURE_X
 			* game->ray.line.texture.y + game->ray.line.texture.x];
 		game->data.addr[game->ray.line.y * SCREEN_X
 			+ game->ray.screen_pixel] = game->ray.line.color;

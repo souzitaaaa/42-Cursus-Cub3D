@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:30:06 by dinoguei          #+#    #+#             */
-/*   Updated: 2024/04/16 18:46:39 by jede-ara         ###   ########.fr       */
+/*   Updated: 2024/04/17 00:00:35 by dinoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	init_struct(t_game *game)
 	game->data.img = NULL;
 	game->texture.N = NULL;
 	game->texture.WE = NULL;
+	game->texture.SO = NULL;
+	game->texture.EA = NULL;
 	game->map.mapa_y = 0;
 	game->map.mapa_x = 0;
 	game->ray.screen_pixel = 0;
@@ -47,21 +49,33 @@ void	init_struct(t_game *game)
 	game->ray.line.step = 0;
 	game->ray.line.texturePos = 0;
 	game->ray.line.color = 0;
+	game->map.map_a = NULL;
+	game->map.area = NULL;
 }
 
 void	get_xpm(t_game *game)
 {
 	auto int tile_size = 32;
-	game->texture.N = mlx_xpm_file_to_image(game->data.mlx, TESTE,
+	game->texture.N = mlx_xpm_file_to_image(game->data.mlx, game->map.no_texture,
 			&tile_size, &tile_size);
 	game->texture.N_addr = (unsigned int *)mlx_get_data_addr(game->texture.N,
 			&game->texture.N_bitsPixel, &game->texture.N_lineLen,
 			&game->texture.N_endian);
-	game->texture.WE = mlx_xpm_file_to_image(game->data.mlx, TESTE2,
+	game->texture.WE = mlx_xpm_file_to_image(game->data.mlx, game->map.we_texture,
 			&tile_size, &tile_size);
 	game->texture.W_addr = (unsigned int *)mlx_get_data_addr(game->texture.WE,
 			&game->texture.W_bitsPixel, &game->texture.W_lineLen,
 			&game->texture.W_endian);
+	game->texture.SO = mlx_xpm_file_to_image(game->data.mlx, game->map.so_texture,
+			&tile_size, &tile_size);
+	game->texture.S_addr = (unsigned int *)mlx_get_data_addr(game->texture.SO,
+			&game->texture.S_bitsPixel, &game->texture.S_lineLen,
+			&game->texture.S_endian);
+	game->texture.EA = mlx_xpm_file_to_image(game->data.mlx, game->map.ea_texture,
+			&tile_size, &tile_size);
+	game->texture.E_addr = (unsigned int *)mlx_get_data_addr(game->texture.EA,
+			&game->texture.E_bitsPixel, &game->texture.E_lineLen,
+			&game->texture.E_endian);
 }
 
 int	key_press(int kc, t_game *game)
@@ -109,6 +123,33 @@ void	init_game_teste(t_game *game)
 	mlx_loop(game->data.mlx);
 }
 
+bool	check_args(int ac, char **av)
+{
+	int			i;
+
+	i = 0;
+	if (ac != 2)
+	{
+		ft_printf("❌ Error\n    Invalid number of arguments\n");
+		return (false);
+	}
+	if (av[1][0] == '\0')
+	{
+		ft_printf("❌ Error\n    No map inserted\n");
+		return (false);
+	}
+	while (av[1][i] == ' ' || av[1][i] == '\t')
+	{
+		if (av[1][i + 1] == '\0')
+		{
+			ft_printf("❌ Error\n    No map inserted\n");
+			return (false);
+		}
+		i++;
+	}
+	return (true);
+}
+
 /**
  * @brief		Main function of the program, from here we decide the flow,
  * 			of the program, deciding how to deal with our information
@@ -121,19 +162,9 @@ int	main(int ac, char **av)
 {
 	t_game		game;
 	t_playerPos	player;
-	int			i;
 
-	i = 0;
-	if (ac != 2)
-		error(&game, "Wrong number of arguments");
-	if (av[1][0] == '\0')
-		error(&game, "No map inserted");
-	while (av[1][i] == ' ' || av[1][i] == '\t')
-	{
-		if (av[1][i + 1] == '\0')
-			error(&game, "No map inserted");
-		i++;
-	}
+	if (!check_args(ac, av))
+		return 1;
 	game.map.map_folder = av[1];
 	init_struct(&game);
 	map_validations(&game);
@@ -142,5 +173,13 @@ int	main(int ac, char **av)
 	set_direction(&game, player);
 	game.pos.col += 0.5;
 	game.pos.row += 0.5;
+	printf("Texturas: \n");
+	printf("%s\n", game.map.no_texture);
+	printf("%s\n", game.map.so_texture);
+	printf("%s\n", game.map.we_texture);
+	printf("%s\n", game.map.ea_texture);
+	printf("Color:\n");
+	printf("Floor: %i, %i, %i\n", game.map.f_range[0], game.map.f_range[1], game.map.f_range[2]);
+	//printf("Ceiling: %i, %i, %i\n", game.map.c_range[0], game.map.c_range[1], game.map.c_range[2]);
 	init_game_teste(&game);
 }

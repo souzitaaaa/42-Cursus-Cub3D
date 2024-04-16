@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   textures.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 16:03:46 by jede-ara          #+#    #+#             */
-/*   Updated: 2024/04/16 16:05:40 by jede-ara         ###   ########.fr       */
+/*   Updated: 2024/04/17 00:02:30 by dinoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,5 @@ bool	check_extension(t_game *game)
 void	check_textures(t_game *game)
 {
 	if (check_extension(game) == false)
-	{
-		ft_printf("Error\n The texture you provided isn't .xpm\n");
-		exit(EXIT_FAILURE);
-	}
+		error(game, "The texture you provided isn't .xpm");
 }

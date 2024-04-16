@@ -18,17 +18,11 @@ t_playerPos	get_position(t_game *game, char **map)
 		while (map[y][x] != '\0')
 		{
 			if (!is_valid_char(map[y][x]))
-			{
-				ft_printf("Error\n Invalid map character.\n");
-				exit(EXIT_FAILURE);
-			}
+				error(game, "Invalid map character");
 			if (map[y][x] == 'N' || map[y][x] == 'S' || map[y][x] == 'E' || map[y][x] == 'W')
 			{
 				if (pos.row != -1 || pos.col != -1)
-				{
-					ft_printf("Error\n It's not possible to have more than one player.\n");
-					exit(EXIT_FAILURE);
-				}
+					error(game, "It's not possible to have more than one player");
 				pos.row = x;
 				pos.col = y;
 				pos.orientation = map[y][x];
@@ -38,10 +32,7 @@ t_playerPos	get_position(t_game *game, char **map)
 		y++;
 	}
 	if (pos.orientation == ' ')
-	{
-	 	ft_printf("Error\n The game must have one player.");
-	 	exit(EXIT_FAILURE);
-	}
+		error(game, "The game must have ony player");
 	return (pos);
 }
 

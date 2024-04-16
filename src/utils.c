@@ -18,6 +18,10 @@ void	free_exit(t_game *game)
 		mlx_destroy_image(game->data.mlx, game->texture.N);
 	if (game->texture.WE != NULL)
 		mlx_destroy_image(game->data.mlx, game->texture.WE);
+	if (game->texture.SO != NULL)
+		mlx_destroy_image(game->data.mlx, game->texture.SO);
+	if (game->texture.EA != NULL)
+		mlx_destroy_image(game->data.mlx, game->texture.EA);
 	if (game->data.img != NULL)
 		mlx_destroy_image(game->data.mlx, game->data.img);
 	if (game->data.win != NULL)

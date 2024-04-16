@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_validations_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 20:00:17 by jede-ara          #+#    #+#             */
-/*   Updated: 2024/04/16 20:02:12 by jede-ara         ###   ########.fr       */
+/*   Updated: 2024/04/16 23:54:22 by dinoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	get_min(int a, int b)
 
 int	get_len_line(t_game *game, char **map, int y, t_len_line *len_info)
 {
+	len_info->len_current_line = ft_strlen(map[y]);
 	if (y > 0)
 		len_info->len_prev_line = ft_strlen(map[y - 1]);
 	else
@@ -39,6 +40,7 @@ bool	verify_long_lines(t_game *game, char **map)
 	int			x;
 	int			y;
 
+	//init_len_info(&len_info);
 	y = 0;
 	while (y < game->map.mapa_y)
 	{

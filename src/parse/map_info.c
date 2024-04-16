@@ -1,6 +1,6 @@
 #include "../../includes/cub3d.h"
 
-void	ft_isprint_error(char *line)
+void	ft_isprint_error(t_game *game, char *line)
 {
 	int		i;
 
@@ -8,10 +8,7 @@ void	ft_isprint_error(char *line)
 	while (line[i])
 	{
 		if (ft_isprint(line[i]))
-		{
-            ft_printf("Error\n Invalid map!!!\n");
-            exit(EXIT_FAILURE);
-		}
+		    error(game, "Invalid map");
 		i++;
 	}
 }
@@ -23,7 +20,7 @@ void    parse_map(t_game *game, int *y)
     //Aloca memoria e preenche o map_a
     game->map.map_a = (char **)malloc(sizeof(char *) * (game->map.area_y + 1));
     i = 0;
-    while (*y < game->map.area_y  && game->map.area[*y][0] != '\0' 
+    while (*y < game->map.area_y  && game->map.area[*y][0] != '\0'
             && is_not_texture(game->map.area[*y]))
     {
         game->map.map_a[i] = special_strtrim(ft_strdup(game->map.area[*y]));
@@ -34,11 +31,11 @@ void    parse_map(t_game *game, int *y)
     game->map.mapa_y = i;
     //Depois do mapa estar preenchido,
     //Se ainda n tivermos chegado ao fim do ficheiro
-    //Verifica que nao tem mais nada 
+    //Verifica que nao tem mais nada
     if (*y < game->map.area_y)
     {
         while (*y < game->map.area_y)
-            ft_isprint_error(game->map.area[(*y)++]);
+            ft_isprint_error(game, game->map.area[(*y)++]);
     }
 }
 
@@ -46,7 +43,7 @@ bool    textures_finish(bool ceiling, bool floor, t_game *game)
 {
 	if (ceiling == false || floor == false)
         return (false);
-	if (!game->map.no_texture || !game->map.so_texture 
+	if (!game->map.no_texture || !game->map.so_texture
         || !game->map.we_texture || !game->map.ea_texture)
             return (false);
     return (true);
@@ -56,7 +53,7 @@ bool    check_beggin_map(bool ceiling, bool floor, t_game *game, int *y)
 {
     //Serve para checkar linhas vazias entre texturas
     if(textures_finish(ceiling, floor, game) == false)
-        ft_isprint_error(game->map.area[*y]);
+        ft_isprint_error(game, game->map.area[*y]);
     if(textures_finish(ceiling, floor, game) == true)
     {
         //Se encontra um '1' vai fazer parsing do mapa
@@ -67,7 +64,7 @@ bool    check_beggin_map(bool ceiling, bool floor, t_game *game, int *y)
         }
         //Se nao encontra o 1 tem que ser linha vazia,
         //Checkar linhas vazias entre o fim das texturas e o mapa
-        ft_isprint_error(game->map.area[*y]);
+        ft_isprint_error(game, game->map.area[*y]);
     }
     return(false);
 
@@ -91,12 +88,16 @@ void	map_info(t_game *game)
         {
             //Se encontrar o inicio do mapa, faz parsing do mapa e da break
             if (check_beggin_map(ceiling, floor, game, &y) == true)
+            {
+                //! SE DER ERRO NO CHECK_BEGGIN N DÁ FREE Á LINE
+                free(line);
                 break;
+            }
         }
 		y++;
 		free(line);
 	}
-    //No final de verificar o mapa area todo, 
+    //No final de verificar o mapa area todo,
     //se nao tiver todas as cores e texturas da erro
     verify_textures(ceiling, floor, game);
 }
