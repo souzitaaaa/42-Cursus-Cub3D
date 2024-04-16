@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:30:06 by dinoguei          #+#    #+#             */
-/*   Updated: 2024/04/15 23:35:56 by dinoguei         ###   ########.fr       */
+/*   Updated: 2024/04/16 18:46:39 by jede-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	init_struct(t_game *game)
 	game->data.mlx = NULL;
 	game->data.win = NULL;
 	game->data.img = NULL;
+	game->texture.N = NULL;
+	game->texture.WE = NULL;
 	game->map.mapa_y = 0;
 	game->map.mapa_x = 0;
 	game->ray.screen_pixel = 0;

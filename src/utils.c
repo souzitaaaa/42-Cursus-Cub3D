@@ -27,6 +27,7 @@ void	free_exit(t_game *game)
 		mlx_destroy_display(game->data.mlx);
 		free(game->data.mlx);
 	}
+	exit(0);
 }
 
 void error(t_game *game, char *msg){

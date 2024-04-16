@@ -6,6 +6,7 @@
 # include <fcntl.h>
 # include <stdbool.h>
 # include <stdlib.h>
+#include <stdint.h>
 # include <string.h>
 # include <math.h>
 
@@ -82,6 +83,12 @@ typedef struct s_ivector {
 	int		x;
 	int		y;
 } 				t_ivector;
+
+typedef	struct	s_len_line {
+	int		len_current_line;
+	int		len_prev_line;
+	int		len_next_line;
+}					t_len_line;
 
 typedef struct s_map
 {
@@ -192,12 +199,21 @@ bool 		verify_flood(char **map);
 bool 		flood_walls(t_game *game, char **map, int col, int row);
 void 		alloc_map(t_game *game);
 
+/*
+ Utils map validations
+*/
+int			get_min(int a, int b);
+int			get_len_line(t_game *game, char **map, int y, t_len_line *len_info);
+bool		verify_long_lines(t_game *game, char **map);
+bool		check_middle_lines(t_game *game, char **map);
+bool		first_last_lines(char *line);
+
+
 //* [src/position.c]
 t_playerPos	get_position(t_game *game, char **map);
 void		set_direction(t_game *game, t_playerPos position);
 
 //* [src/algorithm/dda-1.c]
-
 
 int 		loop(t_game *game);
 void		assign_vector_values(t_vector *vector, double y, double x);
@@ -208,12 +224,12 @@ void		set_direction(t_game *game, t_playerPos position);
 void		algoritm_dda(t_game *game);
 void		distance_step_side(t_game *game);
 void		init_game(t_game *game);
-
+void		get_texture_info(t_game *game);
 /*
 Utils
 */
 void		error(t_game *game, char *msg);
-void	assign_ivector_values(t_ivector *vector, int y, int x);
+void		assign_ivector_values(t_ivector *vector, int y, int x);
 
 
 /* Map */
@@ -232,11 +248,13 @@ void		print_map(t_game *game);
 void		check_textures(t_game *game);
 bool		is_valid_char(char c);
 bool		verify_around_spaces(t_game *game, char **map);
-
+bool        is_not_texture(char *line);
+void        parse_textures(t_game *game, char *line, bool *ceiling, bool *floor);
+void   		verify_textures(bool ceiling, bool floor, t_game *game);
 int			esc_key(t_game *game);
 void 		moviment_key(t_game *game, double new_x, double new_y);
 void 		direction_key(t_game *game, double val);
 void		draw_line(t_game *game);
-void	free_exit(t_game *game);
+void		free_exit(t_game *game);
 
 #endif
