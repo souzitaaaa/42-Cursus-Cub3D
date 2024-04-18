@@ -104,6 +104,7 @@ typedef struct s_map
 	int		mapa_x;
 	int		area_y;       	//? Colunas do mapa
 	int		area_x;       	//? Linhas do mapa
+	char	*line;
 	t_vector	dir;		//? Vetor com os valores da direção da câmara
 	t_vector	plane;		//? Vetor com os valores da posição do plano
 }				t_map;
@@ -124,11 +125,16 @@ typedef struct s_data
 	int		mm_endian;			// Endian da imagem
 }				t_data;
 
+
 typedef	struct s_playerPos {
 	double		row;			//? Linha (x) onde o jogador está posicionado
 	double		col;			//? Coluna (y) onde o jogador está posicionado
 	char	orientation;	//? Orientação do jogador (N, S, E, W)
 } t_playerPos;
+
+typedef struct s_playerInfo {
+	t_playerPos	*pos;
+} t_playerInfo;
 
 typedef struct s_dda {
 	bool		hit;
@@ -197,6 +203,12 @@ typedef struct s_game
 	t_texture	texture;
 }				t_game;
 
+/*Init*/
+void		init_struct2(t_game *game);
+void		init_struct(t_game *game);
+void		get_xpm(t_game *game);
+void		init_game(t_game *game);
+int			key_press(int kc, t_game *game);
 //* [src/map_check.c]
 void 		map_validations(t_game *game);
 void 		get_map_y(t_game *game);
@@ -215,12 +227,14 @@ int			get_len_line(t_game *game, char **map, int y, t_len_line *len_info);
 bool		verify_long_lines(t_game *game, char **map);
 bool		check_middle_lines(t_game *game, char **map);
 bool		first_last_lines(char *line);
-void	init_len_info(t_len_line *leninfo);
+void		init_len_info(t_len_line *leninfo);
 
 //* [src/position.c]
 t_playerPos	get_position(t_game *game, char **map);
 void		set_direction(t_game *game, t_playerPos position);
-
+bool		is_valid_char(char c);
+void		get_direction(t_map	*map, double dir_x, double dir_y);
+void		get_plane(t_map	*map, double plane_x, double plane_y);
 //* [src/algorithm/dda-1.c]
 
 int 		loop(t_game *game);
@@ -264,5 +278,6 @@ void 		moviment_key(t_game *game, double new_x, double new_y);
 void 		direction_key(t_game *game, double val);
 void		draw_line(t_game *game);
 void		free_exit(t_game *game);
+int			encode_rgb(uint8_t r, uint8_t g, uint8_t b);
 
 #endif

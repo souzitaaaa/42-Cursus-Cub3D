@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_validations_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 20:00:17 by jede-ara          #+#    #+#             */
-/*   Updated: 2024/04/16 23:54:22 by dinoguei         ###   ########.fr       */
+/*   Updated: 2024/04/18 17:18:42 by jede-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ bool	verify_long_lines(t_game *game, char **map)
 	int			x;
 	int			y;
 
-	//init_len_info(&len_info);
+	init_len_info(&len_info);
 	y = 0;
 	while (y < game->map.mapa_y)
 	{

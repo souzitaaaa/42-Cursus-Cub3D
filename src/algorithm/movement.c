@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 23:10:49 by dinoguei          #+#    #+#             */
-/*   Updated: 2024/04/15 23:39:07 by dinoguei         ###   ########.fr       */
+/*   Updated: 2024/04/18 18:47:33 by jede-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,29 @@ int	esc_key(t_game *game)
 	ft_printf("       ░▒▓██\n");
 	ft_printf("     ░▒▓██" RESET "\tThanks for playing <3\n");
 	free_exit(game);
+}
+
+int	key_press(int kc, t_game *game)
+{
+	if (kc == 65307)
+		esc_key(game);
+	if (kc == 119)
+		moviment_key(game, game->pos.row + game->map.dir.x * MOVESTEP,
+			game->pos.col + game->map.dir.y * MOVESTEP);
+	if (kc == 97)
+		moviment_key(game, game->pos.row + game->map.dir.y * MOVESTEP,
+			game->pos.col - game->map.dir.x * MOVESTEP);
+	if (kc == 115)
+		moviment_key(game, game->pos.row - game->map.dir.x * MOVESTEP,
+			game->pos.col - game->map.dir.y * MOVESTEP);
+	if (kc == 100)
+		moviment_key(game, game->pos.row - game->map.dir.y * MOVESTEP,
+			game->pos.col + game->map.dir.x * MOVESTEP);
+	if (kc == 65363)
+		direction_key(game, -0.2);
+	if (kc == 65361)
+		direction_key(game, 0.2);
+	return (1);
 }
 
 void	moviment_key(t_game *game, double new_x, double new_y)

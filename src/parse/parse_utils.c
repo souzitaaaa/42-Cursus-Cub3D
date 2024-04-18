@@ -6,11 +6,16 @@
 /*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 16:01:32 by jede-ara          #+#    #+#             */
-/*   Updated: 2024/04/16 16:02:48 by jede-ara         ###   ########.fr       */
+/*   Updated: 2024/04/18 16:44:05 by jede-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
+
+int	encode_rgb(uint8_t r, uint8_t g, uint8_t b)
+{
+	return (r << 16 | g << 8 | b);
+}
 
 void	get_mapa_x(t_game *game)
 {

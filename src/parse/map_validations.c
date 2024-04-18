@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_validations.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:38:16 by jede-ara          #+#    #+#             */
-/*   Updated: 2024/04/16 23:53:50 by dinoguei         ###   ########.fr       */
+/*   Updated: 2024/04/18 17:17:16 by jede-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ void	map_validations(t_game *game)
 		error(game, "The map needs to be surrounded by walls");
 }
 
-// void	init_len_info(t_len_line *leninfo)
-// {
-// 	leninfo->len_current_line = 0;
-// 	leninfo->len_next_line = 0;
-// 	leninfo->len_prev_line = 0;
-// }
+void	init_len_info(t_len_line *leninfo)
+{
+	leninfo->len_current_line = 0;
+	leninfo->len_next_line = 0;
+	leninfo->len_prev_line = 0;
+}

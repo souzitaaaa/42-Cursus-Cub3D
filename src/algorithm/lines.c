@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lines.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 23:05:12 by dinoguei          #+#    #+#             */
-/*   Updated: 2024/04/16 22:57:26 by dinoguei         ###   ########.fr       */
+/*   Updated: 2024/04/18 17:12:05 by jede-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ void	draw_line(t_game *game)
 	while (game->ray.line.y < game->ray.lineStart)
 	{
 		game->data.addr[game->ray.line.y * SCREEN_X
-			+ game->ray.screen_pixel] = CEILING_COLOR;
+			+ game->ray.screen_pixel] = encode_rgb(game->map.c_range[0],
+				game->map.c_range[1], game->map.c_range[2]);
 		game->ray.line.y++;
 	}
 	while (game->ray.line.y < game->ray.lineEnd)
@@ -70,7 +71,8 @@ void	draw_line(t_game *game)
 	while (game->ray.line.y <= SCREEN_Y)
 	{
 		game->data.addr[game->ray.line.y * SCREEN_X
-			+ game->ray.screen_pixel] = FLOOR_COLOR;
+			+ game->ray.screen_pixel] = encode_rgb(game->map.f_range[0],
+				game->map.f_range[1], game->map.f_range[2]);
 		game->ray.line.y++;
 	}
 }

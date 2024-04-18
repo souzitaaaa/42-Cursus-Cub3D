@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   colors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:24:20 by jede-ara          #+#    #+#             */
-/*   Updated: 2024/04/17 00:06:59 by dinoguei         ###   ########.fr       */
+/*   Updated: 2024/04/18 18:34:03 by jede-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,7 @@ void	floor_colors(t_game *game)
 			if (color_values[0] < 0 || color_values[0] > 255
 				|| color_values[1] < 0 || color_values[1] > 255
 				|| color_values[2] < 0 || color_values[2] > 255)
-			{
-				ft_printf("Error\nColor range is out.");
-				exit(EXIT_FAILURE);
-			}
+				error(game, "Ceiling color range is out of range");
 		}
 		i++;
 	}
@@ -99,10 +96,7 @@ void	ceiling_colors(t_game *game)
 			if (color_values[0] < 0 || color_values[0] > 255
 				|| color_values[1] < 0 || color_values[1] > 255
 				|| color_values[2] < 0 || color_values[2] > 255)
-			{
-				ft_printf("Error\nColor range is out.");
-				exit(EXIT_FAILURE);
-			}
+				error(game, "Floor color range is out of range");
 		}
 		i++;
 	}

@@ -3,125 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:30:06 by dinoguei          #+#    #+#             */
-/*   Updated: 2024/04/17 00:00:35 by dinoguei         ###   ########.fr       */
+/*   Updated: 2024/04/18 18:47:53 by jede-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/cub3d.h"
 #include "./minilibx-linux/mlx.h"
-
-//! NORMINETTADO
-
-/**
- * @brief 		Function used to initializate the some data on the main struct
- * 			so it doesn't happen any error, during assignments
- *
- * @param game	Struct that contains every information on the program
- */
-void	init_struct(t_game *game)
-{
-	game->data.mlx = NULL;
-	game->data.win = NULL;
-	game->data.img = NULL;
-	game->texture.N = NULL;
-	game->texture.WE = NULL;
-	game->texture.SO = NULL;
-	game->texture.EA = NULL;
-	game->map.mapa_y = 0;
-	game->map.mapa_x = 0;
-	game->ray.screen_pixel = 0;
-	assign_vector_values(&game->ray.distTo, 0, 0);
-	assign_vector_values(&game->ray.step, 0, 0);
-	assign_vector_values(&game->ray.velocity, 0, 0);
-	game->map.no_texture = NULL;
-	game->map.so_texture = NULL;
-	game->map.we_texture = NULL;
-	game->map.ea_texture = NULL;
-	game->ray.dda.hit = false;
-	game->ray.dda.hitSide = 0;
-	game->ray.dda.perpendicularDist = 0;
-	game->ray.dda.wallX = 0;
-	game->ray.line.y = 0;
-	assign_ivector_values(&game->ray.line.texture, 0, 0);
-	game->ray.line.step = 0;
-	game->ray.line.texturePos = 0;
-	game->ray.line.color = 0;
-	game->map.map_a = NULL;
-	game->map.area = NULL;
-}
-
-void	get_xpm(t_game *game)
-{
-	auto int tile_size = 32;
-	game->texture.N = mlx_xpm_file_to_image(game->data.mlx, game->map.no_texture,
-			&tile_size, &tile_size);
-	game->texture.N_addr = (unsigned int *)mlx_get_data_addr(game->texture.N,
-			&game->texture.N_bitsPixel, &game->texture.N_lineLen,
-			&game->texture.N_endian);
-	game->texture.WE = mlx_xpm_file_to_image(game->data.mlx, game->map.we_texture,
-			&tile_size, &tile_size);
-	game->texture.W_addr = (unsigned int *)mlx_get_data_addr(game->texture.WE,
-			&game->texture.W_bitsPixel, &game->texture.W_lineLen,
-			&game->texture.W_endian);
-	game->texture.SO = mlx_xpm_file_to_image(game->data.mlx, game->map.so_texture,
-			&tile_size, &tile_size);
-	game->texture.S_addr = (unsigned int *)mlx_get_data_addr(game->texture.SO,
-			&game->texture.S_bitsPixel, &game->texture.S_lineLen,
-			&game->texture.S_endian);
-	game->texture.EA = mlx_xpm_file_to_image(game->data.mlx, game->map.ea_texture,
-			&tile_size, &tile_size);
-	game->texture.E_addr = (unsigned int *)mlx_get_data_addr(game->texture.EA,
-			&game->texture.E_bitsPixel, &game->texture.E_lineLen,
-			&game->texture.E_endian);
-}
-
-int	key_press(int kc, t_game *game)
-{
-	if (kc == 65307)
-		esc_key(game);
-	if (kc == 119)
-		moviment_key(game, game->pos.row + game->map.dir.x * MOVESTEP,
-			game->pos.col + game->map.dir.y * MOVESTEP);
-	if (kc == 97)
-		moviment_key(game, game->pos.row + game->map.dir.y * MOVESTEP,
-			game->pos.col - game->map.dir.x * MOVESTEP);
-	if (kc == 115)
-		moviment_key(game, game->pos.row - game->map.dir.x * MOVESTEP,
-			game->pos.col - game->map.dir.y * MOVESTEP);
-	if (kc == 100)
-		moviment_key(game, game->pos.row - game->map.dir.y * MOVESTEP,
-			game->pos.col + game->map.dir.x * MOVESTEP);
-	if (kc == 65363)
-		direction_key(game, -0.2);
-	if (kc == 65361)
-		direction_key(game, 0.2);
-	return (1);
-}
-
-/**
- * @brief 		Function to init the instances of the mlx library, such as
- * 			the mlx instance, the window, image and loops
- *
- * @param game	Struct that contains every information on the program
- */
-void	init_game_teste(t_game *game)
-{
-	game->data.mlx = mlx_init();
-	game->data.win = mlx_new_window(game->data.mlx, SCREEN_X,
-			SCREEN_Y, "cub3D");
-	game->data.img = mlx_new_image(game->data.mlx, SCREEN_X, SCREEN_Y);
-	game->data.addr = (unsigned int *)mlx_get_data_addr(game->data.img,
-			&game->data.bits_per_pixel, &game->data.line_len,
-			&game->data.endian);
-	get_xpm(game);
-	mlx_loop_hook(game->data.mlx, loop, game);
-	mlx_hook(game->data.win, 2, 1L << 0, key_press, game);
-	mlx_hook(game->data.win, 17, 0, esc_key, game);
-	mlx_loop(game->data.mlx);
-}
 
 bool	check_args(int ac, char **av)
 {
@@ -150,21 +40,13 @@ bool	check_args(int ac, char **av)
 	return (true);
 }
 
-/**
- * @brief		Main function of the program, from here we decide the flow,
- * 			of the program, deciding how to deal with our information
- *
- * @param ac	Integer type variable that contains the number of arguments
- * @param av	Array containing the arguments, by order of insertion
- * @return int	Main function return a integer
- */
 int	main(int ac, char **av)
 {
 	t_game		game;
 	t_playerPos	player;
 
 	if (!check_args(ac, av))
-		return 1;
+		return (1);
 	game.map.map_folder = av[1];
 	init_struct(&game);
 	map_validations(&game);
@@ -173,13 +55,5 @@ int	main(int ac, char **av)
 	set_direction(&game, player);
 	game.pos.col += 0.5;
 	game.pos.row += 0.5;
-	printf("Texturas: \n");
-	printf("%s\n", game.map.no_texture);
-	printf("%s\n", game.map.so_texture);
-	printf("%s\n", game.map.we_texture);
-	printf("%s\n", game.map.ea_texture);
-	printf("Color:\n");
-	printf("Floor: %i, %i, %i\n", game.map.f_range[0], game.map.f_range[1], game.map.f_range[2]);
-	//printf("Ceiling: %i, %i, %i\n", game.map.c_range[0], game.map.c_range[1], game.map.c_range[2]);
-	init_game_teste(&game);
+	init_game(&game);
 }
