@@ -209,6 +209,7 @@ void		init_struct(t_game *game);
 void		get_xpm(t_game *game);
 void		init_game(t_game *game);
 int			key_press(int kc, t_game *game);
+int			esc_key(t_game *game);
 //* [src/map_check.c]
 void 		map_validations(t_game *game);
 void 		get_map_y(t_game *game);

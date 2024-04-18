@@ -6,7 +6,7 @@
 /*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 23:10:49 by dinoguei          #+#    #+#             */
-/*   Updated: 2024/04/18 19:09:32 by jede-ara         ###   ########.fr       */
+/*   Updated: 2024/04/18 19:20:22 by jede-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	key_press(int kc, t_game *game)
 {
+	if (kc == 65307)
+		esc_key(game);
 	if (kc == 119)
 		moviment_key(game, game->pos.row + game->map.dir.x * MOVESTEP,
 			game->pos.col + game->map.dir.y * MOVESTEP);

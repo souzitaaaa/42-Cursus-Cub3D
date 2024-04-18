@@ -6,7 +6,7 @@
 /*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 18:44:12 by jede-ara          #+#    #+#             */
-/*   Updated: 2024/04/18 19:10:15 by jede-ara         ###   ########.fr       */
+/*   Updated: 2024/04/18 19:23:36 by jede-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,13 @@ void	get_xpm(t_game *game)
 			&game->texture.E_endian);
 }
 
+int	esc_key(t_game *game)
+{
+	ft_printf( YELLOW "\tThanks for playing <3\n" RESET);
+	free_exit(game);
+	exit (1);
+}
+
 void	init_game(t_game *game)
 {
 	game->data.mlx = mlx_init();
@@ -88,5 +95,6 @@ void	init_game(t_game *game)
 	get_xpm(game);
 	mlx_loop_hook(game->data.mlx, loop, game);
 	mlx_hook(game->data.win, 2, 1L << 0, key_press, game);
+	mlx_hook(game->data.win, 17, 0, esc_key, game);
 	mlx_loop(game->data.mlx);
 }
