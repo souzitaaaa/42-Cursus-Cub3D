@@ -273,7 +273,6 @@ bool		verify_around_spaces(t_game *game, char **map);
 bool        is_not_texture(char *line);
 void        parse_textures(t_game *game, char *line, bool *ceiling, bool *floor);
 void   		verify_textures(bool ceiling, bool floor, t_game *game);
-int			esc_key(t_game *game);
 void 		moviment_key(t_game *game, double new_x, double new_y);
 void 		direction_key(t_game *game, double val);
 void		draw_line(t_game *game);

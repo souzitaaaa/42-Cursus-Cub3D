@@ -6,7 +6,7 @@
 /*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 18:44:12 by jede-ara          #+#    #+#             */
-/*   Updated: 2024/04/18 18:50:33 by jede-ara         ###   ########.fr       */
+/*   Updated: 2024/04/18 19:10:15 by jede-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,5 @@ void	init_game(t_game *game)
 	get_xpm(game);
 	mlx_loop_hook(game->data.mlx, loop, game);
 	mlx_hook(game->data.win, 2, 1L << 0, key_press, game);
-	mlx_hook(game->data.win, 17, 0, esc_key, game);
 	mlx_loop(game->data.mlx);
 }

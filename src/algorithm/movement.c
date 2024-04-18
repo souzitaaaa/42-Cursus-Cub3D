@@ -6,37 +6,14 @@
 /*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 23:10:49 by dinoguei          #+#    #+#             */
-/*   Updated: 2024/04/18 18:47:33 by jede-ara         ###   ########.fr       */
+/*   Updated: 2024/04/18 19:09:32 by jede-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-int	esc_key(t_game *game)
-{
-	ft_printf(YELLOW " ░▒███████\n");
-	ft_printf("░██▓▒░░▒▓██\n");
-	ft_printf("██▓▒░__░▒▓██___██████\n");
-	ft_printf("██▓▒░____░▓███▓__░▒▓██\n");
-	ft_printf("██▓▒░___░▓██▓_____░▒▓██\n");
-	ft_printf("██▓▒░_______________░▒▓██\n");
-	ft_printf(" ██▓▒░______________░▒▓██\n");
-	ft_printf("  ██▓▒░____________░▒▓██\n");
-	ft_printf("   ██▓▒░__________░▒▓██\n");
-	ft_printf("    ██▓▒░________░▒▓██\n");
-	ft_printf("     ██▓▒░_____░▒▓██\n");
-	ft_printf("      ██▓▒░__░▒▓██\n");
-	ft_printf("       █▓▒░░▒▓██\n");
-	ft_printf("         ░▒▓██\n");
-	ft_printf("       ░▒▓██\n");
-	ft_printf("     ░▒▓██" RESET "\tThanks for playing <3\n");
-	free_exit(game);
-}
-
 int	key_press(int kc, t_game *game)
 {
-	if (kc == 65307)
-		esc_key(game);
 	if (kc == 119)
 		moviment_key(game, game->pos.row + game->map.dir.x * MOVESTEP,
 			game->pos.col + game->map.dir.y * MOVESTEP);
