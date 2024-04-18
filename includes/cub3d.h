@@ -17,12 +17,6 @@
 
 # define YELLOW "\033[0;31m"
 # define RESET "\033[0m"
-# define COLOR1 0x000155ac
-# define COLOR2 0x000c184e
-# define COLOR3 0x00ffcc41
-# define COLOR4 0x00ef8833
-# define CEILING_COLOR 0x0094e3e4
-# define FLOOR_COLOR 0x0033ac25
 
 # define TEXTURE_X 64
 

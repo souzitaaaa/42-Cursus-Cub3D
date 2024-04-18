@@ -6,7 +6,7 @@
 /*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 18:44:12 by jede-ara          #+#    #+#             */
-/*   Updated: 2024/04/18 19:23:36 by jede-ara         ###   ########.fr       */
+/*   Updated: 2024/04/18 19:53:53 by jede-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,11 @@ void	get_xpm(t_game *game)
 
 int	esc_key(t_game *game)
 {
-	ft_printf( YELLOW "\tThanks for playing <3\n" RESET);
+	ft_printf("🍒🍒🍒🍒🍒🍒🍒🍒🍒🍒🍒🍒🍒🍒🍒🍒🍒🍒🍒🍒🍒🍒🍒\n");
+	ft_printf("🥥                                          🍑\n");
+	ft_printf("🥥      This game isn't fruit related       🍑\n" RESET);
+	ft_printf("🥥                                          🍑\n");
+	ft_printf("🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐🫐\n");
 	free_exit(game);
 	exit (1);
 }

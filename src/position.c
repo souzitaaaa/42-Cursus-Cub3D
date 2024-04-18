@@ -6,7 +6,7 @@
 /*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:31:29 by jede-ara          #+#    #+#             */
-/*   Updated: 2024/04/18 16:29:16 by jede-ara         ###   ########.fr       */
+/*   Updated: 2024/04/18 20:15:01 by jede-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,22 @@
 void	find_player(t_game *game, t_playerInfo *info, char **map)
 {
 	t_playerPos	*pos;
-	int			y;
-	int			x;
 
+	auto int x;
+	auto int y = 0;
 	pos = info->pos;
-	y = 0;
 	while (y < game->map.mapa_y)
 	{
 		x = 0;
 		while (map[y][x] != '\0')
 		{
+			if (!is_valid_char(map[y][x]))
+				error(game, "Invalid map character");
 			if (map[y][x] == 'N' || map[y][x] == 'S'
 				|| map[y][x] == 'E' || map[y][x] == 'W')
 			{
 				if (pos->row != -1 || pos->col != -1)
-					error(game,
-						"It's not possible to have more than one player");
+					error(game, "Only one player allowed");
 				pos->row = x;
 				pos->col = y;
 				pos->orientation = map[y][x];
