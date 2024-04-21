@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 16:06:36 by jede-ara          #+#    #+#             */
-/*   Updated: 2024/04/18 18:11:56 by jede-ara         ###   ########.fr       */
+/*   Updated: 2024/04/21 23:17:00 by dinoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 void	destroy_image(t_game *game)
 {
-	if (game->texture.N != NULL)
-		mlx_destroy_image(game->data.mlx, game->texture.N);
-	if (game->texture.WE != NULL)
-		mlx_destroy_image(game->data.mlx, game->texture.WE);
-	if (game->texture.SO != NULL)
-		mlx_destroy_image(game->data.mlx, game->texture.SO);
-	if (game->texture.EA != NULL)
-		mlx_destroy_image(game->data.mlx, game->texture.EA);
+	if (game->texture.n != NULL)
+		mlx_destroy_image(game->data.mlx, game->texture.n);
+	if (game->texture.we != NULL)
+		mlx_destroy_image(game->data.mlx, game->texture.we);
+	if (game->texture.so != NULL)
+		mlx_destroy_image(game->data.mlx, game->texture.so);
+	if (game->texture.ea != NULL)
+		mlx_destroy_image(game->data.mlx, game->texture.ea);
 	if (game->data.img != NULL)
 		mlx_destroy_image(game->data.mlx, game->data.img);
 	if (game->data.win != NULL)
@@ -56,7 +56,7 @@ void	free_exit(t_game *game)
 void	error(t_game *game, char *msg)
 {
 	(void)game;
-	ft_printf("❌ Error\n    %s\n", msg);
+	ft_printf("Error\n%s\n", msg);
 	free_exit(game);
 }
 

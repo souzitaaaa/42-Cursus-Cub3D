@@ -6,13 +6,11 @@
 /*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:34:59 by dinoguei          #+#    #+#             */
-/*   Updated: 2024/04/15 19:50:08 by dinoguei         ###   ########.fr       */
+/*   Updated: 2024/04/21 23:28:10 by dinoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
-
-//! NORMINETTADO
 
 /**
  * @brief			Function to assign the initial values on a vector
@@ -28,13 +26,13 @@ void	assign_vector_values(t_vector *vector, double y, double x)
 }
 
 /**
- * @brief 		This function will initializate the distTo X and
+ * @brief 		This function will initializate the distto X and
  * 					Y aswell as the stepX
- * 				The @param distTo variables are going to be store
- * 					the value of the first deltaDist, because if the
+ * 				The @param distto variables are going to be store
+ * 					the value of the first deltadist, because if the
  * 					player position is on themiddle of a grid, the value
- * 					of the deltaDistdon't work because it's a fractionary
- * 					value, in between thosedeltaDist values, so these distTo
+ * 					of the deltadistdon't work because it's a fractionary
+ * 					value, in between thosedeltadist values, so these distto
  * 					calculate the first value untill a grid
  * 				The @param step variables are going to be used to know the
  * 					direction of the ray
@@ -43,28 +41,28 @@ void	assign_vector_values(t_vector *vector, double y, double x)
  */
 void	get_distto(t_game *game)
 {
-	if (game->ray.rayDir.x < 0)
+	if (game->ray.raydir.x < 0)
 	{
-		game->ray.distTo.x = (game->pos.row - game->ray.mapPos.x)
-			* game->ray.deltaDist.x;
+		game->ray.distto.x = (game->pos.row - game->ray.mappos.x)
+			* game->ray.deltadist.x;
 		game->ray.step.x = -1;
 	}
 	else
 	{
-		game->ray.distTo.x = (game->ray.mapPos.x + 1.0 - game->pos.row)
-			* game->ray.deltaDist.x;
+		game->ray.distto.x = (game->ray.mappos.x + 1.0 - game->pos.row)
+			* game->ray.deltadist.x;
 		game->ray.step.x = 1;
 	}
-	if (game->ray.rayDir.y < 0)
+	if (game->ray.raydir.y < 0)
 	{
-		game->ray.distTo.y = (game->pos.col - game->ray.mapPos.y)
-			* game->ray.deltaDist.y;
+		game->ray.distto.y = (game->pos.col - game->ray.mappos.y)
+			* game->ray.deltadist.y;
 		game->ray.step.y = -1;
 	}
 	else
 	{
-		game->ray.distTo.y = (game->ray.mapPos.y + 1.0 - game->pos.col)
-			* game->ray.deltaDist.y;
+		game->ray.distto.y = (game->ray.mappos.y + 1.0 - game->pos.col)
+			* game->ray.deltadist.y;
 		game->ray.step.y = 1;
 	}
 }
@@ -72,35 +70,35 @@ void	get_distto(t_game *game)
 void	loop_assignment(t_game *game, double *multiplier)
 {
 	*multiplier = 2 * game->ray.screen_pixel / (double)SCREEN_X - 1;
-	assign_vector_values(&game->ray.rayDir, game->map.dir.y + game->map.plane.y
+	assign_vector_values(&game->ray.raydir, game->map.dir.y + game->map.plane.y
 		* *multiplier, game->map.dir.x + game->map.plane.x * *multiplier);
-	assign_vector_values(&game->ray.deltaDist,
-		sqrt(1 + (game->ray.rayDir.x * game->ray.rayDir.x)
-			/ (game->ray.rayDir.y * game->ray.rayDir.y)),
-		sqrt(1 + (game->ray.rayDir.y * game->ray.rayDir.y)
-			/ (game->ray.rayDir.x * game->ray.rayDir.x)));
-	assign_vector_values(&game->ray.mapPos, floor(game->pos.col),
+	assign_vector_values(&game->ray.deltadist,
+		sqrt(1 + (game->ray.raydir.x * game->ray.raydir.x)
+			/ (game->ray.raydir.y * game->ray.raydir.y)),
+		sqrt(1 + (game->ray.raydir.y * game->ray.raydir.y)
+			/ (game->ray.raydir.x * game->ray.raydir.x)));
+	assign_vector_values(&game->ray.mappos, floor(game->pos.col),
 		floor(game->pos.row));
-	if (game->ray.rayDir.x == 0)
-		game->ray.deltaDist.x = 1e30;
+	if (game->ray.raydir.x == 0)
+		game->ray.deltadist.x = 1e30;
 	else
-		game->ray.deltaDist.x = fabs(1 / game->ray.rayDir.x);
-	if (game->ray.rayDir.y == 0)
-		game->ray.deltaDist.y = 1e30;
+		game->ray.deltadist.x = fabs(1 / game->ray.raydir.x);
+	if (game->ray.raydir.y == 0)
+		game->ray.deltadist.y = 1e30;
 	else
-		game->ray.deltaDist.y = fabs(1 / game->ray.rayDir.y);
+		game->ray.deltadist.y = fabs(1 / game->ray.raydir.y);
 }
 
 void	restart_structs(t_game *game)
 {
 	game->ray.dda.hit = false;
-	game->ray.dda.hitSide = 0;
-	game->ray.dda.perpendicularDist = 0;
-	game->ray.dda.wallX = 0;
+	game->ray.dda.hitside = 0;
+	game->ray.dda.perpendiculardist = 0;
+	game->ray.dda.wallx = 0;
 	game->ray.line.y = 0;
 	assign_ivector_values(&game->ray.line.texture, 0, 0);
 	game->ray.line.step = 0;
-	game->ray.line.texturePos = 0;
+	game->ray.line.texturepos = 0;
 	game->ray.line.color = 0;
 }
 
@@ -122,11 +120,11 @@ void	restart_structs(t_game *game)
 					vector that starts on the plane and goes and ends on
 					the multiplier value, to calculate the point on the
 					camera we are currently in
-				The @param rayDir is a vector that contains the direction
+				The @param raydir is a vector that contains the direction
 					of the ray starting on the player position (dir) and
 					ending on the camera (vector calculated above)
-				The @param deltaDist is the distance on X and Y between the grids
-				The @param mapPos will be used to keep track on the player
+				The @param deltadist is the distance on X and Y between the grids
+				The @param mappos will be used to keep track on the player
 					position, for the calculations ahead, at this part we
 					set them as the initial player position
  *

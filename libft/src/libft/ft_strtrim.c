@@ -6,7 +6,7 @@
 /*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 20:30:08 by dinoguei          #+#    #+#             */
-/*   Updated: 2023/10/10 15:19:15 by dinoguei         ###   ########.fr       */
+/*   Updated: 2024/04/21 17:23:25 by dinoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,15 @@ char	*ft_strtrim(char const *str, char const *set)
 
 char	*special_strtrim(char *str)
 {
-	int len; 
-	int i;
+	int		len;
+	int		i;
 
 	len = ft_strlen(str);
 	i = len - 1;
 	if (str == NULL || *str == '\0')
-	{
 		return (str);
-	}
-	while (i >= 0 && (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || str[i] == '\r'))
+	while (i >= 0 && (str[i] == ' ' || str[i] == '\t'
+			|| str[i] == '\n' || str[i] == '\r'))
 	{
 		str[i] = '\0';
 		i--;

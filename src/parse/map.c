@@ -3,14 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:32:29 by jede-ara          #+#    #+#             */
-/*   Updated: 2024/04/18 18:32:37 by jede-ara         ###   ########.fr       */
+/*   Updated: 2024/04/21 17:19:32 by dinoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
+
+bool	ft_isprint_str(char *line)
+{
+	int		i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (ft_isprint(line[i]))
+			return (true);
+		i++;
+	}
+	return (false);
+}
+
+void	check_empty_file(t_game *game)
+{
+	int		i;
+
+	i = 0;
+	while (i < game->map.area_y)
+	{
+		if (ft_isprint_str(game->map.area[i]))
+			return ;
+		i++;
+	}
+	error(game, "Empty File");
+}
 
 void	read_map_area(t_game *game)
 {
@@ -30,6 +58,7 @@ void	read_map_area(t_game *game)
 		i++;
 	}
 	close(game->map.fd);
+	check_empty_file(game);
 }
 
 void	get_area_x(t_game *game)
@@ -57,6 +86,8 @@ void	get_area_y(t_game *game)
 	char	*out;
 
 	game->map.fd = open(game->map.map_folder, O_RDONLY);
+	if (game->map.fd == -1)
+		error(game, "Map doesn't open");
 	y = 0;
 	while (1)
 	{
@@ -67,10 +98,7 @@ void	get_area_y(t_game *game)
 		free(out);
 	}
 	if (y == 0)
-	{
-		printf("Error\nEmpty file!\n");
-		exit(EXIT_FAILURE);
-	}
+		error(game, "Empty File");
 	game->map.area_y = y;
 	close(game->map.fd);
 }

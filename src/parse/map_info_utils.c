@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_info_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:26:50 by jede-ara          #+#    #+#             */
-/*   Updated: 2024/04/18 18:33:21 by jede-ara         ###   ########.fr       */
+/*   Updated: 2024/04/21 16:11:27 by dinoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,14 @@
 
 void	check_texture(char *line, char *compare, char **texture, t_game *game)
 {
+	auto int i = 2;
 	if (ft_strncmp(line, compare, 3) == 0)
 	{
 		if (*texture)
 			error(game, "Duplicate texture");
-		*texture = ft_strdup(line + 3);
+		while (line[i] == '\t' || line[i] == ' ')
+			i++;
+		*texture = ft_strdup(line + i);
 	}
 }
 
@@ -38,8 +41,13 @@ void	check_color(char *line, char *compare, bool *color, t_game *game)
 
 void	parse_textures(t_game *game, char *line, bool *ceiling, bool *floor)
 {
+	int		i;
+
+	i = 0;
 	if (line[0] != '\0')
 	{
+		while (line[i] == ' ' || line[i] == '\t')
+			i++;
 		check_texture(line, "NO ", &game->map.no_texture, game);
 		check_texture(line, "SO ", &game->map.so_texture, game);
 		check_texture(line, "WE ", &game->map.we_texture, game);

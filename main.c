@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:30:06 by dinoguei          #+#    #+#             */
-/*   Updated: 2024/04/18 18:47:53 by jede-ara         ###   ########.fr       */
+/*   Updated: 2024/04/20 16:50:29 by dinoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,19 @@ bool	check_args(int ac, char **av)
 	i = 0;
 	if (ac != 2)
 	{
-		ft_printf("❌ Error\n    Invalid number of arguments\n");
+		ft_printf("Error\nInvalid number of arguments\n");
 		return (false);
 	}
 	if (av[1][0] == '\0')
 	{
-		ft_printf("❌ Error\n    No map inserted\n");
+		ft_printf("Error\nNo map inserted\n");
 		return (false);
 	}
 	while (av[1][i] == ' ' || av[1][i] == '\t')
 	{
 		if (av[1][i + 1] == '\0')
 		{
-			ft_printf("❌ Error\n    No map inserted\n");
+			ft_printf("Error\nNo map inserted\n");
 			return (false);
 		}
 		i++;

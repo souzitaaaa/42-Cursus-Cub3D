@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_info.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 15:15:10 by jede-ara          #+#    #+#             */
-/*   Updated: 2024/04/18 18:29:32 by jede-ara         ###   ########.fr       */
+/*   Updated: 2024/04/21 17:15:02 by dinoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,10 @@ bool	check_beggin_map(bool ceiling, bool floor, t_game *game, int *y)
 
 void	map_info(t_game *game)
 {
-	int		y;
-	bool	ceiling;
-	bool	floor;
-
-	y = 0;
-	ceiling = false;
-	floor = false;
+	auto int y = 0;
+	auto bool ceiling = false;
+	auto bool floor = false;
+	auto bool map = false;
 	while (y < game->map.area_y)
 	{
 		game->map.line = ft_strtrim(game->map.area[y], " \t");
@@ -90,6 +87,7 @@ void	map_info(t_game *game)
 		{
 			if (check_beggin_map(ceiling, floor, game, &y) == true)
 			{
+				map = true;
 				ft_free_str(&game->map.line);
 				break ;
 			}
@@ -97,4 +95,6 @@ void	map_info(t_game *game)
 		y++;
 		ft_free_str(&game->map.line);
 	}
+	if (map == false)
+		error(game, "Map missing");
 }
