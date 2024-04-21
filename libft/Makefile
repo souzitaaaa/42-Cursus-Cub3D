@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jenny <jenny@student.42.fr>                +#+  +:+       +#+         #
+#    By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/02 10:28:56 by dinoguei          #+#    #+#              #
-#    Updated: 2024/03/04 19:50:00 by jenny            ###   ########.fr        #
+#    Updated: 2024/04/21 16:19:41 by dinoguei         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,6 +53,8 @@ SRCS = libft/ft_isalpha.c \
 		ft_printf/ft_printf_hex.c \
 		ft_printf/ft_printf_pointer.c \
 		get_next_line/get_next_line.c \
+		get_next_line_free_static/get_next_line.c \
+		get_next_line_free_static/get_next_line_utils.c \
 		extras/ft_utoa.c \
 		extras/ft_strcmp.c \
 		extras/ft_atol.c \

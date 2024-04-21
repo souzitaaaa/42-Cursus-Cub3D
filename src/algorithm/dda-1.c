@@ -6,13 +6,11 @@
 /*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 18:34:59 by dinoguei          #+#    #+#             */
-/*   Updated: 2024/04/15 19:24:04 by dinoguei         ###   ########.fr       */
+/*   Updated: 2024/04/21 23:28:10 by dinoguei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
-
-//! NORMINETTADO
 
 /**
  * @brief			Function to assign the initial values on a vector
@@ -28,40 +26,43 @@ void	assign_vector_values(t_vector *vector, double y, double x)
 }
 
 /**
- * @brief 		This function will initializate the distTo X and Y aswell as the stepX
- * 				The @param distTo variables are going to be store the value of the first
- * 			deltaDist, because if the player position is on the middle of a grid, the value
- * 			of the deltaDist don't work because it's a fractionary value, in between those
- * 			deltaDist values, so these distTo calculate the first value untill a grid
- * 				The @param step variables are going to be used to know the direction of
- * 			the ray
+ * @brief 		This function will initializate the distto X and
+ * 					Y aswell as the stepX
+ * 				The @param distto variables are going to be store
+ * 					the value of the first deltadist, because if the
+ * 					player position is on themiddle of a grid, the value
+ * 					of the deltadistdon't work because it's a fractionary
+ * 					value, in between thosedeltadist values, so these distto
+ * 					calculate the first value untill a grid
+ * 				The @param step variables are going to be used to know the
+ * 					direction of the ray
  *
  * @param game	Struct that contains every information on the program
  */
 void	get_distto(t_game *game)
 {
-	if (game->ray.rayDir.x < 0)
+	if (game->ray.raydir.x < 0)
 	{
-		game->ray.distTo.x = (game->pos.row - game->ray.mapPos.x)
-			* game->ray.deltaDist.x;
+		game->ray.distto.x = (game->pos.row - game->ray.mappos.x)
+			* game->ray.deltadist.x;
 		game->ray.step.x = -1;
 	}
 	else
 	{
-		game->ray.distTo.x = (game->ray.mapPos.x + 1.0 - game->pos.row)
-			* game->ray.deltaDist.x;
+		game->ray.distto.x = (game->ray.mappos.x + 1.0 - game->pos.row)
+			* game->ray.deltadist.x;
 		game->ray.step.x = 1;
 	}
-	if (game->ray.rayDir.y < 0)
+	if (game->ray.raydir.y < 0)
 	{
-		game->ray.distTo.y = (game->pos.col - game->ray.mapPos.y)
-			* game->ray.deltaDist.y;
+		game->ray.distto.y = (game->pos.col - game->ray.mappos.y)
+			* game->ray.deltadist.y;
 		game->ray.step.y = -1;
 	}
 	else
 	{
-		game->ray.distTo.y = (game->ray.mapPos.y + 1.0 - game->pos.col)
-			* game->ray.deltaDist.y;
+		game->ray.distto.y = (game->ray.mappos.y + 1.0 - game->pos.col)
+			* game->ray.deltadist.y;
 		game->ray.step.y = 1;
 	}
 }
@@ -69,54 +70,63 @@ void	get_distto(t_game *game)
 void	loop_assignment(t_game *game, double *multiplier)
 {
 	*multiplier = 2 * game->ray.screen_pixel / (double)SCREEN_X - 1;
-	assign_vector_values(&game->ray.rayDir, game->map.dir.y + game->map.plane.y
+	assign_vector_values(&game->ray.raydir, game->map.dir.y + game->map.plane.y
 		* *multiplier, game->map.dir.x + game->map.plane.x * *multiplier);
-	assign_vector_values(&game->ray.deltaDist,
-		sqrt(1 + (game->ray.rayDir.x * game->ray.rayDir.x)
-			/ (game->ray.rayDir.y * game->ray.rayDir.y)),
-		sqrt(1 + (game->ray.rayDir.y * game->ray.rayDir.y)
-			/ (game->ray.rayDir.x * game->ray.rayDir.x)));
-	assign_vector_values(&game->ray.mapPos, floor(game->pos.col),
+	assign_vector_values(&game->ray.deltadist,
+		sqrt(1 + (game->ray.raydir.x * game->ray.raydir.x)
+			/ (game->ray.raydir.y * game->ray.raydir.y)),
+		sqrt(1 + (game->ray.raydir.y * game->ray.raydir.y)
+			/ (game->ray.raydir.x * game->ray.raydir.x)));
+	assign_vector_values(&game->ray.mappos, floor(game->pos.col),
 		floor(game->pos.row));
-	if (game->ray.rayDir.x == 0)
-		game->ray.deltaDist.x = 1e30;
+	if (game->ray.raydir.x == 0)
+		game->ray.deltadist.x = 1e30;
 	else
-		game->ray.deltaDist.x = fabs(1 / game->ray.rayDir.x);
-	if (game->ray.rayDir.y == 0)
-		game->ray.deltaDist.y = 1e30;
+		game->ray.deltadist.x = fabs(1 / game->ray.raydir.x);
+	if (game->ray.raydir.y == 0)
+		game->ray.deltadist.y = 1e30;
 	else
-		game->ray.deltaDist.y = fabs(1 / game->ray.rayDir.y);
+		game->ray.deltadist.y = fabs(1 / game->ray.raydir.y);
 }
 
-void	restart_dda_struct(t_game *game)
+void	restart_structs(t_game *game)
 {
 	game->ray.dda.hit = false;
-	game->ray.dda.hitSide = 0;
-	game->ray.dda.perpendicularDist = 0;
-	game->ray.dda.wallX = 0;
+	game->ray.dda.hitside = 0;
+	game->ray.dda.perpendiculardist = 0;
+	game->ray.dda.wallx = 0;
+	game->ray.line.y = 0;
+	assign_ivector_values(&game->ray.line.texture, 0, 0);
+	game->ray.line.step = 0;
+	game->ray.line.texturepos = 0;
+	game->ray.line.color = 0;
 }
 
 /**
- * @brief       Initial function for the dda algorithm, it's the function
- *			directly connected to the mlx_loop_hook, so this mean that this function
-			will execute in loop.
-				It iterates from 0 until the SCREEN_X (screen width) in order to cover
-			all the window.
-				From there it stars to assign values in order to calculate the rays.
-				The @param multiplier is used to instead of using, 0px to SCREEN_W
-			it uses a value that ranges from -1 to 1, as the extremities of the screen
-			and 0 beeing the middle
-				The @param camera is used to help calculate another vector later on,
-			it's a vector with the value of a vector that starts on the plane and goes
-			and ends on the multiplier value, to calculate the point on the camera we
-			are currently in
-				The @param rayDir is a vector that contains the direction of the ray
-			starting on the player position (dir) and ending on the camera (vector
-			calculated above)
-				The @param deltaDist is the distance on X and Y between the grids
-				The @param mapPos will be used to keep track on the player position,
-			for the calculations ahead, at this part we set them as the initial player
-			position
+ * @brief       Initial function for the dda algorithm, it's
+ * 					the function directly connected to the
+ * 					mlx_loop_hook, so this mean that this function
+					will execute in loop.
+				It iterates from 0 until the SCREEN_X (screen width) in order
+					to coverall the window.
+				From there it stars to assign values in order to
+					calculate the rays.
+				The @param multiplier is used to instead of
+					using, 0px to SCREEN_Wit uses a value that ranges
+					from -1 to 1, as the extremities of the screen
+					and 0 beeing the middle
+				The @param camera is used to help calculate another
+					vector later on, it's a vector with the value of a
+					vector that starts on the plane and goes and ends on
+					the multiplier value, to calculate the point on the
+					camera we are currently in
+				The @param raydir is a vector that contains the direction
+					of the ray starting on the player position (dir) and
+					ending on the camera (vector calculated above)
+				The @param deltadist is the distance on X and Y between the grids
+				The @param mappos will be used to keep track on the player
+					position, for the calculations ahead, at this part we
+					set them as the initial player position
  *
  * @param game  Struct that contains every information on the program
  * @return int  The function on the mlx_loop_hook must return a int type
@@ -134,7 +144,7 @@ int	loop(t_game *game)
 		game->ray.screen_pixel++;
 		mlx_put_image_to_window(game->data.mlx, game->data.win,
 			game->data.img, 0, 0);
-		restart_dda_struct(game);
+		restart_structs(game);
 	}
 	return (1);
 }

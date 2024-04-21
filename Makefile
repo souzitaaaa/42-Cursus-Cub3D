@@ -14,7 +14,7 @@ CC				= cc
 RM 				= rm -rf
 
 #-----------------------------------  FLAGS  -----------------------------------
-CFLAGS 			= -Wall -Wextra -Werror -g
+CFLAGS 			= -Wall -Werror -Wextra -g
 NPD				= --no-print-directory
 MINILIBX 		= ./minilibx
 MLXFLAGS 		= -L ./minilibx -lmlx -Ilmlx -lXext -lX11
@@ -30,9 +30,9 @@ VPATH			= $(SRCS) $(addprefix $(SRCS)/, $(_SUBFOLDERS))
 OBJDIR			= obj
 
 #--------------------------------- FILES  ---------------------------------------
-NAME 			= cub3d
+NAME 			= cub3D
 
-_FILES 			= position utils colors parse_utils textures map walls_utils movement map_validations dda-1 dda-2
+_FILES 			= position utils colors parse_utils textures map walls_utils movement map_validations map_validations_utils dda-1 dda-2 lines map_info map_info_utils position_utils init
 OBJ				= $(_FILES:%=%.o)
 TARGET			= $(addprefix $(OBJDIR)/, $(OBJ))
 _HEADERS		= cub3d.h
@@ -58,7 +58,7 @@ $(NAME): $(OBJDIR) $(TARGET) $(LIBFT) main.c
 	$(MAKE) --no-print-directory -C $(MINILIBX)
 	echo "[$(GREEN)Success$(RESET)] Compiling minilibx$(BOLD)$(RESET)"
 	$(CC) $(CFLAGS) main.c $(TARGET) $(MLXFLAGS) -I $(INCLUDE) $(LIBFT) -o $(NAME) -lm
-	echo "[$(GREEN)Success$(RESET)] cub3d created$(BOLD)$(RESET)"
+	echo "[$(GREEN)Success$(RESET)] cub3D created$(BOLD)$(RESET)"
 
 $(OBJDIR)/%.o : %.c $(HDR)
 	echo "[$(CYAN)Compiling$(RESET)] $(CFLAGS) $<$(RESET)"
