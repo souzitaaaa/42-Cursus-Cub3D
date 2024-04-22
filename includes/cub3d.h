@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dinoguei <dinoguei@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jede-ara <jede-ara@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 17:24:15 by dinoguei          #+#    #+#             */
-/*   Updated: 2024/04/21 23:28:57 by dinoguei         ###   ########.fr       */
+/*   Updated: 2024/04/22 15:53:51 by jede-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,12 +147,13 @@ typedef struct s_dda
 	double		wallx;
 }				t_dda;
 
-typedef struct s_lines {
-	int			y;
-	t_ivector	texture;
-	double		step;
-	double		texturepos;
-	unsigned int color;
+typedef struct s_lines
+{
+	int				y;
+	t_ivector		texture;
+	double			step;
+	unsigned int	color;
+	double			texturepos;
 }				t_lines;
 
 typedef struct s_ray
